@@ -30,8 +30,13 @@ class Users extends RestService {
     }
   }
 
-  protected function only_access($rol){
-    if($this->payload->rol!=$rol)
+  protected function only_access($rols = array()){
+    $ok = false;
+    foreach($rols as $rol){
+      if($this->payload->rol!=$rol)
+       $ok = true;
+    }
+    if(!$ok)
       $this->not_allowed();
   }
 }

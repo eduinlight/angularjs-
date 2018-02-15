@@ -13,21 +13,21 @@ class RestService extends REST_Controller {
   // RESPONSES
   public function token_invalid(){
     @$res->status = 400;
-    @$res->message = "El token is inválido";
+    @$res->message = "Invalid token";
     $this->response($res, 200);
     die;
   }
 
   public function not_found(){
     @$res->status = 404;
-    @$res->message = "La url no existe";
+    @$res->message = "The url does not exist";
     $this->response($res, 200);
     die;
   }
 
   public function data_errors($errors){
     @$res->status = 400;
-    @$res->message = "Existen errores en los datos";
+    @$res->message = "There are some errors in the data provided";
     @$res->errors = $errors;
     $this->response($res, 200);
     die;
@@ -35,7 +35,7 @@ class RestService extends REST_Controller {
 
   public function not_allowed(){
     @$res->status = 501;
-    @$res->message = "Usted no tiene acceso al recurso";
+    @$res->message = "You don't have access to this resource";
     $this->response($res, 200);
     die;
   }

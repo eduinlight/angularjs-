@@ -1234,12 +1234,69 @@ angular.module('logged').component('dancestylesDetailsPage', {
     }())();
   }
 });
+angular.module('logged').component('dancestylesListPage', {
+  templateUrl: 'src/pages/logged/dancestyles/list/dancestyles-list.page.html',
+  controller: function controller($state, loginStatusService, titleBarService, dancestylesApiService, notyService) {
+    return new (function () {
+      function _class30() {
+        _classCallCheck(this, _class30);
+
+        this.dancestyles = [];
+        this.loading = true;
+      }
+
+      _createClass(_class30, [{
+        key: '$onInit',
+        value: function $onInit() {
+          var _this15 = this;
+
+          titleBarService.setData({
+            title: "Estilos dansarios",
+            description: "una descripción",
+            path: [{
+              state: 'users.home',
+              text: "Inicio",
+              icon: true,
+              icon_class: 'fa-home'
+            }, {
+              state: 'users.dancestyles',
+              text: "Estilos dansarios"
+            }]
+          });
+
+          dancestylesApiService.list().then(function (res) {
+            if (res) {
+              _this15.dancestyles = res.data;
+              _this15.loading = false;
+            }
+          });
+        }
+      }, {
+        key: 'delete',
+        value: function _delete(index) {
+          var _this16 = this;
+
+          dancestylesApiService.remove(this.dancestyles[index].id).then(function (data) {
+            if (data) {
+              _this16.dancestyles.splice(index, 1);
+              notyService.success('Mensaje', 'El estilo dansario se eliminó correctamente');
+            } else {
+              notyService.erorr('Mensaje', 'Otros datos están relacionado a este estilo dansario');
+            }
+          });
+        }
+      }]);
+
+      return _class30;
+    }())();
+  }
+});
 angular.module('logged').component('dancestylesFormPage', {
   templateUrl: 'src/pages/logged/dancestyles/form/dancestyles-form.page.html',
   controller: function controller($state, $stateParams, loginStatusService, titleBarService, dancestylesApiService, notyService) {
     return new (function () {
-      function _class30() {
-        _classCallCheck(this, _class30);
+      function _class31() {
+        _classCallCheck(this, _class31);
 
         this.dancestyle = {};
         this.errors = {};
@@ -1249,10 +1306,10 @@ angular.module('logged').component('dancestylesFormPage', {
         this.ok = false;
       }
 
-      _createClass(_class30, [{
+      _createClass(_class31, [{
         key: '$onInit',
         value: function $onInit() {
-          var _this15 = this;
+          var _this17 = this;
 
           var basePath = {
             dancestyle: "Estilos dansarion",
@@ -1273,13 +1330,13 @@ angular.module('logged').component('dancestylesFormPage', {
             this.loading = true;
             dancestylesApiService.get($stateParams.id).then(function (res) {
               if (res) {
-                _this15.dancestyle = res.data;
+                _this17.dancestyle = res.data;
                 basePath.path.push({
                   state: 'users.dancestylesEdit',
-                  text: "Editar " + toTitleBar(_this15.dancestyle.name)
+                  text: "Editar " + toTitleBar(_this17.dancestyle.name)
                 });
                 titleBarService.setData(basePath);
-                _this15.loading = false;
+                _this17.loading = false;
               }
             });
           } else {
@@ -1294,7 +1351,7 @@ angular.module('logged').component('dancestylesFormPage', {
       }, {
         key: 'submit',
         value: function submit() {
-          var _this16 = this;
+          var _this18 = this;
 
           this.submitting = true;
 
@@ -1302,86 +1359,29 @@ angular.module('logged').component('dancestylesFormPage', {
             dancestylesApiService.edit($stateParams.id, this.dancestyle).then(function (res) {
               if (res) {
                 if (res.status == 200) {
-                  _this16.ok = true;
+                  _this18.ok = true;
                   notyService.success('Mensaje', 'El estilo dansario se editó correctamente');
                 } else {
                   notyService.error('Mensaje', 'Existen errores en los datos');
                 }
-                _this16.errors = res.errors;
-                _this16.submitting = false;
+                _this18.errors = res.errors;
+                _this18.submitting = false;
               }
             });
           } else {
             dancestylesApiService.add(this.dancestyle).then(function (res) {
               if (res) {
                 if (res.status == 200) {
-                  _this16.ok = true;
+                  _this18.ok = true;
                   notyService.success('Mensaje', 'El estilo dansario se adicionó correctamente');
                 } else {
                   notyService.error('Mensaje', 'Existen errores en los datos');
                 }
-                _this16.errors = res.errors;
-                _this16.submitting = false;
+                _this18.errors = res.errors;
+                _this18.submitting = false;
               }
             });
           }
-        }
-      }]);
-
-      return _class30;
-    }())();
-  }
-});
-angular.module('logged').component('dancestylesListPage', {
-  templateUrl: 'src/pages/logged/dancestyles/list/dancestyles-list.page.html',
-  controller: function controller($state, loginStatusService, titleBarService, dancestylesApiService, notyService) {
-    return new (function () {
-      function _class31() {
-        _classCallCheck(this, _class31);
-
-        this.dancestyles = [];
-        this.loading = true;
-      }
-
-      _createClass(_class31, [{
-        key: '$onInit',
-        value: function $onInit() {
-          var _this17 = this;
-
-          titleBarService.setData({
-            title: "Estilos dansarios",
-            description: "una descripción",
-            path: [{
-              state: 'users.home',
-              text: "Inicio",
-              icon: true,
-              icon_class: 'fa-home'
-            }, {
-              state: 'users.dancestyles',
-              text: "Estilos dansarios"
-            }]
-          });
-
-          dancestylesApiService.list().then(function (res) {
-            if (res) {
-              _this17.dancestyles = res.data;
-              _this17.loading = false;
-            }
-          });
-        }
-      }, {
-        key: 'delete',
-        value: function _delete(index) {
-          var _this18 = this;
-
-          dancestylesApiService.remove(this.dancestyles[index].id).then(function (data) {
-            if (data) {
-              _this18.dancestyles.splice(index, 1);
-              notyService.success('Mensaje', 'El estilo dansario se eliminó correctamente');
-            } else {
-              notyService.erorr('Mensaje', 'Otros datos están relacionado a este estilo dansario');
-            }
-          });
         }
       }]);
 
