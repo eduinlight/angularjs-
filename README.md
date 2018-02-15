@@ -13,6 +13,14 @@ This project is going to help you to combine angularjs and codeigniter framework
   npm start
 ```
 
+### Create the database with MYSQL
+
+```bash
+  mysql -u user -p
+  >>CREATE DATABASE angularjs_ci;
+  mysql -u user -p angularjs_ci < /db/angularjs_ci.sql
+```
+
 ### Build for production
 
 ```bash
