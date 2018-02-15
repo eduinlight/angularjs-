@@ -32,7 +32,7 @@ After that you need to change #dist/app.js for #dist/app.min.js on your index.ht
 
 ## THANKS
 
-Thank's to the [angularjs](https://github.com/angular) team, [codeigniter](https://github.com/bcit-ci/CodeIgniter) team, [gulp](https://github.com/gulpjs/gulp) team, the [AdminLTE](https://github.com/almasaeed2010/AdminLTE) template for google to provide the easiest library to user JWT with php from the FIREBASE API for PHP. And of course thanks to the [babel](https://github.com/babel/babel) team that allow me to user a modern javascript.
+Thank's to the [angularjs](https://github.com/angular) team, [codeigniter](https://github.com/bcit-ci/CodeIgniter) team, [gulp](https://github.com/gulpjs/gulp) team, the [AdminLTE](https://github.com/almasaeed2010/AdminLTE) template for google to provide the easiest library to user JWT with php from the FIREBASE API for PHP. And of course thanks to the [babel](https://github.com/babel/babel) team that allow me to use a modern javascript sintax.
 
 ## License
 
