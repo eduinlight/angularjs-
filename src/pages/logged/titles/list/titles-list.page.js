@@ -15,16 +15,16 @@ angular.module('logged').component('titlesListPage', {
 
       $onInit() {
         titleBarService.setData({
-          title: "Títulos",
-          description: "una descripción",
+          title: "Titles",
+          description: "a description",
           path: [{
             state: 'users.home',
-            text: "Inicio",
+            text: "Home",
             icon: true,
             icon_class: 'fa-home'
           }, {
             state: 'users.titles',
-            text: "Títulos",
+            text: "Titles",
           }]
         })
 
@@ -40,9 +40,9 @@ angular.module('logged').component('titlesListPage', {
         titlesApiService.remove(this.titles[index].id).then(data => {
           if (data) {
             this.titles.splice(index, 1)
-            notyService.success('Mensaje', 'El título se eliminó correctamente')
+            notyService.success('Message', 'The title was successfully removed')
           } else {
-            notyService.erorr('Mensaje', 'Otros datos están relacionado a este título')
+            notyService.erorr('Message', 'Other data depends from this title')
           }
         })
       }

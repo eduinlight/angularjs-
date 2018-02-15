@@ -55,6 +55,7 @@
   ],
   "dependencies": {
     "@angular/router": "0.2.0",
-    "@uirouter/angularjs": "^1.0.13"
+    "@uirouter/angularjs": "^1.0.13",
+    "ng-translation": "0.0.3"
   }
 }

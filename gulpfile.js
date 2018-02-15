@@ -20,10 +20,10 @@ const app = [
   "src/**/*.module.js",
   "src/**/*.route.js",
   "src/**/*.class.js",
+  "src/**/*.filter.js",
   "src/**/*.service.js",
   "src/**/*.pipe.js",
   "src/**/*.directive.js",
-  "src/**/*.filter.js",
   "src/**/*.template.js",
   "src/**/*.controller.js",
   "src/**/*.component.js",
@@ -43,7 +43,8 @@ gulp.task("app", function() {
     .pipe(concat("app.js"))
     .pipe(babel().on("error", (err) => console.log(err)))
     .pipe(replace(/"use strict";/g, ""))
-    .pipe(gulp.dest(app_output));
+    .pipe(gulp.dest(app_output))
+    .pipe(browserSync.reload({ stream: true }));
 });
 gulp.task("app.min", ["app"], function() {
   gulp.src([app_output + "app.js"])
@@ -58,15 +59,13 @@ gulp.task("build", ["app.min"]);
 gulp.task("serve", function() {
   browserSync.exit()
   browserSync.init({
-    server: "."
+    server: {
+      baseDir: "./"
+    }
   });
-  // gulp.watch(["src/**/*", "index.html"]).on("change", browserSync.reload);
 });
-
-gulp.task("reload-server", function() {
-  browserSync.reload()
-})
 
 gulp.task("watch", ["build-dev", "serve"], () => {
-  gulp.watch(["index.html", "src/**/*.js", "src/**/*.html"], ["build-dev", "reload-server"]);
-});
+  gulp.watch(["index.html", "src/**/*.js", "src/**/*.html"], ["build-dev"])
+    .on('error', (e) => { console.log(e) });
+})

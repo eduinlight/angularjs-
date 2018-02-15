@@ -17,26 +17,28 @@ angular.module('logged').component('citiesListPage', {
       }
 
       $onInit() {
+        console.log($state)
         countriesApiService.get($stateParams.country_id).then((res) => {
+
           if (res) {
             this.country = res.data
             titleBarService.setData({
-              title: "Ciudades",
-              description: "una descripción",
+              title: "Cities",
+              description: "a description",
               path: [{
                 state: 'users.home',
-                text: "Inicio",
+                text: "Home",
                 icon: true,
                 icon_class: 'fa-home'
               }, {
                 state: 'users.countries',
-                text: "Países",
+                text: "Countries",
               }, {
                 state: '',
                 text: toTitleBar(this.country.name),
               }, {
                 state: 'users.cities',
-                text: "Ciudades",
+                text: "Cities",
               }]
             })
 
@@ -56,9 +58,9 @@ angular.module('logged').component('citiesListPage', {
         citiesApiService.remove(this.cities[index].id).then(data => {
           if (data) {
             this.cities.splice(index, 1)
-            notyService.success('Mensaje', 'El ciudad se eliminó correctamente')
+            notyService.success('Message', 'The city was removed successfully')
           } else {
-            notyService.erorr('Mensaje', 'Otros datos están relacionado a esta ciudad')
+            notyService.erorr('Message', 'Other data depends from this city')
           }
         })
       }

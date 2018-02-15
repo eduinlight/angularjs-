@@ -19,16 +19,16 @@ angular.module('logged').component('titlesDetailsPage', {
           if (res) {
             this.title = res.data
             titleBarService.setData({
-              title: "Títulos",
-              description: "una descripción",
+              title: "Titles",
+              description: "a description",
               path: [{
                 state: 'users.home',
-                text: "Inicio",
+                text: "Home",
                 icon: true,
                 icon_class: 'fa-home'
               }, {
                 state: 'users.titles',
-                text: "Títulos",
+                text: "Titles",
               }, {
                 state: 'users.titlesDetails',
                 text: this.title.name,

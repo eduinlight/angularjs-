@@ -4,7 +4,7 @@ angular.module('logged').component('schoolsListPage', {
     $state,
     loginStatusService,
     titleBarService,
-    // schoolsApiService,
+    schoolsApiService,
     notyService
   ) {
     return new class {
@@ -15,37 +15,37 @@ angular.module('logged').component('schoolsListPage', {
 
       $onInit() {
         titleBarService.setData({
-          title: "Escuelas",
-          description: "una descripción",
+          title: "Schools",
+          description: "a description",
           path: [{
             state: 'users.home',
-            text: "Inicio",
+            text: "Home",
             icon: true,
             icon_class: 'fa-home'
           }, {
             state: 'users.schools',
-            text: "Escuelas",
+            text: "Schools",
           }]
         })
 
-        // schoolsApiService.list().then((res) => {
-        //   if (res) {
-        //     this.schools = res.data
-        //     this.loading = false
-        //   }
-        // })
+        schoolsApiService.list().then((res) => {
+          if (res) {
+            this.schools = res.data
+            this.loading = false
+          }
+        })
       }
 
-      // delete(index) {
-      //   schoolsApiService.remove(this.schools[index].id).then(data => {
-      //     if (data) {
-      //       this.schools.splice(index, 1)
-      //       notyService.success('Mensaje', 'El país se eliminó correctamente')
-      //     } else {
-      //       notyService.erorr('Mensaje', 'Otros datos están relacionado a este país')
-      //     }
-      //   })
-      // }
+      delete(index) {
+        schoolsApiService.remove(this.schools[index].id).then(data => {
+          if (data) {
+            this.schools.splice(index, 1)
+            notyService.success('Message', 'The school was successfully removed')
+          } else {
+            notyService.erorr('Message', 'Other data depends from this school')
+          }
+        })
+      }
     }
   }
 });

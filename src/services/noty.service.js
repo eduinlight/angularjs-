@@ -5,7 +5,7 @@ angular.module('my-services').service('notyService',
         title: title,
         text: message,
         class_name: 'gritter-warning gritter-light',
-        time: 500
+        time: 2000
       });
     }
     info = (title, message) => {
@@ -13,7 +13,7 @@ angular.module('my-services').service('notyService',
         title: title,
         text: message,
         class_name: 'gritter-info gritter-light',
-        time: 500
+        time: 2000
       });
     }
     success = (title, message) => {
@@ -21,7 +21,7 @@ angular.module('my-services').service('notyService',
         title: title,
         text: message,
         class_name: 'gritter-success gritter-light',
-        time: 500,
+        time: 2000,
       });
     }
     error = (title, message) => {
@@ -29,7 +29,7 @@ angular.module('my-services').service('notyService',
         title: title,
         text: message,
         class_name: 'gritter-error gritter-light',
-        time: 500
+        time: 2000
       });
     }
   }

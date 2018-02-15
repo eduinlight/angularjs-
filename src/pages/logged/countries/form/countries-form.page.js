@@ -20,38 +20,38 @@ angular.module('logged').component('countriesFormPage', {
 
       $onInit() {
         let basePath = {
-          title: "Países",
-          description: "una descripción",
+          title: "Countries",
+          description: "a description",
           path: [{
             state: 'users.home',
-            text: "Inicio",
+            text: "Home",
             icon: true,
             icon_class: 'fa-home'
           }, {
             state: 'users.countries',
-            text: "Países",
+            text: "Countries",
           }]
         }
 
         if ($stateParams.id != undefined) {
-          this.action = "Editar"
+          this.action = "Edit"
           this.loading = true
           countriesApiService.get($stateParams.id).then((res) => {
             if (res) {
               this.country = res.data
               basePath.path.push({
                 state: 'users.countriesEdit',
-                text: "Editar " + toTitleBar(this.country.name),
+                text: "Edit " + toTitleBar(this.country.name),
               })
               titleBarService.setData(basePath)
               this.loading = false
             }
           })
         } else {
-          this.action = "Adicionar"
+          this.action = "Add"
           basePath.path.push({
             state: 'users.countriesAdd',
-            text: "Adicionar",
+            text: "Add",
           })
           titleBarService.setData(basePath)
         }
@@ -60,14 +60,15 @@ angular.module('logged').component('countriesFormPage', {
       submit() {
         this.submitting = true
 
-        if (this.action == "Editar") {
+        if (this.action == "Edit") {
           countriesApiService.edit($stateParams.id, this.country).then((res) => {
             if (res) {
               if (res.status == 200) {
                 this.ok = true
-                notyService.success('Mensaje', 'El país se editó correctamente')
+                notyService.success('Message', 'The country was successfully edited')
+                $state.go('users.countries')
               } else {
-                notyService.error('Mensaje', 'Existen errores en los datos')
+                notyService.error('Message', 'Exist some errors in data')
               }
               this.errors = res.errors
               this.submitting = false
@@ -78,9 +79,10 @@ angular.module('logged').component('countriesFormPage', {
             if (res) {
               if (res.status == 200) {
                 this.ok = true
-                notyService.success('Mensaje', 'El país se adicionó correctamente')
+                notyService.success('Message', 'The country was successfully added')
+                $state.go('users.countries')
               } else {
-                notyService.error('Mensaje', 'Existen errores en los datos')
+                notyService.error('Message', 'Exist some errors in data')
               }
               this.errors = res.errors
               this.submitting = false

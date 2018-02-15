@@ -1,0 +1,19 @@
+<div class="form-group" ng-class="{'has-error': ($ctrl.form.$submitted && $ctrl.form[$ctrl.name].$invalid) || $ctrl.error}">
+  <label>{{$ctrl.label}}</label>
+  <span class="select2 select2-container select2-container--default select2-container--below select2-container--open" style="width: 100%;">
+    <span class="selection">
+      <span class="select2-selection select2-selection--multiple" >
+        <ul class="select2-selection__rendered">
+          <li ng-repeat="text in $ctrl.model track by $index" class="select2-selection__choice">
+            <span ng-click="$ctrl.del($index)" class="select2-selection__choice__remove">
+              ×
+            </span>{{text}}
+  </li>
+  <li class="select2-search select2-search--inline">
+    <input class="select2-search__field" style="border: 1px #ccc solid" ng-model="$ctrl.text" ng-blur="$ctrl.blur()" type="search">
+  </li>
+  </ul>
+  </span>
+  </span>
+  </span>
+</div>

@@ -1,0 +1,10 @@
+<div class="form-group" ng-class="{'has-error': ($ctrl.form.$submitted && $ctrl.form[$ctrl.name].$invalid) || $ctrl.error}">
+  <label for="name">{{$ctrl.label}} <b ng-if="$ctrl.required">*</b></label>
+  <div class="input-group date">
+    <div class="input-group-addon">
+      <i class="fa fa-calendar"></i>
+    </div>
+    <input type="text" ng-value="($ctrl.model?($ctrl.model * 1000 | date: 'MM/dd/yyyy'):'') " placeholder="mm/dd/yyyy" class="form-control pull-right" id="datepicker" name="{{$ctrl.name}}" ng-required="$ctrl.required">
+  </div>
+  <span ng-show="$ctrl.error" class=" text-danger ">{{$ctrl.error}}</span>
+</div>

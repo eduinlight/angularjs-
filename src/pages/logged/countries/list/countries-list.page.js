@@ -15,16 +15,16 @@ angular.module('logged').component('countriesListPage', {
 
       $onInit() {
         titleBarService.setData({
-          title: "Países",
-          description: "una descripción",
+          title: "Countries",
+          description: "a description",
           path: [{
             state: 'users.home',
-            text: "Inicio",
+            text: "Home",
             icon: true,
             icon_class: 'fa-home'
           }, {
             state: 'users.countries',
-            text: "Países",
+            text: "Countries",
           }]
         })
 
@@ -40,9 +40,9 @@ angular.module('logged').component('countriesListPage', {
         countriesApiService.remove(this.countries[index].id).then(data => {
           if (data) {
             this.countries.splice(index, 1)
-            notyService.success('Mensaje', 'El país se eliminó correctamente')
+            notyService.success('Message', 'The country was successfully removed')
           } else {
-            notyService.erorr('Mensaje', 'Otros datos están relacionado a este país')
+            notyService.erorr('Message', 'Other data depends from this country')
           }
         })
       }

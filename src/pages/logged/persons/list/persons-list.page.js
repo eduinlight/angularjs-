@@ -4,7 +4,7 @@ angular.module('logged').component('personsListPage', {
     $state,
     loginStatusService,
     titleBarService,
-    // personsApiService,
+    personsApiService,
     notyService
   ) {
     return new class {
@@ -15,37 +15,37 @@ angular.module('logged').component('personsListPage', {
 
       $onInit() {
         titleBarService.setData({
-          title: "Personas",
-          description: "una descripción",
+          title: "Persons",
+          description: "a description",
           path: [{
             state: 'users.home',
-            text: "Inicio",
+            text: "Home",
             icon: true,
             icon_class: 'fa-home'
           }, {
             state: 'users.persons',
-            text: "Personas",
+            text: "Persons",
           }]
         })
 
-        // personsApiService.list().then((res) => {
-        //   if (res) {
-        //     this.persons = res.data
-        //     this.loading = false
-        //   }
-        // })
+        personsApiService.list().then((res) => {
+          if (res) {
+            this.persons = res.data
+            this.loading = false
+          }
+        })
       }
 
-      // delete(index) {
-      //   personsApiService.remove(this.persons[index].id).then(data => {
-      //     if (data) {
-      //       this.persons.splice(index, 1)
-      //       notyService.success('Mensaje', 'El país se eliminó correctamente')
-      //     } else {
-      //       notyService.erorr('Mensaje', 'Otros datos están relacionado a este país')
-      //     }
-      //   })
-      // }
+      delete(index) {
+        personsApiService.remove(this.persons[index].id).then(data => {
+          if (data) {
+            this.persons.splice(index, 1)
+            notyService.success('Message', 'La persona se eliminó correctamente')
+          } else {
+            notyService.erorr('Message', 'Otros datos están relacionado a esta persona')
+          }
+        })
+      }
     }
   }
 });

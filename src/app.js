@@ -3,11 +3,13 @@ angular.module('dance', [
 
   //TERCEROS
   'ui.router',
+  'ui.select2',
   //MIOS
   'my-components',
   'my-services',
   'my-pipes',
   'my-directives',
+  'my-filters',
   'pages'
 ]).run(['$state',
   function($state) {

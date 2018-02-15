@@ -1,0 +1,39 @@
+<div class="row">
+  <div class="col-xs-12">
+    <div class="box">
+      <div class="box-header with-border">
+        <h3 class="box-title">{{$ctrl.action}} work</h3>
+      </div>
+      <div ng-show="$ctrl.loading" class="box-body">
+        <loading-data active="true"></loading-data>
+      </div>
+      <form ng-show="!$ctrl.loading && !$ctrl.ok" ng-submit="$ctrl.submit()" name="form" novalidate>
+        <div class="box-body">
+          <my-tabs>
+            <my-tabs-pane selected="true" title="Data of work">
+              <my-input name="name" form=form label="Name" placeholder="Name" model="$ctrl.work.name" required=true error="$ctrl.errors.name"></my-input>
+              <my-input name="characters" form=form label="Characters" placeholder="Characters" model="$ctrl.work.characters" error="$ctrl.errors.characters"></my-input>
+              <my-input name="runtime" form=form label="Runtime" placeholder="Runtime" model="$ctrl.work.runtime" error="$ctrl.errors.runtime"></my-input>
+              <my-textarea row="3" name="description" form=form label="Description" placeholder="Description" model="$ctrl.work.description" error="$ctrl.errors.description"></my-textarea>
+              <my-textarea row="3" name="licensing_info" form=form label="Licensing info" placeholder="Licensing info" model="$ctrl.work.licensing_info" error="$ctrl.errors.licensing_info"></my-textarea>
+              <my-input-date name="premiere_date" form=form label="Premiere date" model="$ctrl.work.premiere_date" error="$ctrl.errors.premiere_date"></my-input-date>
+              <my-select model="$ctrl.work._premiere_venue" label="Premier venue" data="$ctrl.venues" error="$ctrl.errors._premiere_venue"></my-select>
+              <my-select model="$ctrl.work._premiere_company" label="Company" data="$ctrl.companies" error="$ctrl.errors._premiere_company"></my-select>
+            </my-tabs-pane>
+            <my-tabs-pane title="Dance Styles">
+              <my-tags-select-list model="$ctrl.work._dance_styles" data="$ctrl.dance_styles"></my-tags-select-list>
+            </my-tabs-pane>
+            <my-tabs-pane title="Persons">
+              <my-tags-select-list model="$ctrl.work._persons" data="$ctrl.persons"></my-tags-select-list>
+            </my-tabs-pane>
+          </my-tabs>
+        </div>
+        <div class="box-footer ">
+          <button type="submit " class="btn btn-primary " ng-click="form.submit()">
+            {{$ctrl.action}}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

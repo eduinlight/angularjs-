@@ -25,22 +25,22 @@ angular.module('logged').component('citiesDetailsPage', {
                 this.loading = false
 
                 titleBarService.setData({
-                  title: "Ciudades",
-                  description: "una descripción",
+                  title: "Cities",
+                  description: "a description",
                   path: [{
                     state: 'users.home',
-                    text: "Inicio",
+                    text: "Home",
                     icon: true,
                     icon_class: 'fa-home'
                   }, {
                     state: 'users.countries',
-                    text: "Países",
+                    text: "Countries",
                   }, {
                     state: '',
                     text: toTitleBar(this.country.name),
                   }, {
                     state: 'users.cities({country_id: ' + this.country.id + '})',
-                    text: "Ciudades",
+                    text: "Cities",
                   }, {
                     state: 'users.citiesDetails',
                     text: toTitleBar(this.city.name),

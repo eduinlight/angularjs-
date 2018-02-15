@@ -25,44 +25,46 @@ angular.module('logged').component('citiesFormPage', {
             this.country = res.data
             this.city._country = this.country.id
             titleBarService.setData({
-              title: "Ciudades",
-              description: "una descripción",
+              title: "Cities",
+              description: "a description",
               path: [{
                 state: 'users.home',
-                text: "Inicio",
+                text: "Home",
                 icon: true,
                 icon_class: 'fa-home'
               }, {
                 state: 'users.countries',
-                text: "Países",
+                text: "Countries",
               }, {
                 state: '',
                 text: toTitleBar(this.country.name),
               }, {
                 state: 'users.cities' + "({country_id: " + this.country.id + "})",
-                text: "Ciudades",
+                text: "Cities",
               }]
             })
 
             if ($stateParams.id != undefined) {
-              this.action = "Editar"
+              this.action = "Edit"
               this.loading = true
               citiesApiService.get($stateParams.id, "?country_id=" + this.country.id).then((res) => {
                 if (res) {
-                  this.city = res.data
-                  this.city._country = this.country.id
-                  this.loading = false
-                  titleBarService.addPath({
-                    state: 'users.citiesEdit',
-                    text: "Editar " + toTitleBar(this.city.name),
-                  })
+                  if (res.status == 200) {
+                    this.city = res.data
+                    this.city._country = this.country.id
+                    this.loading = false
+                    titleBarService.addPath({
+                      state: 'users.citiesEdit',
+                      text: "Edit " + toTitleBar(this.city.name),
+                    })
+                  }
                 }
               })
             } else {
-              this.action = "Adicionar"
+              this.action = "Add"
               titleBarService.addPath({
                 state: 'users.citiesAdd',
-                text: "Adicionar ",
+                text: "Add ",
               })
             }
           }
@@ -71,14 +73,15 @@ angular.module('logged').component('citiesFormPage', {
 
       submit() {
         this.submitting = true
-        if (this.action == "Editar") {
+        if (this.action == "Edit") {
           citiesApiService.edit($stateParams.id, this.city).then((res) => {
             if (res) {
               if (res.status == 200) {
                 this.ok = true
-                notyService.success('Mensaje', 'La ciudad se editó correctamente')
+                notyService.success('Message', 'The city was successfully edited')
+                $state.go("users.cities", { country_id: this.country.id })
               } else {
-                notyService.error('Mensaje', 'Existen errores en los datos')
+                notyService.error('Message', 'Exist some errors in data')
               }
               this.errors = res.errors
               this.submitting = false
@@ -89,9 +92,10 @@ angular.module('logged').component('citiesFormPage', {
             if (res) {
               if (res.status == 200) {
                 this.ok = true
-                notyService.success('Mensaje', 'La ciudad se adicionó correctamente')
+                notyService.success('Message', 'The city was addes successfully')
+                $state.go("users.cities", { country_id: this.country.id })
               } else {
-                notyService.error('Mensaje', 'Existen errores en los datos')
+                notyService.error('Message', 'Exist some errors in data')
               }
               this.errors = res.errors
               this.submitting = false

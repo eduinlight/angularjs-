@@ -20,38 +20,38 @@ angular.module('logged').component('dancestylesFormPage', {
 
       $onInit() {
         let basePath = {
-          dancestyle: "Estilos dansarion",
-          description: "una descripción",
+          dancestyle: "Dance styles",
+          description: "a description",
           path: [{
             state: 'users.home',
-            text: "Inicio",
+            text: "Home",
             icon: true,
             icon_class: 'fa-home'
           }, {
             state: 'users.dancestyles',
-            text: "Estilos dansarios",
+            text: "Dance styles",
           }]
         }
 
         if ($stateParams.id != undefined) {
-          this.action = "Editar"
+          this.action = "Edit"
           this.loading = true
           dancestylesApiService.get($stateParams.id).then((res) => {
             if (res) {
               this.dancestyle = res.data
               basePath.path.push({
                 state: 'users.dancestylesEdit',
-                text: "Editar " + toTitleBar(this.dancestyle.name),
+                text: "Edit " + toTitleBar(this.dancestyle.name),
               })
               titleBarService.setData(basePath)
               this.loading = false
             }
           })
         } else {
-          this.action = "Adicionar"
+          this.action = "Add"
           basePath.path.push({
             state: 'users.dancestylesAdd',
-            text: "Adicionar",
+            text: "Add",
           })
           titleBarService.setData(basePath)
         }
@@ -60,14 +60,15 @@ angular.module('logged').component('dancestylesFormPage', {
       submit() {
         this.submitting = true
 
-        if (this.action == "Editar") {
+        if (this.action == "Edit") {
           dancestylesApiService.edit($stateParams.id, this.dancestyle).then((res) => {
             if (res) {
               if (res.status == 200) {
                 this.ok = true
-                notyService.success('Mensaje', 'El estilo dansario se editó correctamente')
+                notyService.success('Message', 'The dance style was successfully edited')
+                $state.go('users.dancestyles')
               } else {
-                notyService.error('Mensaje', 'Existen errores en los datos')
+                notyService.error('Message', 'Exist some errors in data')
               }
               this.errors = res.errors
               this.submitting = false
@@ -78,9 +79,10 @@ angular.module('logged').component('dancestylesFormPage', {
             if (res) {
               if (res.status == 200) {
                 this.ok = true
-                notyService.success('Mensaje', 'El estilo dansario se adicionó correctamente')
+                notyService.success('Message', 'The dance style was successfully added')
+                $state.go('users.dancestyles')
               } else {
-                notyService.error('Mensaje', 'Existen errores en los datos')
+                notyService.error('Message', 'Exist some errors in data')
               }
               this.errors = res.errors
               this.submitting = false

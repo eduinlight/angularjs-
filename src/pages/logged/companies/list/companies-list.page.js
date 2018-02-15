@@ -4,7 +4,7 @@ angular.module('logged').component('companiesListPage', {
     $state,
     loginStatusService,
     titleBarService,
-    // companiesApiService,
+    companiesApiService,
     notyService
   ) {
     return new class {
@@ -15,37 +15,37 @@ angular.module('logged').component('companiesListPage', {
 
       $onInit() {
         titleBarService.setData({
-          title: "Compañías",
-          description: "una descripción",
+          title: "Companies",
+          description: "a description",
           path: [{
             state: 'users.home',
-            text: "Inicio",
+            text: "Home",
             icon: true,
             icon_class: 'fa-home'
           }, {
             state: 'users.companies',
-            text: "Compañías",
+            text: "Companies",
           }]
         })
 
-        // companiesApiService.list().then((res) => {
-        //   if (res) {
-        //     this.companies = res.data
-        //     this.loading = false
-        //   }
-        // })
+        companiesApiService.list().then((res) => {
+          if (res) {
+            this.companies = res.data
+            this.loading = false
+          }
+        })
       }
 
-      // delete(index) {
-      //   companiesApiService.remove(this.companies[index].id).then(data => {
-      //     if (data) {
-      //       this.companies.splice(index, 1)
-      //       notyService.success('Mensaje', 'El país se eliminó correctamente')
-      //     } else {
-      //       notyService.erorr('Mensaje', 'Otros datos están relacionado a este país')
-      //     }
-      //   })
-      // }
+      delete(index) {
+        companiesApiService.remove(this.companies[index].id).then(data => {
+          if (data) {
+            this.companies.splice(index, 1)
+            notyService.success('Message', 'The company was removes successfully')
+          } else {
+            notyService.erorr('Message', 'Otros datos están relacionados a esta compañía')
+          }
+        })
+      }
     }
   }
 });

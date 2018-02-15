@@ -11,7 +11,7 @@ angular.module('my-components').component('myHeader', {
       logout = () => {
         loginStatusService.remove()
 
-        notyService.info("Saludos", "Hasta la próxima")
+        notyService.info("Bye", "Have a nice day")
 
         $state.go('login')
       }

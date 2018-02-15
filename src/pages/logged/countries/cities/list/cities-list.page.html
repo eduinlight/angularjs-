@@ -2,27 +2,27 @@
   <div class="col-xs-12">
     <div class="box">
       <div class="box-header with-border">
-        <h3 class="box-title">Listado de ciudades de <b>{{$ctrl.country.name}}</b></h3>
+        <h3 class="box-title">List of cities from <b>{{$ctrl.country.name}}</b></h3>
         <div class="box-tools pull-right">
           <span data-toggle="tooltip" title="" class="badge bg-light-blue">
             {{$ctrl.cities.length}}
           </span>
           <a ui-sref="users.citiesAdd({id: title.id, country_id: $ctrl.country.id})" class="btn">
-            <i class="fa fa-plus"></i> Adicionar
+            <i class="fa fa-plus"></i> Add
           </a>
         </div>
       </div>
       <div class="box-body">
         <loading-data active="$ctrl.loading"></loading-data>
         <div ng-show="!$ctrl.loading && $ctrl.cities.length==0" class="callout callout-info">
-          <p>No existen ciudades agregados</p>
+          <p>No cities added</p>
         </div>
         <table ng-show="!$ctrl.loading && $ctrl.cities.length>0" class="table table-bordered">
           <thead>
             <tr>
               <th style="width: 10px">#</th>
-              <th>Nombre</th>
-              <th style="width: 20%">Opciones</th>
+              <th>Name</th>
+              <th style="width: 20%">Options</th>
             </tr>
           </thead>
           <tbody>
@@ -33,7 +33,7 @@
                 <a ui-sref="users.citiesDetails({id: title.id, country_id: $ctrl.country.id})" class="btn btn-success" title="Detelles">
                   <i class="fa fa-search"></i>
                 </a>
-                <a ui-sref="users.citiesEdit({id: title.id, country_id: $ctrl.country.id})" class="btn btn-primary" title="Editar">
+                <a ui-sref="users.citiesEdit({id: title.id, country_id: $ctrl.country.id})" class="btn btn-primary" title="Edit">
                   <i class="fa fa-edit"></i>
                 </a>
                 <a ng-click="$ctrl.delete($index)" class="btn btn-danger" title="Eliminar">

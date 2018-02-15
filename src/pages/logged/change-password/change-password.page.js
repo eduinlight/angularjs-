@@ -26,7 +26,7 @@ angular.module('logged').component('changePasswordPage', {
               this.errors = {}
 
               //notificación de bienvenida
-              notyService.info("Mensaje", "La contraseña se cambió con éxito")
+              notyService.info("Message", "The password was changed successfully")
 
               //cambio de estado
               $window.history.back()

@@ -1,0 +1,12 @@
+<div class="form-group">
+  <div class="box-body box-profile" ng-if="$ctrl.image_url!=''">
+    <img ng-src="{{$ctrl.model.url}}" style="width: 120px; height: 120px; border-radius: 0px solid 50px;">
+  </div>
+  <span class="btn btn-warning btn-file">
+    {{$ctrl.label}} <b ng-if="$ctrl.required">*</b>
+    <input type="file" name="{{$ctrl.name}}" ng-required="$ctrl.required" onchange="angular.element(this).scope().$ctrl.change(this)">
+  </span>
+  <span ng-if="($ctrl.form.$submitted && $ctrl.form[$ctrl.name].$invalid) || $ctrl.error">
+      <span ng-show="$ctrl.error" class=" text-danger ">{{$ctrl.error}}</span>
+  </span>
+</div>

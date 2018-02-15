@@ -6,6 +6,9 @@ angular.module('cities', [
     $stateProvider.state('users.cities', {
       url: '/countries/:country_id/cities',
       component: 'citiesListPage',
+      params: {
+        country_id: ""
+      }
     })
     $stateProvider.state('users.citiesAdd', {
       url: '/countries/:country_id/cities/add',

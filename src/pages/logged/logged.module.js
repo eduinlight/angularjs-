@@ -6,7 +6,7 @@ angular.module('logged', [
   'persons',
   'works',
   'schools',
-  'places',
+  'venues',
 ]).config(
   ($stateProvider, $urlServiceProvider) => {
     $urlServiceProvider.config.strictMode(false);

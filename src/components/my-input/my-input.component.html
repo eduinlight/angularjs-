@@ -1,0 +1,5 @@
+<div class="form-group" ng-class="{'has-error': ($ctrl.form.$submitted && $ctrl.form[$ctrl.name].$invalid) || $ctrl.error}">
+  <label for="name">{{$ctrl.label}} <b ng-if="$ctrl.required">*</b></label>
+  <input type="{{$ctrl.type}}" class="form-control" ng-change="$ctrl.change()" name="{{$ctrl.name}}" ng-model="$ctrl.model" placeholder="{{$ctrl.placeholder}}" ng-required="$ctrl.required">
+  <span ng-show="$ctrl.error" class=" text-danger ">{{$ctrl.error}}</span>
+</div>

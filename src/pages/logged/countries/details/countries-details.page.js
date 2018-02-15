@@ -19,16 +19,16 @@ angular.module('logged').component('countriesDetailsPage', {
           if (res) {
             this.country = res.data
             titleBarService.setData({
-              title: "Países",
-              description: "una descripción",
+              title: "Countries",
+              description: "a description",
               path: [{
                 state: 'users.home',
-                text: "Inicio",
+                text: "Home",
                 icon: true,
                 icon_class: 'fa-home'
               }, {
                 state: 'users.countries',
-                text: "Países",
+                text: "Countries",
               }, {
                 state: 'users.countriesDetails',
                 text: this.country.name,

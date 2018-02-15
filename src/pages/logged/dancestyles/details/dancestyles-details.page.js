@@ -19,16 +19,16 @@ angular.module('logged').component('dancestylesDetailsPage', {
           if (res) {
             this.dancestyle = res.data
             titleBarService.setData({
-              title: "Estilos dansarios",
-              description: "una descripción",
+              title: "Dance styles",
+              description: "a description",
               path: [{
                 state: 'users.home',
-                text: "Inicio",
+                text: "Home",
                 icon: true,
                 icon_class: 'fa-home'
               }, {
                 state: 'users.dancestyles',
-                text: "Estilos dansarios",
+                text: "Dance styles",
               }, {
                 state: 'users.dancestylesDetails',
                 text: this.dancestyle.name,

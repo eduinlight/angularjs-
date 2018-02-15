@@ -4,7 +4,7 @@ angular.module('logged').component('worksListPage', {
     $state,
     loginStatusService,
     titleBarService,
-    // worksApiService,
+    worksApiService,
     notyService
   ) {
     return new class {
@@ -15,37 +15,37 @@ angular.module('logged').component('worksListPage', {
 
       $onInit() {
         titleBarService.setData({
-          title: "Trabajos",
-          description: "una descripción",
+          title: "Works",
+          description: "a description",
           path: [{
             state: 'users.home',
-            text: "Inicio",
+            text: "Home",
             icon: true,
             icon_class: 'fa-home'
           }, {
             state: 'users.works',
-            text: "Trabajos",
+            text: "Works",
           }]
         })
 
-        // worksApiService.list().then((res) => {
-        //   if (res) {
-        //     this.works = res.data
-        //     this.loading = false
-        //   }
-        // })
+        worksApiService.list().then((res) => {
+          if (res) {
+            this.works = res.data
+            this.loading = false
+          }
+        })
       }
 
-      // delete(index) {
-      //   worksApiService.remove(this.works[index].id).then(data => {
-      //     if (data) {
-      //       this.works.splice(index, 1)
-      //       notyService.success('Mensaje', 'El país se eliminó correctamente')
-      //     } else {
-      //       notyService.erorr('Mensaje', 'Otros datos están relacionado a este país')
-      //     }
-      //   })
-      // }
+      delete(index) {
+        worksApiService.remove(this.works[index].id).then(data => {
+          if (data) {
+            this.works.splice(index, 1)
+            notyService.success('Message', 'The work was successfully removed')
+          } else {
+            notyService.erorr('Message', 'Other data depends from this work')
+          }
+        })
+      }
     }
   }
 });

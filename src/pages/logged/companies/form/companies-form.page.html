@@ -1,0 +1,44 @@
+<div class="row">
+  <div class="col-xs-12">
+    <div class="box">
+      <div class="box-header with-border">
+        <h3 class="box-title">{{$ctrl.action}} company</h3>
+      </div>
+      <div ng-show="$ctrl.loading" class="box-body">
+        <loading-data active="true"></loading-data>
+      </div>
+      <form ng-show="!$ctrl.loading && !$ctrl.ok" ng-submit="$ctrl.submit()" name="form" novalidate>
+        <div class="box-body">
+          <my-tabs>
+            <my-tabs-pane selected="true" title="Data of company">
+              <my-input name="name" form=form label="Name" placeholder="Name" model="$ctrl.company.name" required=true error="$ctrl.errors.name"></my-input>
+              <my-select model="$ctrl.company._city" label="City" data="$ctrl.cities" error="$ctrl.errors._city"></my-select>
+              <my-input name="address" form=form label="Address" placeholder="Address" model="$ctrl.company.address" error="$ctrl.errors.address"></my-input>
+              <my-input name="phone" form=form label="Phone" placeholder="Phone" model="$ctrl.company.phone" error="$ctrl.errors.phone"></my-input>
+              <my-textarea row="3" name="description" form=form label="Description" placeholder="Description" model="$ctrl.company.description" error="$ctrl.errors.description"></my-textarea>
+              <my-textarea row="3" name="history" form=form label="History" placeholder="History" model="$ctrl.company.history" error="$ctrl.errors.history"></my-textarea>
+              <my-tags-list title="Websites" model="$ctrl.company._websites" can-edit="true" can-remove="true"></my-tags-list>
+            </my-tabs-pane>
+            <my-tabs-pane title="Dance Styles">
+              <my-tags-select-list model="$ctrl.company._dance_styles" data="$ctrl.dance_styles"></my-tags-select-list>
+            </my-tabs-pane>
+            <my-tabs-pane title="Persons">
+              <my-tags-select-list model="$ctrl.company._persons" data="$ctrl.persons"></my-tags-select-list>
+            </my-tabs-pane>
+            <my-tabs-pane title="Works">
+              <my-tags-select-list model="$ctrl.company._works" data="$ctrl.works"></my-tags-select-list>
+            </my-tabs-pane>
+            <my-tabs-pane title="Schools">
+              <my-tags-select-list model="$ctrl.company._schools" data="$ctrl.schools"></my-tags-select-list>
+            </my-tabs-pane>
+          </my-tabs>
+        </div>
+        <div class="box-footer ">
+          <button type="submit " class="btn btn-primary " ng-click="form.submit()">
+            {{$ctrl.action}}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

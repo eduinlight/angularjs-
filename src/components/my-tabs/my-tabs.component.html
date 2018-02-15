@@ -1,0 +1,8 @@
+<div class="nav-tabs-custom">
+  <ul class="nav nav-tabs">
+    <li ng-repeat="pane in $ctrl.panes" style="cursor: pointer" ng-class="{'active':pane.selected}" class="pull-left ">
+      <a ng-click="$ctrl.select(pane)">{{pane.title}}</a>
+    </li>
+  </ul>
+  <div class="tab-content" ng-transclude></div>
+</div>

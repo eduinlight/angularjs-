@@ -1,0 +1,11 @@
+<div class="form-group " ng-class="{'has-error': ($ctrl.form.$submitted && $ctrl.form[$ctrl.name].$invalid) || $ctrl.error}">
+  <label>{{$ctrl.label}} <b ng-if="$ctrl.required">*</b></label>
+  <input type="hidden">
+  <select class="form-control select2" style="width: 100%;" ng-model="$ctrl.model" ng-required="$ctrl.required">
+    <!-- <option value=""></option> -->
+    <option ng-repeat="option in $ctrl.data" value="{{option.id}}">{{option.text}}</option>
+  </select>
+  <span>
+    <span ng-show="$ctrl.error" class=" text-danger ">{{$ctrl.error}}</span>
+  </span>
+</div>

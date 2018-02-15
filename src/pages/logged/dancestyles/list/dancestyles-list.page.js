@@ -15,16 +15,16 @@ angular.module('logged').component('dancestylesListPage', {
 
       $onInit() {
         titleBarService.setData({
-          title: "Estilos dansarios",
-          description: "una descripción",
+          title: "Dance styles",
+          description: "a description",
           path: [{
             state: 'users.home',
-            text: "Inicio",
+            text: "Home",
             icon: true,
             icon_class: 'fa-home'
           }, {
             state: 'users.dancestyles',
-            text: "Estilos dansarios",
+            text: "Dance styles",
           }]
         })
 
@@ -40,9 +40,9 @@ angular.module('logged').component('dancestylesListPage', {
         dancestylesApiService.remove(this.dancestyles[index].id).then(data => {
           if (data) {
             this.dancestyles.splice(index, 1)
-            notyService.success('Mensaje', 'El estilo dansario se eliminó correctamente')
+            notyService.success('Message', 'The dance style was successfully removed')
           } else {
-            notyService.erorr('Mensaje', 'Otros datos están relacionado a este estilo dansario')
+            notyService.erorr('Message', 'Other data depends from this dance style')
           }
         })
       }

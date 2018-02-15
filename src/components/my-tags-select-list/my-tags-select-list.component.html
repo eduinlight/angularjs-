@@ -1,0 +1,22 @@
+<div class="box box-primary">
+  <div class="box-body">
+    <form name="form">
+      <div class="input-group input-group-sm">
+        <my-select data="$ctrl.data" model="$ctrl.selected"></my-select>
+        <span class="input-group-btn">
+          <button type="button"  ng-click="$ctrl.add()" class="btn btn-info btn-flat">Add</button>
+        </span>
+      </div>
+    </form>
+  </div>
+  <div class="box-footer clearfix no-border">
+    <ul class="todo-list ui-sortable">
+      <li ng-repeat="d in $ctrl.model track by $index">
+        <span class="text">{{$ctrl.getText(d)}}</span>
+        <div class="tools">
+          <i ng-click="$ctrl.remove($index)" class="fa fa-trash-o"></i>
+        </div>
+      </li>
+    </ul>
+  </div>
+</div>

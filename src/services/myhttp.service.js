@@ -15,6 +15,30 @@ angular.module('my-services').service('myHttpService',
         })
       }
 
+      upload(url, data) {
+        let fd = new FormData()
+        angular.forEach(data, (value, key) => {
+          fd.append(key, value)
+        })
+        debugService.log("Request to: " + url + " Method: post")
+        debugService.log("Data: ", data)
+        let upHeader = {}
+        angular.copy(this.config.headers, upHeader)
+        upHeader['Content-Type'] = undefined
+        return $http.post(url, fd, {
+          transformRequest: angular.identity,
+          headers: upHeader,
+        }).then((res) => {
+          debugService.log("Response from: " + url + " Method: post")
+          debugService.log("Response: ", res)
+          return res.data
+        }, (error) => {
+          debugService.log("Errors from: " + _url + " Method: post ")
+          debugService.log("Errors: ", error)
+          notyService.error("Error", "There is not connection with the server")
+        })
+      }
+
       checkAccessToken() {
         if (loginStatusService.isLogged()) {
           this.config.headers['Authorization'] = "Bearer " + loginStatusService.storage.access_token
@@ -34,7 +58,7 @@ angular.module('my-services').service('myHttpService',
           }, (error) => {
             debugService.log("Errors from: " + _url + " Method: get ")
             debugService.log("Errors: ", error)
-            notyService.error("Error", "No se pudo conectar al servidor")
+            notyService.error("Error", "There is not connection with the server")
           })
       }
 
@@ -51,7 +75,7 @@ angular.module('my-services').service('myHttpService',
           }, (error) => {
             debugService.log("Response from: " + _url + " Method: post ")
             debugService.log("Data: ", data)
-            notyService.error("Error", "No se pudo conectar al servidor")
+            notyService.error("Error", "There is not connection with the server")
           })
       }
 
@@ -68,7 +92,7 @@ angular.module('my-services').service('myHttpService',
           }, (error) => {
             debugService.log("Response from: " + _url + " Method: put ")
             debugService.log("Data: ", data)
-            notyService.error("Error", "No se pudo conectar al servidor")
+            notyService.error("Error", "There is not connection with the server")
           })
       }
 
@@ -83,7 +107,7 @@ angular.module('my-services').service('myHttpService',
           }, (error) => {
             debugService.log("Errors from: " + _url + " Method: delete ")
             debugService.log("Errors: ", error)
-            notyService.error("Error", "No se pudo conectar al servidor")
+            notyService.error("Error", "There is not connection with the server")
           })
       }
     }

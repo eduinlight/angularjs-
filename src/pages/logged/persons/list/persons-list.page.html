@@ -2,18 +2,53 @@
   <div class="col-xs-12">
     <div class="box">
       <div class="box-header with-border">
-        <h3 class="box-title">Listado de personas</h3>
+        <h3 class="box-person">List of persons</h3>
         <div class="box-tools pull-right">
-          <span data-toggle="tooltip" title="" class="badge bg-light-blue">
+          <span data-toggle="tooltip" person="" class="badge bg-light-blue">
             {{$ctrl.persons.length}}
           </span>
           <a ui-sref="users.personsAdd" class="btn">
-            <i class="fa fa-plus"></i> Adicionar
+            <i class="fa fa-plus"></i> Add
           </a>
         </div>
       </div>
       <div class="box-body">
-        personas
+        <loading-data active="$ctrl.loading"></loading-data>
+        <div ng-show="!$ctrl.loading && $ctrl.persons.length==0" class="callout callout-info">
+          <p>The are not persons</p>
+        </div>
+        <table ng-show="!$ctrl.loading && $ctrl.persons.length>0" class="table table-bordered">
+          <thead>
+            <tr>
+              <th style="width: 10px">#</th>
+              <th>First name</th>
+              <th>Last name</th>
+              <th>Gender</th>
+              <th>Email</th>
+              <th style="width: 20%">Options</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr ng-repeat="person in $ctrl.persons track by $index">
+              <td>{{$index+1}}</td>
+              <td>{{person.first_name}}</td>
+              <td>{{person.last_name}}</td>
+              <td>{{person.gender|gender}}</td>
+              <td>{{person.email}}</td>
+              <td>
+                <a ui-sref="users.personsDetails({id: person.id})" class="btn btn-success" title="Detelles">
+                  <i class="fa fa-search"></i>
+                </a>
+                <a ui-sref="users.personsEdit({id: person.id})" class="btn btn-primary" title="Edit">
+                  <i class="fa fa-edit"></i>
+                </a>
+                <a ng-click="$ctrl.delete($index)" class="btn btn-danger" title="Eliminar">
+                  <i class="fa fa-remove"></i>
+                </a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </div>
       <div class="box-footer clearfix">
         <ul class="pagination pagination-sm no-margin pull-right">

@@ -12,9 +12,9 @@ angular.module('dance', [
 //CORE
 
 //TERCEROS
-'ui.router',
+'ui.router', 'ui.select2',
 //MIOS
-'my-components', 'my-services', 'my-pipes', 'my-directives', 'pages']).run(['$state', function ($state) {
+'my-components', 'my-services', 'my-pipes', 'my-directives', 'my-filters', 'pages']).run(['$state', function ($state) {
   if (location.hash == "") {
     $state.go('users.home');
   }
@@ -32,7 +32,7 @@ angular.module('dance').config(function ($stateProvider, $locationProvider, $url
   $urlRouterProvider.otherwise('not_found');
 });
 angular.module('dance').constant('config', {
-  api_url: "http://localhost/dance/api",
+  api_url: location.origin + location.pathname + 'api',
   debug: true
 });
 var stateTree = function stateTree(state, node, $sp) {
@@ -48,12 +48,13 @@ var toTitleBar = function toTitleBar(str) {
   if (str.length <= 10) return str;
   return str.substr(0, 7) + "...";
 };
-angular.module('my-components', []);
 angular.module('my-directives', []);
+angular.module('my-components', []);
+angular.module('my-filters', []);
 angular.module('pages', ['not_logged', 'logged']);
 angular.module('my-pipes', []);
 angular.module('my-services', []);
-angular.module('logged', ['titles', 'dancestyles', 'countries', 'companies', 'persons', 'works', 'schools', 'places']).config(function ($stateProvider, $urlServiceProvider) {
+angular.module('logged', ['titles', 'dancestyles', 'countries', 'companies', 'persons', 'works', 'schools', 'venues']).config(function ($stateProvider, $urlServiceProvider) {
   $urlServiceProvider.config.strictMode(false);
   $stateProvider.state('changePassword', {
     url: '/change_password',
@@ -91,18 +92,18 @@ angular.module('companies', []).config(function ($stateProvider, $urlServiceProv
     url: '/companies',
     component: 'companiesListPage'
   });
-  // $stateProvider.state('users.companiesAdd', {
-  //   url: '/companies/add',
-  //   component: 'companiesFormPage'
-  // })
-  // $stateProvider.state('users.companiesEdit', {
-  //   url: '/companies/edit/:id',
-  //   component: 'companiesFormPage'
-  // })
-  // $stateProvider.state('users.companiesDetails', {
-  //   url: '/companies/details/:id',
-  //   component: 'companiesDetailsPage'
-  // })
+  $stateProvider.state('users.companiesAdd', {
+    url: '/companies/add',
+    component: 'companiesFormPage'
+  });
+  $stateProvider.state('users.companiesEdit', {
+    url: '/companies/edit/:id',
+    component: 'companiesFormPage'
+  });
+  $stateProvider.state('users.companiesDetails', {
+    url: '/companies/details/:id',
+    component: 'companiesDetailsPage'
+  });
 });
 angular.module('countries', ['cities']).config(function ($stateProvider, $urlServiceProvider) {
   $urlServiceProvider.config.strictMode(false);
@@ -148,37 +149,18 @@ angular.module('persons', []).config(function ($stateProvider, $urlServiceProvid
     url: '/persons',
     component: 'personsListPage'
   });
-  // $stateProvider.state('users.personsAdd', {
-  //   url: '/persons/add',
-  //   component: 'personsFormPage'
-  // })
-  // $stateProvider.state('users.personsEdit', {
-  //   url: '/persons/edit/:id',
-  //   component: 'personsFormPage'
-  // })
-  // $stateProvider.state('users.personsDetails', {
-  //   url: '/persons/details/:id',
-  //   component: 'personsDetailsPage'
-  // })
-});
-angular.module('places', []).config(function ($stateProvider, $urlServiceProvider) {
-  $urlServiceProvider.config.strictMode(false);
-  $stateProvider.state('users.places', {
-    url: '/places',
-    component: 'placesListPage'
+  $stateProvider.state('users.personsAdd', {
+    url: '/persons/add',
+    component: 'personsFormPage'
   });
-  // $stateProvider.state('users.placesAdd', {
-  //   url: '/places/add',
-  //   component: 'placesFormPage'
-  // })
-  // $stateProvider.state('users.placesEdit', {
-  //   url: '/places/edit/:id',
-  //   component: 'placesFormPage'
-  // })
-  // $stateProvider.state('users.placesDetails', {
-  //   url: '/places/details/:id',
-  //   component: 'placesDetailsPage'
-  // })
+  $stateProvider.state('users.personsEdit', {
+    url: '/persons/edit/:id',
+    component: 'personsFormPage'
+  });
+  $stateProvider.state('users.personsDetails', {
+    url: '/persons/details/:id',
+    component: 'personsDetailsPage'
+  });
 });
 angular.module('schools', []).config(function ($stateProvider, $urlServiceProvider) {
   $urlServiceProvider.config.strictMode(false);
@@ -186,18 +168,37 @@ angular.module('schools', []).config(function ($stateProvider, $urlServiceProvid
     url: '/schools',
     component: 'schoolsListPage'
   });
-  // $stateProvider.state('users.schoolsAdd', {
-  //   url: '/schools/add',
-  //   component: 'schoolsFormPage'
-  // })
-  // $stateProvider.state('users.schoolsEdit', {
-  //   url: '/schools/edit/:id',
-  //   component: 'schoolsFormPage'
-  // })
-  // $stateProvider.state('users.schoolsDetails', {
-  //   url: '/schools/details/:id',
-  //   component: 'schoolsDetailsPage'
-  // })
+  $stateProvider.state('users.schoolsAdd', {
+    url: '/schools/add',
+    component: 'schoolsFormPage'
+  });
+  $stateProvider.state('users.schoolsEdit', {
+    url: '/schools/edit/:id',
+    component: 'schoolsFormPage'
+  });
+  $stateProvider.state('users.schoolsDetails', {
+    url: '/schools/details/:id',
+    component: 'schoolsDetailsPage'
+  });
+});
+angular.module('venues', []).config(function ($stateProvider, $urlServiceProvider) {
+  $urlServiceProvider.config.strictMode(false);
+  $stateProvider.state('users.venues', {
+    url: '/venues',
+    component: 'venuesListPage'
+  });
+  $stateProvider.state('users.venuesAdd', {
+    url: '/venues/add',
+    component: 'venuesFormPage'
+  });
+  $stateProvider.state('users.venuesEdit', {
+    url: '/venues/edit/:id',
+    component: 'venuesFormPage'
+  });
+  $stateProvider.state('users.venuesDetails', {
+    url: '/venues/details/:id',
+    component: 'venuesDetailsPage'
+  });
 });
 angular.module('titles', []).config(function ($stateProvider, $urlServiceProvider) {
   $urlServiceProvider.config.strictMode(false);
@@ -224,24 +225,27 @@ angular.module('works', []).config(function ($stateProvider, $urlServiceProvider
     url: '/works',
     component: 'worksListPage'
   });
-  // $stateProvider.state('users.worksAdd', {
-  //   url: '/works/add',
-  //   component: 'worksFormPage'
-  // })
-  // $stateProvider.state('users.worksEdit', {
-  //   url: '/works/edit/:id',
-  //   component: 'worksFormPage'
-  // })
-  // $stateProvider.state('users.worksDetails', {
-  //   url: '/works/details/:id',
-  //   component: 'worksDetailsPage'
-  // })
+  $stateProvider.state('users.worksAdd', {
+    url: '/works/add',
+    component: 'worksFormPage'
+  });
+  $stateProvider.state('users.worksEdit', {
+    url: '/works/edit/:id',
+    component: 'worksFormPage'
+  });
+  $stateProvider.state('users.worksDetails', {
+    url: '/works/details/:id',
+    component: 'worksDetailsPage'
+  });
 });
 angular.module('cities', []).config(function ($stateProvider, $urlServiceProvider) {
   $urlServiceProvider.config.strictMode(false);
   $stateProvider.state('users.cities', {
     url: '/countries/:country_id/cities',
-    component: 'citiesListPage'
+    component: 'citiesListPage',
+    params: {
+      country_id: ""
+    }
   });
   $stateProvider.state('users.citiesAdd', {
     url: '/countries/:country_id/cities/add',
@@ -317,6 +321,40 @@ var CrudClass = function () {
   return CrudClass;
 }();
 
+angular.module('my-filters').filter('city', function () {
+  return function (input) {
+    if (input) {
+      return input.name + ", " + input._country.name;
+    }
+    return "";
+  };
+});
+angular.module('my-filters').filter('gender', function () {
+  return function (input) {
+    var s = [];
+    s['M'] = 'Male';
+    s['F'] = 'Famele';
+    return s[input];
+  };
+});
+// angular.module('my-filters')
+//   .filter('notinbyid', function() {
+//     return function(A, B) {
+//       // if (A && typeof(A) == 'object') {
+//       // let C = []
+//       // for (let i = 0, la = A.length; i < la; i++) {
+//       //   let index = B.findIndex(v => A[i].id == v)
+//       //   if (index != -1)
+//       //     C.push(A[i])
+//       // }
+//       return [{ id: 1, text: '2323' }]
+
+//       // }
+
+
+//       // return A
+//     };
+//   })
 angular.module('my-services').service('debugService', function (config) {
   this.log = function () {
     var p1 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : "";
@@ -345,6 +383,31 @@ angular.module('my-services').service('myHttpService', function ($http, loginSta
     }
 
     _createClass(_class, [{
+      key: 'upload',
+      value: function upload(url, data) {
+        var fd = new FormData();
+        angular.forEach(data, function (value, key) {
+          fd.append(key, value);
+        });
+        debugService.log("Request to: " + url + " Method: post");
+        debugService.log("Data: ", data);
+        var upHeader = {};
+        angular.copy(this.config.headers, upHeader);
+        upHeader['Content-Type'] = undefined;
+        return $http.post(url, fd, {
+          transformRequest: angular.identity,
+          headers: upHeader
+        }).then(function (res) {
+          debugService.log("Response from: " + url + " Method: post");
+          debugService.log("Response: ", res);
+          return res.data;
+        }, function (error) {
+          debugService.log("Errors from: " + _url + " Method: post ");
+          debugService.log("Errors: ", error);
+          notyService.error("Error", "There is not connection with the server");
+        });
+      }
+    }, {
       key: 'checkAccessToken',
       value: function checkAccessToken() {
         if (loginStatusService.isLogged()) {
@@ -365,7 +428,7 @@ angular.module('my-services').service('myHttpService', function ($http, loginSta
         }, function (error) {
           debugService.log("Errors from: " + _url + " Method: get ");
           debugService.log("Errors: ", error);
-          notyService.error("Error", "No se pudo conectar al servidor");
+          notyService.error("Error", "There is not connection with the server");
         });
       }
     }, {
@@ -382,7 +445,7 @@ angular.module('my-services').service('myHttpService', function ($http, loginSta
         }, function (error) {
           debugService.log("Response from: " + _url + " Method: post ");
           debugService.log("Data: ", data);
-          notyService.error("Error", "No se pudo conectar al servidor");
+          notyService.error("Error", "There is not connection with the server");
         });
       }
     }, {
@@ -399,7 +462,7 @@ angular.module('my-services').service('myHttpService', function ($http, loginSta
         }, function (error) {
           debugService.log("Response from: " + _url + " Method: put ");
           debugService.log("Data: ", data);
-          notyService.error("Error", "No se pudo conectar al servidor");
+          notyService.error("Error", "There is not connection with the server");
         });
       }
     }, {
@@ -414,7 +477,7 @@ angular.module('my-services').service('myHttpService', function ($http, loginSta
         }, function (error) {
           debugService.log("Errors from: " + _url + " Method: delete ");
           debugService.log("Errors: ", error);
-          notyService.error("Error", "No se pudo conectar al servidor");
+          notyService.error("Error", "There is not connection with the server");
         });
       }
     }]);
@@ -431,7 +494,7 @@ angular.module('my-services').service('notyService', function () {
         title: title,
         text: message,
         class_name: 'gritter-warning gritter-light',
-        time: 500
+        time: 2000
       });
     };
 
@@ -440,7 +503,7 @@ angular.module('my-services').service('notyService', function () {
         title: title,
         text: message,
         class_name: 'gritter-info gritter-light',
-        time: 500
+        time: 2000
       });
     };
 
@@ -449,7 +512,7 @@ angular.module('my-services').service('notyService', function () {
         title: title,
         text: message,
         class_name: 'gritter-success gritter-light',
-        time: 500
+        time: 2000
       });
     };
 
@@ -458,7 +521,7 @@ angular.module('my-services').service('notyService', function () {
         title: title,
         text: message,
         class_name: 'gritter-error gritter-light',
-        time: 500
+        time: 2000
       });
     };
   }
@@ -478,52 +541,135 @@ angular.module('my-services').service('citiesApiService', function (myHttpServic
     return _class4;
   }(CrudClass))();
 });
-angular.module('my-services').service('countriesApiService', function (myHttpService) {
+angular.module('my-services').service('companiesApiService', function (myHttpService) {
   return new (function (_CrudClass2) {
     _inherits(_class5, _CrudClass2);
 
     function _class5() {
       _classCallCheck(this, _class5);
 
-      return _possibleConstructorReturn(this, (_class5.__proto__ || Object.getPrototypeOf(_class5)).call(this, myHttpService, "/countries"));
+      return _possibleConstructorReturn(this, (_class5.__proto__ || Object.getPrototypeOf(_class5)).call(this, myHttpService, "/companies"));
     }
 
     return _class5;
   }(CrudClass))();
 });
-angular.module('my-services').service('dancestylesApiService', function (myHttpService) {
+angular.module('my-services').service('countriesApiService', function (myHttpService) {
   return new (function (_CrudClass3) {
     _inherits(_class6, _CrudClass3);
 
     function _class6() {
       _classCallCheck(this, _class6);
 
-      return _possibleConstructorReturn(this, (_class6.__proto__ || Object.getPrototypeOf(_class6)).call(this, myHttpService, "/dancestyles"));
+      return _possibleConstructorReturn(this, (_class6.__proto__ || Object.getPrototypeOf(_class6)).call(this, myHttpService, "/countries"));
     }
 
     return _class6;
   }(CrudClass))();
 });
-angular.module('my-services').service('titlesApiService', function (myHttpService) {
+angular.module('my-services').service('dancestylesApiService', function (myHttpService) {
   return new (function (_CrudClass4) {
     _inherits(_class7, _CrudClass4);
 
     function _class7() {
       _classCallCheck(this, _class7);
 
-      return _possibleConstructorReturn(this, (_class7.__proto__ || Object.getPrototypeOf(_class7)).call(this, myHttpService, "/titles"));
+      return _possibleConstructorReturn(this, (_class7.__proto__ || Object.getPrototypeOf(_class7)).call(this, myHttpService, "/dancestyles"));
     }
 
     return _class7;
   }(CrudClass))();
 });
-angular.module('my-services').service('authService', function (myHttpService, config, notyService, debugService) {
-  return new (function () {
+angular.module('my-services').service('personsApiService', function (myHttpService) {
+  return new (function (_CrudClass5) {
+    _inherits(_class8, _CrudClass5);
+
     function _class8() {
       _classCallCheck(this, _class8);
+
+      return _possibleConstructorReturn(this, (_class8.__proto__ || Object.getPrototypeOf(_class8)).call(this, myHttpService, "/persons"));
     }
 
-    _createClass(_class8, [{
+    return _class8;
+  }(CrudClass))();
+});
+angular.module('my-services').service('schoolsApiService', function (myHttpService) {
+  return new (function (_CrudClass6) {
+    _inherits(_class9, _CrudClass6);
+
+    function _class9() {
+      _classCallCheck(this, _class9);
+
+      return _possibleConstructorReturn(this, (_class9.__proto__ || Object.getPrototypeOf(_class9)).call(this, myHttpService, "/schools"));
+    }
+
+    return _class9;
+  }(CrudClass))();
+});
+angular.module('my-services').service('titlesApiService', function (myHttpService) {
+  return new (function (_CrudClass7) {
+    _inherits(_class10, _CrudClass7);
+
+    function _class10() {
+      _classCallCheck(this, _class10);
+
+      return _possibleConstructorReturn(this, (_class10.__proto__ || Object.getPrototypeOf(_class10)).call(this, myHttpService, "/titles"));
+    }
+
+    return _class10;
+  }(CrudClass))();
+});
+angular.module('my-services').service('uploadService', function (myHttpService, config) {
+  return new (function () {
+    function _class11() {
+      _classCallCheck(this, _class11);
+    }
+
+    _createClass(_class11, [{
+      key: 'upload',
+      value: function upload(file) {
+        return myHttpService.upload(config.api_url + "/upload", { file: file }).then(function (data) {
+          return data;
+        });
+      }
+    }]);
+
+    return _class11;
+  }())();
+});
+angular.module('my-services').service('venuesApiService', function (myHttpService) {
+  return new (function (_CrudClass8) {
+    _inherits(_class12, _CrudClass8);
+
+    function _class12() {
+      _classCallCheck(this, _class12);
+
+      return _possibleConstructorReturn(this, (_class12.__proto__ || Object.getPrototypeOf(_class12)).call(this, myHttpService, "/venues"));
+    }
+
+    return _class12;
+  }(CrudClass))();
+});
+angular.module('my-services').service('worksApiService', function (myHttpService) {
+  return new (function (_CrudClass9) {
+    _inherits(_class13, _CrudClass9);
+
+    function _class13() {
+      _classCallCheck(this, _class13);
+
+      return _possibleConstructorReturn(this, (_class13.__proto__ || Object.getPrototypeOf(_class13)).call(this, myHttpService, "/works"));
+    }
+
+    return _class13;
+  }(CrudClass))();
+});
+angular.module('my-services').service('authService', function (myHttpService, config, notyService, debugService) {
+  return new (function () {
+    function _class14() {
+      _classCallCheck(this, _class14);
+    }
+
+    _createClass(_class14, [{
       key: 'login',
       value: function login(user, pass) {
         return myHttpService.post('/auth/login', { user: user, pass: pass }).then(function (res) {
@@ -539,7 +685,7 @@ angular.module('my-services').service('authService', function (myHttpService, co
       }
     }]);
 
-    return _class8;
+    return _class14;
   }())();
 });
 function StorageModel() {
@@ -550,8 +696,8 @@ function StorageModel() {
 }
 angular.module('my-services').service('loginStatusService', function ($rootScope) {
   return new (function () {
-    function _class10() {
-      _classCallCheck(this, _class10);
+    function _class16() {
+      _classCallCheck(this, _class16);
 
       this.storage_key = "danceapp_02869264ksjdi234nkw";
 
@@ -561,7 +707,7 @@ angular.module('my-services').service('loginStatusService', function ($rootScope
       this.emitChange();
     }
 
-    _createClass(_class10, [{
+    _createClass(_class16, [{
       key: 'emitChange',
       value: function emitChange() {
         this.scope.$emit('storageChange', this.storage);
@@ -609,12 +755,12 @@ angular.module('my-services').service('loginStatusService', function ($rootScope
       }
     }]);
 
-    return _class10;
+    return _class16;
   }())();
 });
 angular.module('my-services').service('titleBarService', function () {
-  function _class11($rootScope) {
-    _classCallCheck(this, _class11);
+  function _class17($rootScope) {
+    _classCallCheck(this, _class17);
 
     this.scope = $rootScope.$new(true);
 
@@ -625,7 +771,7 @@ angular.module('my-services').service('titleBarService', function () {
     this.emitChange();
   }
 
-  _createClass(_class11, [{
+  _createClass(_class17, [{
     key: 'emitChange',
     value: function emitChange() {
       this.scope.$emit('dataChange', {
@@ -668,71 +814,16 @@ angular.module('my-services').service('titleBarService', function () {
     }
   }]);
 
-  return _class11;
+  return _class17;
 }());
 angular.module('pages').component('usersTemplate', {
-  templateUrl: '/src/templates/users.template.html',
+  templateUrl: 'src/templates/users.template.html',
   controller: function controller() {
     _classCallCheck(this, controller);
   }
 });
 angular.module('my-components').component('myFooter', {
   templateUrl: 'src/components/footer/footer.component.html',
-  controller: function controller() {
-    return new (function () {
-      function _class13() {
-        _classCallCheck(this, _class13);
-
-        this.$onInit = function () {};
-      }
-
-      return _class13;
-    }())();
-  }
-});
-angular.module('my-components').component('myHeader', {
-  templateUrl: 'src/components/header/header.component.html',
-  controller: function controller(loginStatusService, $state, notyService) {
-    return new (function () {
-      function _class15() {
-        _classCallCheck(this, _class15);
-
-        this.$onInit = function () {};
-
-        this.logout = function () {
-          loginStatusService.remove();
-
-          notyService.info("Saludos", "Hasta la próxima");
-
-          $state.go('login');
-        };
-      }
-
-      return _class15;
-    }())();
-  }
-});
-angular.module('my-components').component('leftPanel', {
-  templateUrl: 'src/components/left-panel/left-panel.component.html',
-  controller: function controller() {
-    return new (function () {
-      function _class17() {
-        _classCallCheck(this, _class17);
-
-        this.$onInit = function () {
-          // this.active = true
-        };
-      }
-
-      return _class17;
-    }())();
-  }
-});
-angular.module('my-components').component('loadingData', {
-  templateUrl: 'src/components/loading-data/loading-data.component.html',
-  bindings: {
-    active: "<"
-  },
   controller: function controller() {
     return new (function () {
       function _class19() {
@@ -745,12 +836,477 @@ angular.module('my-components').component('loadingData', {
     }())();
   }
 });
+angular.module('my-components').component('myHeader', {
+  templateUrl: 'src/components/header/header.component.html',
+  controller: function controller(loginStatusService, $state, notyService) {
+    return new (function () {
+      function _class21() {
+        _classCallCheck(this, _class21);
+
+        this.$onInit = function () {};
+
+        this.logout = function () {
+          loginStatusService.remove();
+
+          notyService.info("Bye", "Have a nice day");
+
+          $state.go('login');
+        };
+      }
+
+      return _class21;
+    }())();
+  }
+});
+angular.module('my-components').component('leftPanel', {
+  templateUrl: 'src/components/left-panel/left-panel.component.html',
+  controller: function controller() {
+    return new (function () {
+      function _class23() {
+        _classCallCheck(this, _class23);
+
+        this.$onInit = function () {
+          // this.active = true
+        };
+      }
+
+      return _class23;
+    }())();
+  }
+});
+angular.module('my-components').component('loadingData', {
+  templateUrl: 'src/components/loading-data/loading-data.component.html',
+  bindings: {
+    active: "<"
+  },
+  controller: function controller() {
+    return new (function () {
+      function _class25() {
+        _classCallCheck(this, _class25);
+
+        this.$onInit = function () {};
+      }
+
+      return _class25;
+    }())();
+  }
+});
+angular.module('my-components').component('myInput', {
+  templateUrl: 'src/components/my-input/my-input.component.html',
+  bindings: {
+    error: '=',
+    form: '<',
+    label: '@',
+    name: '@',
+    model: '=',
+    placeholder: '@',
+    required: '<',
+    type: '@'
+  },
+  controller: function controller() {
+    return new (function () {
+      function _class27() {
+        _classCallCheck(this, _class27);
+
+        this.$onInit = function () {};
+      }
+
+      _createClass(_class27, [{
+        key: 'change',
+        value: function change() {
+          this.error = '';
+        }
+      }]);
+
+      return _class27;
+    }())();
+  }
+});
+angular.module('my-components').component('myInputDate', {
+  templateUrl: 'src/components/my-input-date/my-input-date.component.html',
+  bindings: {
+    error: '=',
+    form: '<',
+    label: '@',
+    name: '@',
+    model: '=',
+    required: '<'
+  },
+  controller: function controller($element, $scope) {
+    return new (function () {
+      function _class29() {
+        var _this11 = this;
+
+        _classCallCheck(this, _class29);
+
+        this.$onInit = function () {
+          var $elem = $($element).find('#datepicker');
+          $elem.datepicker({
+            autoclose: true,
+            format: 'mm/dd/yyyy'
+          });
+
+          $elem.change(function () {
+            var d = new Date($elem.val());
+            _this11.model = d.getTime() / 1000;
+          });
+        };
+      }
+
+      return _class29;
+    }())();
+  }
+});
+angular.module('my-components').component('myInputFile', {
+  templateUrl: 'src/components/my-input-file/my-input-file.component.html',
+  bindings: {
+    form: '<',
+    label: '@',
+    name: '@',
+    model: '=',
+    required: '<',
+    error: '<'
+  },
+  controller: function controller(uploadService) {
+    return new (function () {
+      function _class31() {
+        _classCallCheck(this, _class31);
+
+        this.$onInit = function () {};
+      }
+
+      _createClass(_class31, [{
+        key: 'change',
+        value: function change(target) {
+          var _this12 = this;
+
+          if (target.files.length > 0) {
+            uploadService.upload(target.files[0]).then(function (res) {
+              if (res) {
+                if (res.status == 200) {
+                  _this12.model = res.data;
+                  _this12.error = undefined;
+                } else {
+                  _this12.error = res.errors.file;
+                }
+              }
+            });
+          }
+        }
+      }]);
+
+      return _class31;
+    }())();
+  }
+});
+angular.module('my-components').component('mySelect', {
+  templateUrl: 'src/components/my-select/my-select.component.html',
+  bindings: {
+    error: '=',
+    form: '<',
+    label: '@',
+    name: '@',
+    model: '=',
+    data: '<',
+    required: '<'
+    // multiple: '<'
+  },
+  controller: function controller($element, $attrs) {
+    return new (function () {
+      function _class32() {
+        _classCallCheck(this, _class32);
+      }
+
+      return _class32;
+    }())();
+  }
+});
+angular.module('my-components').component('myShowList', {
+  templateUrl: 'src/components/my-show-list/my-show-list.component.html',
+  bindings: {
+    title: '@',
+    data: '<',
+    attr: '@'
+  },
+  controller: function controller($element) {
+    return new (function () {
+      function _class33() {
+        _classCallCheck(this, _class33);
+      }
+
+      return _class33;
+    }())();
+  }
+});
+angular.module('my-components').component('myTabsPane', {
+  transclude: true,
+  templateUrl: 'src/components/my-tabs/my-tabs-pane.component.html',
+  require: {
+    tabsCtrl: '^myTabs'
+  },
+  bindings: {
+    title: '@',
+    selected: '<'
+  },
+  controller: function controller() {
+    return new (function () {
+      function _class35() {
+        _classCallCheck(this, _class35);
+
+        this.$onInit = function () {
+          this.tabsCtrl.addPane(this);
+          if (this.selected) {
+            this.tabsCtrl.select(this);
+          }
+        };
+      }
+
+      return _class35;
+    }())();
+  }
+});
+angular.module('my-components').component('myTabs', {
+  transclude: true,
+  templateUrl: 'src/components/my-tabs/my-tabs.component.html',
+  controller: function controller() {
+    return new (function () {
+      function _class36() {
+        _classCallCheck(this, _class36);
+      }
+
+      _createClass(_class36, [{
+        key: '$onInit',
+        value: function $onInit() {
+          this.panes = [];
+        }
+      }, {
+        key: 'select',
+        value: function select(pane) {
+          angular.forEach(this.panes, function (pane) {
+            pane.selected = false;
+          });
+          pane.selected = true;
+        }
+      }, {
+        key: 'addPane',
+        value: function addPane(pane) {
+          if (this.panes.length === 0) {
+            this.select(pane);
+          }
+          this.panes.push(pane);
+        }
+      }]);
+
+      return _class36;
+    }())();
+  }
+});
+angular.module('my-components').component('myTags', {
+  templateUrl: 'src/components/my-tags/my-tags.component.html',
+  bindings: {
+    label: '@',
+    model: '='
+  },
+  controller: function controller() {
+    return new (function () {
+      function _class38() {
+        var _this13 = this;
+
+        _classCallCheck(this, _class38);
+
+        this.$onInit = function () {
+          if (_this13.model == undefined) {
+            _this13.model = [];
+          }
+        };
+
+        this.text = "";
+      }
+
+      _createClass(_class38, [{
+        key: 'blur',
+        value: function blur() {
+          if (this.text.trim() !== "") {
+            this.model.push(this.text);
+          }
+          this.text = "";
+        }
+      }, {
+        key: 'del',
+        value: function del(index) {
+          this.model.splice(index, 1);
+        }
+      }]);
+
+      return _class38;
+    }())();
+  }
+});
+angular.module('my-components').component('myTagsList', {
+  templateUrl: 'src/components/my-tags-list/my-tags-list.component.html',
+  bindings: {
+    title: '@',
+    model: '=',
+    canEdit: '<',
+    canRemove: '<',
+    onChange: '&'
+  },
+  controller: function controller($element) {
+    return new (function () {
+      function _class39() {
+        _classCallCheck(this, _class39);
+      }
+
+      _createClass(_class39, [{
+        key: '$onInit',
+        value: function $onInit() {
+          if (this.model == undefined) {
+            this.model = [];
+          }
+          this.action = "Add";
+          this.text = "";
+        }
+      }, {
+        key: 'handleEnter',
+        value: function handleEnter(event) {
+          var _this14 = this;
+
+          if (event == undefined || event.key == "Enter") {
+            if (event != undefined) {
+              event.preventDefault();
+            }
+
+            var value = this.text.trim();
+            if (value !== "") {
+              if (this.canEdit && this.action === 'Edit') {
+                if (this.model.findIndex(function (v, i) {
+                  return _this14.editing_id != i && v == value;
+                }) === -1) {
+                  this.model[this.editing_id] = value;
+                  this.text = '';
+                  this.action = 'Add';
+                }
+              } else if (this.action === 'Add') {
+                if (this.model.findIndex(function (v) {
+                  return v == value;
+                }) === -1) {
+                  this.model.push(value);
+                  this.text = '';
+                }
+              }
+              this.onChange(this.model);
+            }
+          }
+        }
+      }, {
+        key: 'edit',
+        value: function edit(id) {
+          this.action = 'Edit';
+          this.text = this.model[id];
+          this.editing_id = id;
+        }
+      }, {
+        key: 'remove',
+        value: function remove(id) {
+          if (this.canRemove) this.model.splice(id, 1);
+        }
+      }]);
+
+      return _class39;
+    }())();
+  }
+});
+angular.module('my-components').component('myTagsSelectList', {
+  templateUrl: 'src/components/my-tags-select-list/my-tags-select-list.component.html',
+  bindings: {
+    model: '=',
+    data: '<',
+    onChange: '&'
+  },
+  controller: function controller($element) {
+    return new (function () {
+      function _class40() {
+        _classCallCheck(this, _class40);
+      }
+
+      _createClass(_class40, [{
+        key: '$onInit',
+        value: function $onInit() {
+          if (this.model == undefined) {
+            this.model = [];
+          }
+          this.selected = -1;
+        }
+      }, {
+        key: 'getText',
+        value: function getText(id) {
+          if (this.data) {
+            var index = this.data.findIndex(function (v) {
+              return v.id == id;
+            });
+            if (index != -1) {
+              return this.data[this.data.findIndex(function (v) {
+                return v.id == id;
+              })].text;
+            }
+          }
+
+          return "";
+        }
+      }, {
+        key: 'add',
+        value: function add() {
+          var _this15 = this;
+
+          if (this.model.findIndex(function (v) {
+            return v == _this15.selected;
+          }) == -1 && this.selected != -1) {
+            this.model.push(this.selected);
+            this.selected = -1;
+            this.onChange(this.model);
+          }
+        }
+      }, {
+        key: 'remove',
+        value: function remove(id) {
+          this.model.splice(id, 1);
+        }
+      }]);
+
+      return _class40;
+    }())();
+  }
+});
+angular.module('my-components').component('myTextarea', {
+  templateUrl: 'src/components/my-textarea/my-textarea.component.html',
+  bindings: {
+    error: '=',
+    form: '<',
+    label: '@',
+    name: '@',
+    model: '=',
+    placeholder: '@',
+    required: '<',
+    row: '<'
+  },
+  controller: function controller() {
+    return new (function () {
+      function _class42() {
+        _classCallCheck(this, _class42);
+
+        this.$onInit = function () {};
+      }
+
+      return _class42;
+    }())();
+  }
+});
 angular.module('my-components').component('titleBar', {
   templateUrl: 'src/components/title-bar/title-bar.component.html',
   controller: function controller(titleBarService) {
     return new (function () {
-      function _class20() {
-        _classCallCheck(this, _class20);
+      function _class43() {
+        _classCallCheck(this, _class43);
 
         this.title = "";
         this.description = "";
@@ -759,15 +1315,15 @@ angular.module('my-components').component('titleBar', {
         this._event = null;
       }
 
-      _createClass(_class20, [{
+      _createClass(_class43, [{
         key: '$onInit',
         value: function $onInit() {
-          var _this6 = this;
+          var _this16 = this;
 
           this._event = titleBarService.scope.$on('dataChange', function (event, data) {
-            _this6.title = data.title;
-            _this6.description = data.description;
-            _this6.path = data.path;
+            _this16.title = data.title;
+            _this16.description = data.description;
+            _this16.path = data.path;
           });
         }
       }, {
@@ -775,7 +1331,7 @@ angular.module('my-components').component('titleBar', {
         value: function $onDestroy() {}
       }]);
 
-      return _class20;
+      return _class43;
     }())();
   }
 });
@@ -788,15 +1344,15 @@ angular.module('my-components').component('leftPanelLink', {
   },
   controller: function controller() {
     return new (function () {
-      function _class22() {
-        _classCallCheck(this, _class22);
+      function _class45() {
+        _classCallCheck(this, _class45);
 
         this.$onInit = function () {
           // this.active = true
         };
       }
 
-      return _class22;
+      return _class45;
     }())();
   }
 });
@@ -804,11 +1360,11 @@ angular.module('logged').component('changePasswordPage', {
   templateUrl: 'src/pages/logged/change-password/change-password.page.html',
   controller: function controller($window, notyService, config, authService, loginStatusService, $state) {
     return new (function () {
-      function _class23() {
-        _classCallCheck(this, _class23);
+      function _class46() {
+        _classCallCheck(this, _class46);
       }
 
-      _createClass(_class23, [{
+      _createClass(_class46, [{
         key: '$onInit',
         value: function $onInit() {
           if (!loginStatusService.isLogged()) {
@@ -825,18 +1381,18 @@ angular.module('logged').component('changePasswordPage', {
       }, {
         key: 'change_password',
         value: function change_password() {
-          var _this7 = this;
+          var _this17 = this;
 
           authService.change_password(this.model).then(function (res) {
             if (res) {
               if (res.status == 400) {
-                _this7.errors = res.errors;
+                _this17.errors = res.errors;
               } else {
                 //quitar errores
-                _this7.errors = {};
+                _this17.errors = {};
 
                 //notificación de bienvenida
-                notyService.info("Mensaje", "La contraseña se cambió con éxito");
+                notyService.info("Message", "The password was changed successfully");
 
                 //cambio de estado
                 $window.history.back();
@@ -851,7 +1407,7 @@ angular.module('logged').component('changePasswordPage', {
         }
       }]);
 
-      return _class23;
+      return _class46;
     }())();
   }
 });
@@ -859,19 +1415,21 @@ angular.module('logged').component('homePage', {
   templateUrl: 'src/pages/logged/home/home.page.html',
   controller: function controller($state, loginStatusService, titleBarService) {
     return new (function () {
-      function _class24() {
-        _classCallCheck(this, _class24);
+      function _class47() {
+        _classCallCheck(this, _class47);
+
+        this.rios = "windows";
       }
 
-      _createClass(_class24, [{
+      _createClass(_class47, [{
         key: '$onInit',
         value: function $onInit() {
           titleBarService.setData({
-            title: "Inicio",
-            description: "una descripción",
+            title: "Home",
+            description: "a description",
             path: [{
               state: 'users.home',
-              text: "Inicio",
+              text: "Home",
               icon: true,
               icon_class: 'fa-home'
             }]
@@ -879,35 +1437,35 @@ angular.module('logged').component('homePage', {
         }
       }]);
 
-      return _class24;
+      return _class47;
     }())();
   }
 });
 angular.module('not_logged').component('loginPage', {
   templateUrl: 'src/pages/not_logged/login/login.page.html',
   controller: function controller(notyService, config, authService, loginStatusService, $state) {
-    var _this8 = this;
+    var _this18 = this;
 
     this.$onInit = function () {
       if (loginStatusService.isLogged()) {
         $state.go('users.home');
       }
 
-      _this8.model = {
+      _this18.model = {
         user: "",
         pass: ""
       };
-      _this8.errors = {};
+      _this18.errors = {};
     };
 
     this.login = function () {
-      authService.login(_this8.model.user, _this8.model.pass).then(function (res) {
+      authService.login(_this18.model.user, _this18.model.pass).then(function (res) {
         if (res) {
           if (res.status == 400) {
-            _this8.errors = res.errors;
+            _this18.errors = res.errors;
           } else {
             //quitar errores
-            _this8.errors = {};
+            _this18.errors = {};
 
             //guardar el estado de la app
             loginStatusService.setStorage({
@@ -932,730 +1490,174 @@ angular.module('not_logged').component('notFoundPage', {
   templateUrl: 'src/pages/not_logged/not_found/not_found.page.html',
   controller: function controller(notyService) {}
 });
-angular.module('logged').component('companiesListPage', {
-  templateUrl: 'src/pages/logged/companies/list/companies-list.page.html',
-  controller: function controller($state, loginStatusService, titleBarService,
-  // companiesApiService,
-  notyService) {
+angular.module('logged').component('companiesDetailsPage', {
+  templateUrl: 'src/pages/logged/companies/details/companies-details.page.html',
+  controller: function controller($state, $stateParams, loginStatusService, titleBarService, companiesApiService, notyService, $filter) {
     return new (function () {
-      function _class25() {
-        _classCallCheck(this, _class25);
+      function _class48() {
+        _classCallCheck(this, _class48);
 
-        this.companies = [];
+        this.company = {};
         this.loading = true;
       }
 
-      _createClass(_class25, [{
-        key: '$onInit',
-        value: function $onInit() {
-          titleBarService.setData({
-            title: "Compañías",
-            description: "una descripción",
-            path: [{
-              state: 'users.home',
-              text: "Inicio",
-              icon: true,
-              icon_class: 'fa-home'
-            }, {
-              state: 'users.companies',
-              text: "Compañías"
-            }]
-          });
-
-          // companiesApiService.list().then((res) => {
-          //   if (res) {
-          //     this.companies = res.data
-          //     this.loading = false
-          //   }
-          // })
-        }
-
-        // delete(index) {
-        //   companiesApiService.remove(this.companies[index].id).then(data => {
-        //     if (data) {
-        //       this.companies.splice(index, 1)
-        //       notyService.success('Mensaje', 'El país se eliminó correctamente')
-        //     } else {
-        //       notyService.erorr('Mensaje', 'Otros datos están relacionado a este país')
-        //     }
-        //   })
-        // }
-
-      }]);
-
-      return _class25;
-    }())();
-  }
-});
-angular.module('logged').component('countriesDetailsPage', {
-  templateUrl: 'src/pages/logged/countries/details/countries-details.page.html',
-  controller: function controller($stateParams, $state, loginStatusService, titleBarService, countriesApiService) {
-    return new (function () {
-      function _class26() {
-        _classCallCheck(this, _class26);
-
-        this.country = {};
-        this.action = "";
-        this.loading = true;
-      }
-
-      _createClass(_class26, [{
-        key: '$onInit',
-        value: function $onInit() {
-          var _this9 = this;
-
-          countriesApiService.get($stateParams.id).then(function (res) {
-            if (res) {
-              _this9.country = res.data;
-              titleBarService.setData({
-                title: "Países",
-                description: "una descripción",
-                path: [{
-                  state: 'users.home',
-                  text: "Inicio",
-                  icon: true,
-                  icon_class: 'fa-home'
-                }, {
-                  state: 'users.countries',
-                  text: "Países"
-                }, {
-                  state: 'users.countriesDetails',
-                  text: _this9.country.name
-                }]
-              });
-              _this9.loading = false;
-            }
-          });
-        }
-      }]);
-
-      return _class26;
-    }())();
-  }
-});
-angular.module('logged').component('countriesFormPage', {
-  templateUrl: 'src/pages/logged/countries/form/countries-form.page.html',
-  controller: function controller($state, $stateParams, loginStatusService, titleBarService, countriesApiService, notyService) {
-    return new (function () {
-      function _class27() {
-        _classCallCheck(this, _class27);
-
-        this.country = {};
-        this.errors = {};
-        this.action = "";
-        this.loading = false;
-        this.submitting = false;
-        this.ok = false;
-      }
-
-      _createClass(_class27, [{
-        key: '$onInit',
-        value: function $onInit() {
-          var _this10 = this;
-
-          var basePath = {
-            title: "Países",
-            description: "una descripción",
-            path: [{
-              state: 'users.home',
-              text: "Inicio",
-              icon: true,
-              icon_class: 'fa-home'
-            }, {
-              state: 'users.countries',
-              text: "Países"
-            }]
-          };
-
-          if ($stateParams.id != undefined) {
-            this.action = "Editar";
-            this.loading = true;
-            countriesApiService.get($stateParams.id).then(function (res) {
-              if (res) {
-                _this10.country = res.data;
-                basePath.path.push({
-                  state: 'users.countriesEdit',
-                  text: "Editar " + toTitleBar(_this10.country.name)
-                });
-                titleBarService.setData(basePath);
-                _this10.loading = false;
-              }
-            });
-          } else {
-            this.action = "Adicionar";
-            basePath.path.push({
-              state: 'users.countriesAdd',
-              text: "Adicionar"
-            });
-            titleBarService.setData(basePath);
-          }
-        }
-      }, {
-        key: 'submit',
-        value: function submit() {
-          var _this11 = this;
-
-          this.submitting = true;
-
-          if (this.action == "Editar") {
-            countriesApiService.edit($stateParams.id, this.country).then(function (res) {
-              if (res) {
-                if (res.status == 200) {
-                  _this11.ok = true;
-                  notyService.success('Mensaje', 'El país se editó correctamente');
-                } else {
-                  notyService.error('Mensaje', 'Existen errores en los datos');
-                }
-                _this11.errors = res.errors;
-                _this11.submitting = false;
-              }
-            });
-          } else {
-            countriesApiService.add(this.country).then(function (res) {
-              if (res) {
-                if (res.status == 200) {
-                  _this11.ok = true;
-                  notyService.success('Mensaje', 'El país se adicionó correctamente');
-                } else {
-                  notyService.error('Mensaje', 'Existen errores en los datos');
-                }
-                _this11.errors = res.errors;
-                _this11.submitting = false;
-              }
-            });
-          }
-        }
-      }]);
-
-      return _class27;
-    }())();
-  }
-});
-angular.module('logged').component('countriesListPage', {
-  templateUrl: 'src/pages/logged/countries/list/countries-list.page.html',
-  controller: function controller($state, loginStatusService, titleBarService, countriesApiService, notyService) {
-    return new (function () {
-      function _class28() {
-        _classCallCheck(this, _class28);
-
-        this.countries = [];
-        this.loading = true;
-      }
-
-      _createClass(_class28, [{
-        key: '$onInit',
-        value: function $onInit() {
-          var _this12 = this;
-
-          titleBarService.setData({
-            title: "Países",
-            description: "una descripción",
-            path: [{
-              state: 'users.home',
-              text: "Inicio",
-              icon: true,
-              icon_class: 'fa-home'
-            }, {
-              state: 'users.countries',
-              text: "Países"
-            }]
-          });
-
-          countriesApiService.list().then(function (res) {
-            if (res) {
-              _this12.countries = res.data;
-              _this12.loading = false;
-            }
-          });
-        }
-      }, {
-        key: 'delete',
-        value: function _delete(index) {
-          var _this13 = this;
-
-          countriesApiService.remove(this.countries[index].id).then(function (data) {
-            if (data) {
-              _this13.countries.splice(index, 1);
-              notyService.success('Mensaje', 'El país se eliminó correctamente');
-            } else {
-              notyService.erorr('Mensaje', 'Otros datos están relacionado a este país');
-            }
-          });
-        }
-      }]);
-
-      return _class28;
-    }())();
-  }
-});
-angular.module('logged').component('dancestylesDetailsPage', {
-  templateUrl: 'src/pages/logged/dancestyles/details/dancestyles-details.page.html',
-  controller: function controller($stateParams, $state, loginStatusService, titleBarService, dancestylesApiService) {
-    return new (function () {
-      function _class29() {
-        _classCallCheck(this, _class29);
-
-        this.dancestyle = {};
-        this.action = "";
-        this.loading = true;
-      }
-
-      _createClass(_class29, [{
-        key: '$onInit',
-        value: function $onInit() {
-          var _this14 = this;
-
-          dancestylesApiService.get($stateParams.id).then(function (res) {
-            if (res) {
-              _this14.dancestyle = res.data;
-              titleBarService.setData({
-                title: "Estilos dansarios",
-                description: "una descripción",
-                path: [{
-                  state: 'users.home',
-                  text: "Inicio",
-                  icon: true,
-                  icon_class: 'fa-home'
-                }, {
-                  state: 'users.dancestyles',
-                  text: "Estilos dansarios"
-                }, {
-                  state: 'users.dancestylesDetails',
-                  text: _this14.dancestyle.name
-                }]
-              });
-              _this14.loading = false;
-            }
-          });
-        }
-      }]);
-
-      return _class29;
-    }())();
-  }
-});
-angular.module('logged').component('dancestylesListPage', {
-  templateUrl: 'src/pages/logged/dancestyles/list/dancestyles-list.page.html',
-  controller: function controller($state, loginStatusService, titleBarService, dancestylesApiService, notyService) {
-    return new (function () {
-      function _class30() {
-        _classCallCheck(this, _class30);
-
-        this.dancestyles = [];
-        this.loading = true;
-      }
-
-      _createClass(_class30, [{
-        key: '$onInit',
-        value: function $onInit() {
-          var _this15 = this;
-
-          titleBarService.setData({
-            title: "Estilos dansarios",
-            description: "una descripción",
-            path: [{
-              state: 'users.home',
-              text: "Inicio",
-              icon: true,
-              icon_class: 'fa-home'
-            }, {
-              state: 'users.dancestyles',
-              text: "Estilos dansarios"
-            }]
-          });
-
-          dancestylesApiService.list().then(function (res) {
-            if (res) {
-              _this15.dancestyles = res.data;
-              _this15.loading = false;
-            }
-          });
-        }
-      }, {
-        key: 'delete',
-        value: function _delete(index) {
-          var _this16 = this;
-
-          dancestylesApiService.remove(this.dancestyles[index].id).then(function (data) {
-            if (data) {
-              _this16.dancestyles.splice(index, 1);
-              notyService.success('Mensaje', 'El estilo dansario se eliminó correctamente');
-            } else {
-              notyService.erorr('Mensaje', 'Otros datos están relacionado a este estilo dansario');
-            }
-          });
-        }
-      }]);
-
-      return _class30;
-    }())();
-  }
-});
-angular.module('logged').component('dancestylesFormPage', {
-  templateUrl: 'src/pages/logged/dancestyles/form/dancestyles-form.page.html',
-  controller: function controller($state, $stateParams, loginStatusService, titleBarService, dancestylesApiService, notyService) {
-    return new (function () {
-      function _class31() {
-        _classCallCheck(this, _class31);
-
-        this.dancestyle = {};
-        this.errors = {};
-        this.action = "";
-        this.loading = false;
-        this.submitting = false;
-        this.ok = false;
-      }
-
-      _createClass(_class31, [{
-        key: '$onInit',
-        value: function $onInit() {
-          var _this17 = this;
-
-          var basePath = {
-            dancestyle: "Estilos dansarion",
-            description: "una descripción",
-            path: [{
-              state: 'users.home',
-              text: "Inicio",
-              icon: true,
-              icon_class: 'fa-home'
-            }, {
-              state: 'users.dancestyles',
-              text: "Estilos dansarios"
-            }]
-          };
-
-          if ($stateParams.id != undefined) {
-            this.action = "Editar";
-            this.loading = true;
-            dancestylesApiService.get($stateParams.id).then(function (res) {
-              if (res) {
-                _this17.dancestyle = res.data;
-                basePath.path.push({
-                  state: 'users.dancestylesEdit',
-                  text: "Editar " + toTitleBar(_this17.dancestyle.name)
-                });
-                titleBarService.setData(basePath);
-                _this17.loading = false;
-              }
-            });
-          } else {
-            this.action = "Adicionar";
-            basePath.path.push({
-              state: 'users.dancestylesAdd',
-              text: "Adicionar"
-            });
-            titleBarService.setData(basePath);
-          }
-        }
-      }, {
-        key: 'submit',
-        value: function submit() {
-          var _this18 = this;
-
-          this.submitting = true;
-
-          if (this.action == "Editar") {
-            dancestylesApiService.edit($stateParams.id, this.dancestyle).then(function (res) {
-              if (res) {
-                if (res.status == 200) {
-                  _this18.ok = true;
-                  notyService.success('Mensaje', 'El estilo dansario se editó correctamente');
-                } else {
-                  notyService.error('Mensaje', 'Existen errores en los datos');
-                }
-                _this18.errors = res.errors;
-                _this18.submitting = false;
-              }
-            });
-          } else {
-            dancestylesApiService.add(this.dancestyle).then(function (res) {
-              if (res) {
-                if (res.status == 200) {
-                  _this18.ok = true;
-                  notyService.success('Mensaje', 'El estilo dansario se adicionó correctamente');
-                } else {
-                  notyService.error('Mensaje', 'Existen errores en los datos');
-                }
-                _this18.errors = res.errors;
-                _this18.submitting = false;
-              }
-            });
-          }
-        }
-      }]);
-
-      return _class31;
-    }())();
-  }
-});
-angular.module('logged').component('personsListPage', {
-  templateUrl: 'src/pages/logged/persons/list/persons-list.page.html',
-  controller: function controller($state, loginStatusService, titleBarService,
-  // personsApiService,
-  notyService) {
-    return new (function () {
-      function _class32() {
-        _classCallCheck(this, _class32);
-
-        this.persons = [];
-        this.loading = true;
-      }
-
-      _createClass(_class32, [{
-        key: '$onInit',
-        value: function $onInit() {
-          titleBarService.setData({
-            title: "Personas",
-            description: "una descripción",
-            path: [{
-              state: 'users.home',
-              text: "Inicio",
-              icon: true,
-              icon_class: 'fa-home'
-            }, {
-              state: 'users.persons',
-              text: "Personas"
-            }]
-          });
-
-          // personsApiService.list().then((res) => {
-          //   if (res) {
-          //     this.persons = res.data
-          //     this.loading = false
-          //   }
-          // })
-        }
-
-        // delete(index) {
-        //   personsApiService.remove(this.persons[index].id).then(data => {
-        //     if (data) {
-        //       this.persons.splice(index, 1)
-        //       notyService.success('Mensaje', 'El país se eliminó correctamente')
-        //     } else {
-        //       notyService.erorr('Mensaje', 'Otros datos están relacionado a este país')
-        //     }
-        //   })
-        // }
-
-      }]);
-
-      return _class32;
-    }())();
-  }
-});
-angular.module('logged').component('placesListPage', {
-  templateUrl: 'src/pages/logged/places/list/places-list.page.html',
-  controller: function controller($state, loginStatusService, titleBarService,
-  // placesApiService,
-  notyService) {
-    return new (function () {
-      function _class33() {
-        _classCallCheck(this, _class33);
-
-        this.places = [];
-        this.loading = true;
-      }
-
-      _createClass(_class33, [{
-        key: '$onInit',
-        value: function $onInit() {
-          titleBarService.setData({
-            title: "Venues",
-            description: "una descripción",
-            path: [{
-              state: 'users.home',
-              text: "Inicio",
-              icon: true,
-              icon_class: 'fa-home'
-            }, {
-              state: 'users.places',
-              text: "Venues"
-            }]
-          });
-
-          // placesApiService.list().then((res) => {
-          //   if (res) {
-          //     this.places = res.data
-          //     this.loading = false
-          //   }
-          // })
-        }
-
-        // delete(index) {
-        //   placesApiService.remove(this.places[index].id).then(data => {
-        //     if (data) {
-        //       this.places.splice(index, 1)
-        //       notyService.success('Mensaje', 'El país se eliminó correctamente')
-        //     } else {
-        //       notyService.erorr('Mensaje', 'Otros datos están relacionado a este país')
-        //     }
-        //   })
-        // }
-
-      }]);
-
-      return _class33;
-    }())();
-  }
-});
-angular.module('logged').component('schoolsListPage', {
-  templateUrl: 'src/pages/logged/schools/list/schools-list.page.html',
-  controller: function controller($state, loginStatusService, titleBarService,
-  // schoolsApiService,
-  notyService) {
-    return new (function () {
-      function _class34() {
-        _classCallCheck(this, _class34);
-
-        this.schools = [];
-        this.loading = true;
-      }
-
-      _createClass(_class34, [{
-        key: '$onInit',
-        value: function $onInit() {
-          titleBarService.setData({
-            title: "Escuelas",
-            description: "una descripción",
-            path: [{
-              state: 'users.home',
-              text: "Inicio",
-              icon: true,
-              icon_class: 'fa-home'
-            }, {
-              state: 'users.schools',
-              text: "Escuelas"
-            }]
-          });
-
-          // schoolsApiService.list().then((res) => {
-          //   if (res) {
-          //     this.schools = res.data
-          //     this.loading = false
-          //   }
-          // })
-        }
-
-        // delete(index) {
-        //   schoolsApiService.remove(this.schools[index].id).then(data => {
-        //     if (data) {
-        //       this.schools.splice(index, 1)
-        //       notyService.success('Mensaje', 'El país se eliminó correctamente')
-        //     } else {
-        //       notyService.erorr('Mensaje', 'Otros datos están relacionado a este país')
-        //     }
-        //   })
-        // }
-
-      }]);
-
-      return _class34;
-    }())();
-  }
-});
-angular.module('logged').component('titlesDetailsPage', {
-  templateUrl: 'src/pages/logged/titles/details/titles-details.page.html',
-  controller: function controller($stateParams, $state, loginStatusService, titleBarService, titlesApiService) {
-    return new (function () {
-      function _class35() {
-        _classCallCheck(this, _class35);
-
-        this.title = {};
-        this.action = "";
-        this.loading = true;
-      }
-
-      _createClass(_class35, [{
+      _createClass(_class48, [{
         key: '$onInit',
         value: function $onInit() {
           var _this19 = this;
 
-          titlesApiService.get($stateParams.id).then(function (res) {
+          var basePath = {
+            title: "Companies",
+            description: "a description",
+            path: [{
+              state: 'users.home',
+              text: "Home",
+              icon: true,
+              icon_class: 'fa-home'
+            }, {
+              state: 'users.companies',
+              text: "Companies"
+            }]
+          };
+
+          companiesApiService.get($stateParams.id).then(function (res) {
             if (res) {
-              _this19.title = res.data;
-              titleBarService.setData({
-                title: "Títulos",
-                description: "una descripción",
-                path: [{
-                  state: 'users.home',
-                  text: "Inicio",
-                  icon: true,
-                  icon_class: 'fa-home'
-                }, {
-                  state: 'users.titles',
-                  text: "Títulos"
-                }, {
-                  state: 'users.titlesDetails',
-                  text: _this19.title.name
-                }]
-              });
-              _this19.loading = false;
+              if (res.status == 200) {
+                _this19.company = res.data;
+                basePath.path.push({
+                  state: 'users.companiesDetails',
+                  text: "Details " + toTitleBar(_this19.company.name)
+                });
+                titleBarService.setData(basePath);
+                _this19.loading = false;
+              } else {
+                $state.go('not_found');
+              }
             }
           });
         }
       }]);
 
-      return _class35;
+      return _class48;
     }())();
   }
 });
-angular.module('logged').component('titlesFormPage', {
-  templateUrl: 'src/pages/logged/titles/form/titles-form.page.html',
-  controller: function controller($state, $stateParams, loginStatusService, titleBarService, titlesApiService, notyService) {
+angular.module('logged').component('companiesFormPage', {
+  templateUrl: 'src/pages/logged/companies/form/companies-form.page.html',
+  controller: function controller($state, $stateParams, loginStatusService, titleBarService, companiesApiService, citiesApiService, schoolsApiService, worksApiService, dancestylesApiService, personsApiService, notyService, $filter, $q) {
     return new (function () {
-      function _class36() {
-        _classCallCheck(this, _class36);
+      function _class49() {
+        _classCallCheck(this, _class49);
 
-        this.title = {};
+        this.company = {};
         this.errors = {};
         this.action = "";
-        this.loading = false;
+        this.loading = true;
         this.submitting = false;
         this.ok = false;
       }
 
-      _createClass(_class36, [{
+      _createClass(_class49, [{
         key: '$onInit',
         value: function $onInit() {
           var _this20 = this;
 
+          var promises = [];
+          promises[promises.push(citiesApiService.list()) - 1].then(function (res) {
+            if (res && res.status == 200) {
+              _this20.cities = res.data.map(function (v) {
+                return { id: v.id, text: v.name + ', ' + v.country };
+              });
+            }
+          });
+          promises[promises.push(dancestylesApiService.list()) - 1].then(function (res) {
+            if (res && res.status == 200) {
+              _this20.dance_styles = res.data.map(function (v) {
+                return { id: v.id, text: v.name };
+              });
+            }
+          });
+          promises[promises.push(schoolsApiService.list()) - 1].then(function (res) {
+            if (res && res.status == 200) {
+              _this20.schools = res.data.map(function (v) {
+                return { id: v.id, text: v.name };
+              });
+            }
+          });
+          promises[promises.push(personsApiService.list()) - 1].then(function (res) {
+            if (res && res.status == 200) {
+              _this20.persons = res.data.map(function (v) {
+                return { id: v.id, text: v.first_name + v.last_name };
+              });
+            }
+          });
+          promises[promises.push(worksApiService.list()) - 1].then(function (res) {
+            if (res && res.status == 200) {
+              _this20.works = res.data.map(function (v) {
+                return { id: v.id, text: v.name };
+              });
+            }
+          });
+
+          console.log("asd");
           var basePath = {
-            title: "Títulos",
-            description: "una descripción",
+            title: "Companies",
+            description: "a description",
             path: [{
               state: 'users.home',
-              text: "Inicio",
+              text: "Home",
               icon: true,
               icon_class: 'fa-home'
             }, {
-              state: 'users.titles',
-              text: "Títulos"
+              state: 'users.companies',
+              text: "Companies"
             }]
           };
-
           if ($stateParams.id != undefined) {
-            this.action = "Editar";
-            this.loading = true;
-            titlesApiService.get($stateParams.id).then(function (res) {
+            this.action = "Edit";
+            promises[promises.push(companiesApiService.get($stateParams.id)) - 1].then(function (res) {
               if (res) {
-                _this20.title = res.data;
-                basePath.path.push({
-                  state: 'users.titlesEdit',
-                  text: "Editar " + toTitleBar(_this20.title.name)
-                });
-                titleBarService.setData(basePath);
-                _this20.loading = false;
+                if (res.status == 200) {
+                  res.data._dance_styles = res.data._dance_styles.map(function (v) {
+                    return v.id;
+                  });
+                  res.data._persons = res.data._persons.map(function (v) {
+                    return v.id;
+                  });
+                  res.data._works = res.data._works.map(function (v) {
+                    return v.id;
+                  });
+                  res.data._schools = res.data._schools.map(function (v) {
+                    return v.id;
+                  });
+                  res.data._city = res.data._city.id;
+                  _this20.company = res.data;
+                  _this20.company._websites = _this20.company._websites.map(function (v) {
+                    return v.url;
+                  });
+                  basePath.path.push({
+                    state: 'users.companiesEdit',
+                    text: "Edit " + toTitleBar(_this20.company.name)
+                  });
+                  titleBarService.setData(basePath);
+                } else {
+                  $state.go('not_found');
+                }
               }
             });
           } else {
-            this.action = "Adicionar";
+            // this.company.date_born = new Date(1548201600 * 1000)
+            this.action = "Add";
             basePath.path.push({
-              state: 'users.titlesAdd',
-              text: "Adicionar"
+              state: 'users.companiesAdd',
+              text: "Add"
             });
             titleBarService.setData(basePath);
           }
+
+          $q.all([promises]).then(function () {
+            _this20.loading = false;
+          });
         }
       }, {
         key: 'submit',
@@ -1664,27 +1666,29 @@ angular.module('logged').component('titlesFormPage', {
 
           this.submitting = true;
 
-          if (this.action == "Editar") {
-            titlesApiService.edit($stateParams.id, this.title).then(function (res) {
+          if (this.action == "Edit") {
+            companiesApiService.edit($stateParams.id, this.company).then(function (res) {
               if (res) {
                 if (res.status == 200) {
+                  notyService.success('Message', 'The person was edited successfully');
                   _this21.ok = true;
-                  notyService.success('Mensaje', 'El título se editó correctamente');
+                  $state.go('users.companies');
                 } else {
-                  notyService.error('Mensaje', 'Existen errores en los datos');
+                  notyService.error('Message', 'Exist some errors in data');
                 }
                 _this21.errors = res.errors;
                 _this21.submitting = false;
               }
             });
           } else {
-            titlesApiService.add(this.title).then(function (res) {
+            companiesApiService.add(this.company).then(function (res) {
               if (res) {
                 if (res.status == 200) {
                   _this21.ok = true;
-                  notyService.success('Mensaje', 'El título se adicionó correctamente');
+                  notyService.success('Message', 'The person was added successfully');
+                  $state.go('users.companies');
                 } else {
-                  notyService.error('Mensaje', 'Existen errores en los datos');
+                  notyService.error('Message', 'Exist some errors in data');
                 }
                 _this21.errors = res.errors;
                 _this21.submitting = false;
@@ -1694,43 +1698,43 @@ angular.module('logged').component('titlesFormPage', {
         }
       }]);
 
-      return _class36;
+      return _class49;
     }())();
   }
 });
-angular.module('logged').component('titlesListPage', {
-  templateUrl: 'src/pages/logged/titles/list/titles-list.page.html',
-  controller: function controller($state, loginStatusService, titleBarService, titlesApiService, notyService) {
+angular.module('logged').component('companiesListPage', {
+  templateUrl: 'src/pages/logged/companies/list/companies-list.page.html',
+  controller: function controller($state, loginStatusService, titleBarService, companiesApiService, notyService) {
     return new (function () {
-      function _class37() {
-        _classCallCheck(this, _class37);
+      function _class50() {
+        _classCallCheck(this, _class50);
 
-        this.titles = [];
+        this.companies = [];
         this.loading = true;
       }
 
-      _createClass(_class37, [{
+      _createClass(_class50, [{
         key: '$onInit',
         value: function $onInit() {
           var _this22 = this;
 
           titleBarService.setData({
-            title: "Títulos",
-            description: "una descripción",
+            title: "Companies",
+            description: "a description",
             path: [{
               state: 'users.home',
-              text: "Inicio",
+              text: "Home",
               icon: true,
               icon_class: 'fa-home'
             }, {
-              state: 'users.titles',
-              text: "Títulos"
+              state: 'users.companies',
+              text: "Companies"
             }]
           });
 
-          titlesApiService.list().then(function (res) {
+          companiesApiService.list().then(function (res) {
             if (res) {
-              _this22.titles = res.data;
+              _this22.companies = res.data;
               _this22.loading = false;
             }
           });
@@ -1740,142 +1744,75 @@ angular.module('logged').component('titlesListPage', {
         value: function _delete(index) {
           var _this23 = this;
 
-          titlesApiService.remove(this.titles[index].id).then(function (data) {
+          companiesApiService.remove(this.companies[index].id).then(function (data) {
             if (data) {
-              _this23.titles.splice(index, 1);
-              notyService.success('Mensaje', 'El título se eliminó correctamente');
+              _this23.companies.splice(index, 1);
+              notyService.success('Message', 'The company was removes successfully');
             } else {
-              notyService.erorr('Mensaje', 'Otros datos están relacionado a este título');
+              notyService.erorr('Message', 'Otros datos están relacionados a esta compañía');
             }
           });
         }
       }]);
 
-      return _class37;
+      return _class50;
     }())();
   }
 });
-angular.module('logged').component('worksListPage', {
-  templateUrl: 'src/pages/logged/works/list/works-list.page.html',
-  controller: function controller($state, loginStatusService, titleBarService,
-  // worksApiService,
-  notyService) {
+angular.module('logged').component('countriesDetailsPage', {
+  templateUrl: 'src/pages/logged/countries/details/countries-details.page.html',
+  controller: function controller($stateParams, $state, loginStatusService, titleBarService, countriesApiService) {
     return new (function () {
-      function _class38() {
-        _classCallCheck(this, _class38);
+      function _class51() {
+        _classCallCheck(this, _class51);
 
-        this.works = [];
+        this.country = {};
+        this.action = "";
         this.loading = true;
       }
 
-      _createClass(_class38, [{
-        key: '$onInit',
-        value: function $onInit() {
-          titleBarService.setData({
-            title: "Trabajos",
-            description: "una descripción",
-            path: [{
-              state: 'users.home',
-              text: "Inicio",
-              icon: true,
-              icon_class: 'fa-home'
-            }, {
-              state: 'users.works',
-              text: "Trabajos"
-            }]
-          });
-
-          // worksApiService.list().then((res) => {
-          //   if (res) {
-          //     this.works = res.data
-          //     this.loading = false
-          //   }
-          // })
-        }
-
-        // delete(index) {
-        //   worksApiService.remove(this.works[index].id).then(data => {
-        //     if (data) {
-        //       this.works.splice(index, 1)
-        //       notyService.success('Mensaje', 'El país se eliminó correctamente')
-        //     } else {
-        //       notyService.erorr('Mensaje', 'Otros datos están relacionado a este país')
-        //     }
-        //   })
-        // }
-
-      }]);
-
-      return _class38;
-    }())();
-  }
-});
-angular.module('logged').component('citiesDetailsPage', {
-  templateUrl: 'src/pages/logged/countries/cities/details/cities-details.page.html',
-  controller: function controller($stateParams, $state, loginStatusService, titleBarService, citiesApiService, countriesApiService) {
-    return new (function () {
-      function _class39() {
-        _classCallCheck(this, _class39);
-
-        this.loading = true;
-        this.city = {};
-      }
-
-      _createClass(_class39, [{
+      _createClass(_class51, [{
         key: '$onInit',
         value: function $onInit() {
           var _this24 = this;
 
-          countriesApiService.get($stateParams.country_id).then(function (res) {
+          countriesApiService.get($stateParams.id).then(function (res) {
             if (res) {
               _this24.country = res.data;
-
-              citiesApiService.get($stateParams.id).then(function (res) {
-                if (res) {
-                  _this24.city = res.data;
-                  _this24.loading = false;
-
-                  titleBarService.setData({
-                    title: "Ciudades",
-                    description: "una descripción",
-                    path: [{
-                      state: 'users.home',
-                      text: "Inicio",
-                      icon: true,
-                      icon_class: 'fa-home'
-                    }, {
-                      state: 'users.countries',
-                      text: "Países"
-                    }, {
-                      state: '',
-                      text: toTitleBar(_this24.country.name)
-                    }, {
-                      state: 'users.cities({country_id: ' + _this24.country.id + '})',
-                      text: "Ciudades"
-                    }, {
-                      state: 'users.citiesDetails',
-                      text: toTitleBar(_this24.city.name)
-                    }]
-                  });
-                }
+              titleBarService.setData({
+                title: "Countries",
+                description: "a description",
+                path: [{
+                  state: 'users.home',
+                  text: "Home",
+                  icon: true,
+                  icon_class: 'fa-home'
+                }, {
+                  state: 'users.countries',
+                  text: "Countries"
+                }, {
+                  state: 'users.countriesDetails',
+                  text: _this24.country.name
+                }]
               });
+              _this24.loading = false;
             }
           });
         }
       }]);
 
-      return _class39;
+      return _class51;
     }())();
   }
 });
-angular.module('logged').component('citiesFormPage', {
-  templateUrl: 'src/pages/logged/countries/cities/form/cities-form.page.html',
-  controller: function controller($state, $stateParams, loginStatusService, titleBarService, countriesApiService, citiesApiService, notyService) {
+angular.module('logged').component('countriesFormPage', {
+  templateUrl: 'src/pages/logged/countries/form/countries-form.page.html',
+  controller: function controller($state, $stateParams, loginStatusService, titleBarService, countriesApiService, notyService) {
     return new (function () {
-      function _class40() {
-        _classCallCheck(this, _class40);
+      function _class52() {
+        _classCallCheck(this, _class52);
 
-        this.city = {};
+        this.country = {};
         this.errors = {};
         this.action = "";
         this.loading = false;
@@ -1883,58 +1820,47 @@ angular.module('logged').component('citiesFormPage', {
         this.ok = false;
       }
 
-      _createClass(_class40, [{
+      _createClass(_class52, [{
         key: '$onInit',
         value: function $onInit() {
           var _this25 = this;
 
-          countriesApiService.get($stateParams.country_id).then(function (res) {
-            if (res) {
-              _this25.country = res.data;
-              _this25.city._country = _this25.country.id;
-              titleBarService.setData({
-                title: "Ciudades",
-                description: "una descripción",
-                path: [{
-                  state: 'users.home',
-                  text: "Inicio",
-                  icon: true,
-                  icon_class: 'fa-home'
-                }, {
-                  state: 'users.countries',
-                  text: "Países"
-                }, {
-                  state: '',
-                  text: toTitleBar(_this25.country.name)
-                }, {
-                  state: 'users.cities' + "({country_id: " + _this25.country.id + "})",
-                  text: "Ciudades"
-                }]
-              });
+          var basePath = {
+            title: "Countries",
+            description: "a description",
+            path: [{
+              state: 'users.home',
+              text: "Home",
+              icon: true,
+              icon_class: 'fa-home'
+            }, {
+              state: 'users.countries',
+              text: "Countries"
+            }]
+          };
 
-              if ($stateParams.id != undefined) {
-                _this25.action = "Editar";
-                _this25.loading = true;
-                citiesApiService.get($stateParams.id, "?country_id=" + _this25.country.id).then(function (res) {
-                  if (res) {
-                    _this25.city = res.data;
-                    _this25.city._country = _this25.country.id;
-                    _this25.loading = false;
-                    titleBarService.addPath({
-                      state: 'users.citiesEdit',
-                      text: "Editar " + toTitleBar(_this25.city.name)
-                    });
-                  }
+          if ($stateParams.id != undefined) {
+            this.action = "Edit";
+            this.loading = true;
+            countriesApiService.get($stateParams.id).then(function (res) {
+              if (res) {
+                _this25.country = res.data;
+                basePath.path.push({
+                  state: 'users.countriesEdit',
+                  text: "Edit " + toTitleBar(_this25.country.name)
                 });
-              } else {
-                _this25.action = "Adicionar";
-                titleBarService.addPath({
-                  state: 'users.citiesAdd',
-                  text: "Adicionar "
-                });
+                titleBarService.setData(basePath);
+                _this25.loading = false;
               }
-            }
-          });
+            });
+          } else {
+            this.action = "Add";
+            basePath.path.push({
+              state: 'users.countriesAdd',
+              text: "Add"
+            });
+            titleBarService.setData(basePath);
+          }
         }
       }, {
         key: 'submit',
@@ -1942,27 +1868,30 @@ angular.module('logged').component('citiesFormPage', {
           var _this26 = this;
 
           this.submitting = true;
-          if (this.action == "Editar") {
-            citiesApiService.edit($stateParams.id, this.city).then(function (res) {
+
+          if (this.action == "Edit") {
+            countriesApiService.edit($stateParams.id, this.country).then(function (res) {
               if (res) {
                 if (res.status == 200) {
                   _this26.ok = true;
-                  notyService.success('Mensaje', 'La ciudad se editó correctamente');
+                  notyService.success('Message', 'The country was successfully edited');
+                  $state.go('users.countries');
                 } else {
-                  notyService.error('Mensaje', 'Existen errores en los datos');
+                  notyService.error('Message', 'Exist some errors in data');
                 }
                 _this26.errors = res.errors;
                 _this26.submitting = false;
               }
             });
           } else {
-            citiesApiService.add(this.city).then(function (res) {
+            countriesApiService.add(this.country).then(function (res) {
               if (res) {
                 if (res.status == 200) {
                   _this26.ok = true;
-                  notyService.success('Mensaje', 'La ciudad se adicionó correctamente');
+                  notyService.success('Message', 'The country was successfully added');
+                  $state.go('users.countries');
                 } else {
-                  notyService.error('Mensaje', 'Existen errores en los datos');
+                  notyService.error('Message', 'Exist some errors in data');
                 }
                 _this26.errors = res.errors;
                 _this26.submitting = false;
@@ -1972,56 +1901,44 @@ angular.module('logged').component('citiesFormPage', {
         }
       }]);
 
-      return _class40;
+      return _class52;
     }())();
   }
 });
-angular.module('logged').component('citiesListPage', {
-  templateUrl: 'src/pages/logged/countries/cities/list/cities-list.page.html',
-  controller: function controller($state, $stateParams, loginStatusService, titleBarService, citiesApiService, countriesApiService, notyService) {
+angular.module('logged').component('countriesListPage', {
+  templateUrl: 'src/pages/logged/countries/list/countries-list.page.html',
+  controller: function controller($state, loginStatusService, titleBarService, countriesApiService, notyService) {
     return new (function () {
-      function _class41() {
-        _classCallCheck(this, _class41);
+      function _class53() {
+        _classCallCheck(this, _class53);
 
-        this.cities = [];
+        this.countries = [];
         this.loading = true;
-        this.country = {};
       }
 
-      _createClass(_class41, [{
+      _createClass(_class53, [{
         key: '$onInit',
         value: function $onInit() {
           var _this27 = this;
 
-          countriesApiService.get($stateParams.country_id).then(function (res) {
-            if (res) {
-              _this27.country = res.data;
-              titleBarService.setData({
-                title: "Ciudades",
-                description: "una descripción",
-                path: [{
-                  state: 'users.home',
-                  text: "Inicio",
-                  icon: true,
-                  icon_class: 'fa-home'
-                }, {
-                  state: 'users.countries',
-                  text: "Países"
-                }, {
-                  state: '',
-                  text: toTitleBar(_this27.country.name)
-                }, {
-                  state: 'users.cities',
-                  text: "Ciudades"
-                }]
-              });
+          titleBarService.setData({
+            title: "Countries",
+            description: "a description",
+            path: [{
+              state: 'users.home',
+              text: "Home",
+              icon: true,
+              icon_class: 'fa-home'
+            }, {
+              state: 'users.countries',
+              text: "Countries"
+            }]
+          });
 
-              citiesApiService.list("?country_id=" + _this27.country.id).then(function (res) {
-                if (res) {
-                  _this27.cities = res.data;
-                  _this27.loading = false;
-                }
-              });
+          countriesApiService.list().then(function (res) {
+            if (res) {
+              _this27.countries = res.data;
+              _this27.loading = false;
             }
           });
         }
@@ -2030,18 +1947,1651 @@ angular.module('logged').component('citiesListPage', {
         value: function _delete(index) {
           var _this28 = this;
 
-          citiesApiService.remove(this.cities[index].id).then(function (data) {
+          countriesApiService.remove(this.countries[index].id).then(function (data) {
             if (data) {
-              _this28.cities.splice(index, 1);
-              notyService.success('Mensaje', 'El ciudad se eliminó correctamente');
+              _this28.countries.splice(index, 1);
+              notyService.success('Message', 'The country was successfully removed');
             } else {
-              notyService.erorr('Mensaje', 'Otros datos están relacionado a esta ciudad');
+              notyService.erorr('Message', 'Other data depends from this country');
             }
           });
         }
       }]);
 
-      return _class41;
+      return _class53;
+    }())();
+  }
+});
+angular.module('logged').component('dancestylesDetailsPage', {
+  templateUrl: 'src/pages/logged/dancestyles/details/dancestyles-details.page.html',
+  controller: function controller($stateParams, $state, loginStatusService, titleBarService, dancestylesApiService) {
+    return new (function () {
+      function _class54() {
+        _classCallCheck(this, _class54);
+
+        this.dancestyle = {};
+        this.action = "";
+        this.loading = true;
+      }
+
+      _createClass(_class54, [{
+        key: '$onInit',
+        value: function $onInit() {
+          var _this29 = this;
+
+          dancestylesApiService.get($stateParams.id).then(function (res) {
+            if (res) {
+              _this29.dancestyle = res.data;
+              titleBarService.setData({
+                title: "Dance styles",
+                description: "a description",
+                path: [{
+                  state: 'users.home',
+                  text: "Home",
+                  icon: true,
+                  icon_class: 'fa-home'
+                }, {
+                  state: 'users.dancestyles',
+                  text: "Dance styles"
+                }, {
+                  state: 'users.dancestylesDetails',
+                  text: _this29.dancestyle.name
+                }]
+              });
+              _this29.loading = false;
+            }
+          });
+        }
+      }]);
+
+      return _class54;
+    }())();
+  }
+});
+angular.module('logged').component('dancestylesFormPage', {
+  templateUrl: 'src/pages/logged/dancestyles/form/dancestyles-form.page.html',
+  controller: function controller($state, $stateParams, loginStatusService, titleBarService, dancestylesApiService, notyService) {
+    return new (function () {
+      function _class55() {
+        _classCallCheck(this, _class55);
+
+        this.dancestyle = {};
+        this.errors = {};
+        this.action = "";
+        this.loading = false;
+        this.submitting = false;
+        this.ok = false;
+      }
+
+      _createClass(_class55, [{
+        key: '$onInit',
+        value: function $onInit() {
+          var _this30 = this;
+
+          var basePath = {
+            dancestyle: "Dance styles",
+            description: "a description",
+            path: [{
+              state: 'users.home',
+              text: "Home",
+              icon: true,
+              icon_class: 'fa-home'
+            }, {
+              state: 'users.dancestyles',
+              text: "Dance styles"
+            }]
+          };
+
+          if ($stateParams.id != undefined) {
+            this.action = "Edit";
+            this.loading = true;
+            dancestylesApiService.get($stateParams.id).then(function (res) {
+              if (res) {
+                _this30.dancestyle = res.data;
+                basePath.path.push({
+                  state: 'users.dancestylesEdit',
+                  text: "Edit " + toTitleBar(_this30.dancestyle.name)
+                });
+                titleBarService.setData(basePath);
+                _this30.loading = false;
+              }
+            });
+          } else {
+            this.action = "Add";
+            basePath.path.push({
+              state: 'users.dancestylesAdd',
+              text: "Add"
+            });
+            titleBarService.setData(basePath);
+          }
+        }
+      }, {
+        key: 'submit',
+        value: function submit() {
+          var _this31 = this;
+
+          this.submitting = true;
+
+          if (this.action == "Edit") {
+            dancestylesApiService.edit($stateParams.id, this.dancestyle).then(function (res) {
+              if (res) {
+                if (res.status == 200) {
+                  _this31.ok = true;
+                  notyService.success('Message', 'The dance style was successfully edited');
+                  $state.go('users.dancestyles');
+                } else {
+                  notyService.error('Message', 'Exist some errors in data');
+                }
+                _this31.errors = res.errors;
+                _this31.submitting = false;
+              }
+            });
+          } else {
+            dancestylesApiService.add(this.dancestyle).then(function (res) {
+              if (res) {
+                if (res.status == 200) {
+                  _this31.ok = true;
+                  notyService.success('Message', 'The dance style was successfully added');
+                  $state.go('users.dancestyles');
+                } else {
+                  notyService.error('Message', 'Exist some errors in data');
+                }
+                _this31.errors = res.errors;
+                _this31.submitting = false;
+              }
+            });
+          }
+        }
+      }]);
+
+      return _class55;
+    }())();
+  }
+});
+angular.module('logged').component('dancestylesListPage', {
+  templateUrl: 'src/pages/logged/dancestyles/list/dancestyles-list.page.html',
+  controller: function controller($state, loginStatusService, titleBarService, dancestylesApiService, notyService) {
+    return new (function () {
+      function _class56() {
+        _classCallCheck(this, _class56);
+
+        this.dancestyles = [];
+        this.loading = true;
+      }
+
+      _createClass(_class56, [{
+        key: '$onInit',
+        value: function $onInit() {
+          var _this32 = this;
+
+          titleBarService.setData({
+            title: "Dance styles",
+            description: "a description",
+            path: [{
+              state: 'users.home',
+              text: "Home",
+              icon: true,
+              icon_class: 'fa-home'
+            }, {
+              state: 'users.dancestyles',
+              text: "Dance styles"
+            }]
+          });
+
+          dancestylesApiService.list().then(function (res) {
+            if (res) {
+              _this32.dancestyles = res.data;
+              _this32.loading = false;
+            }
+          });
+        }
+      }, {
+        key: 'delete',
+        value: function _delete(index) {
+          var _this33 = this;
+
+          dancestylesApiService.remove(this.dancestyles[index].id).then(function (data) {
+            if (data) {
+              _this33.dancestyles.splice(index, 1);
+              notyService.success('Message', 'The dance style was successfully removed');
+            } else {
+              notyService.erorr('Message', 'Other data depends from this dance style');
+            }
+          });
+        }
+      }]);
+
+      return _class56;
+    }())();
+  }
+});
+angular.module('logged').component('personsDetailsPage', {
+  templateUrl: 'src/pages/logged/persons/details/persons-details.page.html',
+  controller: function controller($state, $stateParams, loginStatusService, titleBarService, personsApiService, notyService, $filter) {
+    return new (function () {
+      function _class57() {
+        _classCallCheck(this, _class57);
+
+        this.person = {};
+        this.loading = true;
+      }
+
+      _createClass(_class57, [{
+        key: '$onInit',
+        value: function $onInit() {
+          var _this34 = this;
+
+          var basePath = {
+            title: "Persons",
+            description: "a description",
+            path: [{
+              state: 'users.home',
+              text: "Home",
+              icon: true,
+              icon_class: 'fa-home'
+            }, {
+              state: 'users.persons',
+              text: "Persons"
+            }]
+          };
+
+          personsApiService.get($stateParams.id).then(function (res) {
+            if (res) {
+              if (res.status == 200) {
+                _this34.person = res.data;
+                basePath.path.push({
+                  state: 'users.personsDetails',
+                  text: "Details " + toTitleBar(_this34.person.first_name)
+                });
+                titleBarService.setData(basePath);
+                _this34.loading = false;
+              } else {
+                $state.go('not_found');
+              }
+            }
+          });
+        }
+      }]);
+
+      return _class57;
+    }())();
+  }
+});
+angular.module('logged').component('personsFormPage', {
+  templateUrl: 'src/pages/logged/persons/form/persons-form.page.html',
+  controller: function controller($state, $stateParams, loginStatusService, titleBarService, personsApiService, citiesApiService, titlesApiService, dancestylesApiService, venuesApiService, notyService, $filter) {
+    return new (function () {
+      function _class58() {
+        _classCallCheck(this, _class58);
+
+        this.person = {};
+        this.errors = {};
+        this.action = "";
+        this.loading = false;
+        this.submitting = false;
+        this.ok = false;
+      }
+
+      _createClass(_class58, [{
+        key: '$onInit',
+        value: function $onInit() {
+          var _this35 = this;
+
+          venuesApiService.list().then(function (res) {
+            if (res && res.status == 200) {
+              _this35.venues = res.data.map(function (v) {
+                return { id: v.id, text: v.name };
+              });
+            }
+          });
+          titlesApiService.list().then(function (res) {
+            if (res && res.status == 200) {
+              _this35.titles = res.data.map(function (v) {
+                return { id: v.id, text: v.name };
+              });
+            }
+          });
+          dancestylesApiService.list().then(function (res) {
+            if (res && res.status == 200) {
+              _this35.dance_styles = res.data.map(function (v) {
+                return { id: v.id, text: v.name };
+              });
+            }
+          });
+
+          var basePath = {
+            title: "Persons",
+            description: "a description",
+            path: [{
+              state: 'users.home',
+              text: "Home",
+              icon: true,
+              icon_class: 'fa-home'
+            }, {
+              state: 'users.persons',
+              text: "Persons"
+            }]
+          };
+
+          if ($stateParams.id != undefined) {
+            this.action = "Edit";
+            this.loading = true;
+            personsApiService.get($stateParams.id).then(function (res) {
+              if (res) {
+                if (res.status == 200) {
+                  citiesApiService.list().then(function (res) {
+                    if (res && res.status == 200) {
+                      _this35.cities = res.data.map(function (v) {
+                        return { id: v.id, text: v.name + ", " + v.country };
+                      });
+                    }
+                  });
+                  res.data._titles = res.data._titles.map(function (v) {
+                    return v.id;
+                  });
+                  res.data._dance_styles = res.data._dance_styles.map(function (v) {
+                    return v.id;
+                  });
+                  res.data._venues = res.data._venues.map(function (v) {
+                    return v.id;
+                  });
+                  res.data._city = res.data._city.id;
+                  _this35.person = res.data;
+                  _this35.person._websites = _this35.person._websites.map(function (v) {
+                    return v.url;
+                  });
+                  basePath.path.push({
+                    state: 'users.personsEdit',
+                    text: "Edit " + toTitleBar(_this35.person.first_name)
+                  });
+                  titleBarService.setData(basePath);
+                  _this35.loading = false;
+                } else {
+                  $state.go('not_found');
+                }
+              }
+            });
+          } else {
+            // this.person.date_born = new Date(1548201600 * 1000)
+            this.action = "Add";
+            basePath.path.push({
+              state: 'users.personsAdd',
+              text: "Add"
+            });
+            titleBarService.setData(basePath);
+          }
+        }
+      }, {
+        key: 'submit',
+        value: function submit() {
+          var _this36 = this;
+
+          this.submitting = true;
+
+          if (this.action == "Edit") {
+            personsApiService.edit($stateParams.id, this.person).then(function (res) {
+              if (res) {
+                if (res.status == 200) {
+                  notyService.success('Message', 'The person was successfully edited');
+                  _this36.ok = true;
+                  $state.go('users.persons');
+                } else {
+                  notyService.error('Message', 'Exist some errors in data');
+                }
+                _this36.errors = res.errors;
+                _this36.submitting = false;
+              }
+            });
+          } else {
+            personsApiService.add(this.person).then(function (res) {
+              if (res) {
+                if (res.status == 200) {
+                  _this36.ok = true;
+                  notyService.success('Message', 'The person was successfully added');
+                  $state.go('users.persons');
+                } else {
+                  notyService.error('Message', 'Exist some errors in data');
+                }
+                _this36.errors = res.errors;
+                _this36.submitting = false;
+              }
+            });
+          }
+        }
+      }]);
+
+      return _class58;
+    }())();
+  }
+});
+angular.module('logged').component('personsListPage', {
+  templateUrl: 'src/pages/logged/persons/list/persons-list.page.html',
+  controller: function controller($state, loginStatusService, titleBarService, personsApiService, notyService) {
+    return new (function () {
+      function _class59() {
+        _classCallCheck(this, _class59);
+
+        this.persons = [];
+        this.loading = true;
+      }
+
+      _createClass(_class59, [{
+        key: '$onInit',
+        value: function $onInit() {
+          var _this37 = this;
+
+          titleBarService.setData({
+            title: "Persons",
+            description: "a description",
+            path: [{
+              state: 'users.home',
+              text: "Home",
+              icon: true,
+              icon_class: 'fa-home'
+            }, {
+              state: 'users.persons',
+              text: "Persons"
+            }]
+          });
+
+          personsApiService.list().then(function (res) {
+            if (res) {
+              _this37.persons = res.data;
+              _this37.loading = false;
+            }
+          });
+        }
+      }, {
+        key: 'delete',
+        value: function _delete(index) {
+          var _this38 = this;
+
+          personsApiService.remove(this.persons[index].id).then(function (data) {
+            if (data) {
+              _this38.persons.splice(index, 1);
+              notyService.success('Message', 'La persona se eliminó correctamente');
+            } else {
+              notyService.erorr('Message', 'Otros datos están relacionado a esta persona');
+            }
+          });
+        }
+      }]);
+
+      return _class59;
+    }())();
+  }
+});
+angular.module('logged').component('schoolsDetailsPage', {
+  templateUrl: 'src/pages/logged/schools/details/schools-details.page.html',
+  controller: function controller($state, $stateParams, loginStatusService, titleBarService, schoolsApiService, notyService, $filter) {
+    return new (function () {
+      function _class60() {
+        _classCallCheck(this, _class60);
+
+        this.school = {};
+        this.loading = true;
+      }
+
+      _createClass(_class60, [{
+        key: '$onInit',
+        value: function $onInit() {
+          var _this39 = this;
+
+          var basePath = {
+            title: "Schools",
+            description: "a description",
+            path: [{
+              state: 'users.home',
+              text: "Home",
+              icon: true,
+              icon_class: 'fa-home'
+            }, {
+              state: 'users.schools',
+              text: "Schools"
+            }]
+          };
+
+          schoolsApiService.get($stateParams.id).then(function (res) {
+            if (res) {
+              if (res.status == 200) {
+                _this39.school = res.data;
+                basePath.path.push({
+                  state: 'users.schoolsDetails',
+                  text: "Details " + toTitleBar(_this39.school.name)
+                });
+                titleBarService.setData(basePath);
+                _this39.loading = false;
+              } else {
+                $state.go('not_found');
+              }
+            }
+          });
+        }
+      }]);
+
+      return _class60;
+    }())();
+  }
+});
+angular.module('logged').component('schoolsFormPage', {
+  templateUrl: 'src/pages/logged/schools/form/schools-form.page.html',
+  controller: function controller($state, $stateParams, loginStatusService, titleBarService, schoolsApiService, citiesApiService, dancestylesApiService, personsApiService, notyService, $filter, $q) {
+    return new (function () {
+      function _class61() {
+        _classCallCheck(this, _class61);
+
+        this.school = {};
+        this.errors = {};
+        this.action = "";
+        this.loading = true;
+        this.submitting = false;
+        this.ok = false;
+      }
+
+      _createClass(_class61, [{
+        key: '$onInit',
+        value: function $onInit() {
+          var _this40 = this;
+
+          var promises = [];
+          promises[promises.push(citiesApiService.list()) - 1].then(function (res) {
+            if (res && res.status == 200) {
+              _this40.cities = res.data.map(function (v) {
+                return { id: v.id, text: v.name + ", " + v.country };
+              });
+            }
+          });
+          promises[promises.push(personsApiService.list()) - 1].then(function (res) {
+            if (res && res.status == 200) {
+              _this40.persons = res.data.map(function (v) {
+                return { id: v.id, text: v.first_name + " " + v.last_name };
+              });
+            }
+          });
+          promises[promises.push(dancestylesApiService.list()) - 1].then(function (res) {
+            if (res && res.status == 200) {
+              _this40.dance_styles = res.data.map(function (v) {
+                return { id: v.id, text: v.name };
+              });
+            }
+          });
+
+          var basePath = {
+            title: "Schools",
+            description: "a description",
+            path: [{
+              state: 'users.home',
+              text: "Home",
+              icon: true,
+              icon_class: 'fa-home'
+            }, {
+              state: 'users.schools',
+              text: "Schools"
+            }]
+          };
+
+          if ($stateParams.id != undefined) {
+            this.action = "Edit";
+            promises[promises.push(schoolsApiService.get($stateParams.id)) - 1].then(function (res) {
+              if (res) {
+                if (res.status == 200) {
+                  res.data._dance_styles = res.data._dance_styles.map(function (v) {
+                    return v.id;
+                  });
+                  res.data._persons = res.data._persons.map(function (v) {
+                    return v.id;
+                  });
+                  res.data._city = res.data._city.id;
+                  res.data._websites = res.data._websites.map(function (v) {
+                    return v.url;
+                  });
+                  _this40.school = res.data;
+                  basePath.path.push({
+                    state: 'users.schoolsEdit',
+                    text: "Edit " + toTitleBar(_this40.school.name)
+                  });
+                  titleBarService.setData(basePath);
+                } else {
+                  $state.go('not_found');
+                }
+              }
+            });
+          } else {
+            // this.school.date_born = new Date(1548201600 * 1000)
+            this.action = "Add";
+            basePath.path.push({
+              state: 'users.schoolsAdd',
+              text: "Add"
+            });
+            titleBarService.setData(basePath);
+          }
+
+          $q.all(promises).then(function () {
+            _this40.loading = false;
+          });
+        }
+      }, {
+        key: 'submit',
+        value: function submit() {
+          var _this41 = this;
+
+          this.submitting = true;
+
+          if (this.action == "Edit") {
+            schoolsApiService.edit($stateParams.id, this.school).then(function (res) {
+              if (res) {
+                if (res.status == 200) {
+                  notyService.success('Message', 'The school was successfully edited');
+                  _this41.ok = true;
+                  $state.go('users.schools');
+                } else {
+                  notyService.error('Message', 'Exist some errors in data');
+                }
+                _this41.errors = res.errors;
+                _this41.submitting = false;
+              }
+            });
+          } else {
+            schoolsApiService.add(this.school).then(function (res) {
+              if (res) {
+                if (res.status == 200) {
+                  _this41.ok = true;
+                  notyService.success('Message', 'The school was successfully added');
+                  $state.go('users.schools');
+                } else {
+                  notyService.error('Message', 'Exist some errors in data');
+                }
+                _this41.errors = res.errors;
+                _this41.submitting = false;
+              }
+            });
+          }
+        }
+      }]);
+
+      return _class61;
+    }())();
+  }
+});
+angular.module('logged').component('schoolsListPage', {
+  templateUrl: 'src/pages/logged/schools/list/schools-list.page.html',
+  controller: function controller($state, loginStatusService, titleBarService, schoolsApiService, notyService) {
+    return new (function () {
+      function _class62() {
+        _classCallCheck(this, _class62);
+
+        this.schools = [];
+        this.loading = true;
+      }
+
+      _createClass(_class62, [{
+        key: '$onInit',
+        value: function $onInit() {
+          var _this42 = this;
+
+          titleBarService.setData({
+            title: "Schools",
+            description: "a description",
+            path: [{
+              state: 'users.home',
+              text: "Home",
+              icon: true,
+              icon_class: 'fa-home'
+            }, {
+              state: 'users.schools',
+              text: "Schools"
+            }]
+          });
+
+          schoolsApiService.list().then(function (res) {
+            if (res) {
+              _this42.schools = res.data;
+              _this42.loading = false;
+            }
+          });
+        }
+      }, {
+        key: 'delete',
+        value: function _delete(index) {
+          var _this43 = this;
+
+          schoolsApiService.remove(this.schools[index].id).then(function (data) {
+            if (data) {
+              _this43.schools.splice(index, 1);
+              notyService.success('Message', 'The school was successfully removed');
+            } else {
+              notyService.erorr('Message', 'Other data depends from this school');
+            }
+          });
+        }
+      }]);
+
+      return _class62;
+    }())();
+  }
+});
+angular.module('logged').component('venuesDetailsPage', {
+  templateUrl: 'src/pages/logged/venues/details/venues-details.page.html',
+  controller: function controller($state, $stateParams, loginStatusService, titleBarService, venuesApiService, notyService, $filter) {
+    return new (function () {
+      function _class63() {
+        _classCallCheck(this, _class63);
+
+        this.venue = {};
+        this.loading = true;
+      }
+
+      _createClass(_class63, [{
+        key: '$onInit',
+        value: function $onInit() {
+          var _this44 = this;
+
+          var basePath = {
+            title: "Venues",
+            description: "a description",
+            path: [{
+              state: 'users.home',
+              text: "Home",
+              icon: true,
+              icon_class: 'fa-home'
+            }, {
+              state: 'users.venues',
+              text: "Venues"
+            }]
+          };
+
+          venuesApiService.get($stateParams.id).then(function (res) {
+            if (res) {
+              if (res.status == 200) {
+                _this44.venue = res.data;
+                basePath.path.push({
+                  state: 'users.venuesDetails',
+                  text: "Details " + toTitleBar(_this44.venue.name)
+                });
+                titleBarService.setData(basePath);
+                _this44.loading = false;
+              } else {
+                $state.go('not_found');
+              }
+            }
+          });
+        }
+      }]);
+
+      return _class63;
+    }())();
+  }
+});
+angular.module('logged').component('venuesFormPage', {
+  templateUrl: 'src/pages/logged/venues/form/venues-form.page.html',
+  controller: function controller($state, $stateParams, loginStatusService, titleBarService, venuesApiService, citiesApiService, titlesApiService, dancestylesApiService, notyService, $filter, $q) {
+    return new (function () {
+      function _class64() {
+        _classCallCheck(this, _class64);
+
+        this.venue = {};
+        this.errors = {};
+        this.action = "";
+        this.loading = true;
+        this.submitting = false;
+        this.ok = false;
+      }
+
+      _createClass(_class64, [{
+        key: '$onInit',
+        value: function $onInit() {
+          var _this45 = this;
+
+          var promises = [];
+          promises[promises.push(citiesApiService.list()) - 1].then(function (res) {
+            if (res && res.status == 200) {
+              _this45.cities = res.data.map(function (v) {
+                return { id: v.id, text: v.name + ", " + v.country };
+              });
+            }
+          });
+
+          var basePath = {
+            title: "Venues",
+            description: "a description",
+            path: [{
+              state: 'users.home',
+              text: "Home",
+              icon: true,
+              icon_class: 'fa-home'
+            }, {
+              state: 'users.venues',
+              text: "Venues"
+            }]
+          };
+
+          if ($stateParams.id != undefined) {
+            this.action = "Edit";
+            promises[promises.push(venuesApiService.get($stateParams.id)) - 1].then(function (res) {
+              if (res) {
+                if (res.status == 200) {
+                  res.data._city = res.data._city.id;
+                  _this45.venue = res.data;
+                  _this45.venue._websites = _this45.venue._websites.map(function (v) {
+                    return v.url;
+                  });
+                  basePath.path.push({
+                    state: 'users.venuesEdit',
+                    text: "Edit " + toTitleBar(_this45.venue.name)
+                  });
+                  titleBarService.setData(basePath);
+                } else {
+                  $state.go('not_found');
+                }
+              }
+            });
+          } else {
+            this.action = "Add";
+            basePath.path.push({
+              state: 'users.venuesAdd',
+              text: "Add"
+            });
+            titleBarService.setData(basePath);
+          }
+
+          $q.all(promises).then(function () {
+            _this45.loading = false;
+          });
+        }
+      }, {
+        key: 'submit',
+        value: function submit() {
+          var _this46 = this;
+
+          this.submitting = true;
+
+          if (this.action == "Edit") {
+            venuesApiService.edit($stateParams.id, this.venue).then(function (res) {
+              if (res) {
+                if (res.status == 200) {
+                  notyService.success('Message', 'The venue was successfully edited');
+                  _this46.ok = true;
+                  $state.go('users.venues');
+                } else {
+                  notyService.error('Message', 'Exist some errors in data');
+                }
+                _this46.errors = res.errors;
+                _this46.submitting = false;
+              }
+            });
+          } else {
+            venuesApiService.add(this.venue).then(function (res) {
+              if (res) {
+                if (res.status == 200) {
+                  _this46.ok = true;
+                  notyService.success('Message', 'The venue was successfully added');
+                  $state.go('users.venues');
+                } else {
+                  notyService.error('Message', 'Exist some errors in data');
+                }
+                _this46.errors = res.errors;
+                _this46.submitting = false;
+              }
+            });
+          }
+        }
+      }]);
+
+      return _class64;
+    }())();
+  }
+});
+angular.module('logged').component('venuesListPage', {
+  templateUrl: 'src/pages/logged/venues/list/venues-list.page.html',
+  controller: function controller($state, loginStatusService, titleBarService, venuesApiService, notyService) {
+    return new (function () {
+      function _class65() {
+        _classCallCheck(this, _class65);
+
+        this.venues = [];
+        this.loading = true;
+      }
+
+      _createClass(_class65, [{
+        key: '$onInit',
+        value: function $onInit() {
+          var _this47 = this;
+
+          titleBarService.setData({
+            title: "Venues",
+            description: "a description",
+            path: [{
+              state: 'users.home',
+              text: "Home",
+              icon: true,
+              icon_class: 'fa-home'
+            }, {
+              state: 'users.venues',
+              text: "Venues"
+            }]
+          });
+
+          venuesApiService.list().then(function (res) {
+            if (res) {
+              _this47.venues = res.data;
+              _this47.loading = false;
+            }
+          });
+        }
+      }, {
+        key: 'delete',
+        value: function _delete(index) {
+          var _this48 = this;
+
+          venuesApiService.remove(this.venues[index].id).then(function (data) {
+            if (data) {
+              _this48.venues.splice(index, 1);
+              notyService.success('Message', 'The venue was successfully removed');
+            } else {
+              notyService.erorr('Message', 'Other data depends from this venue');
+            }
+          });
+        }
+      }]);
+
+      return _class65;
+    }())();
+  }
+});
+angular.module('logged').component('titlesDetailsPage', {
+  templateUrl: 'src/pages/logged/titles/details/titles-details.page.html',
+  controller: function controller($stateParams, $state, loginStatusService, titleBarService, titlesApiService) {
+    return new (function () {
+      function _class66() {
+        _classCallCheck(this, _class66);
+
+        this.title = {};
+        this.action = "";
+        this.loading = true;
+      }
+
+      _createClass(_class66, [{
+        key: '$onInit',
+        value: function $onInit() {
+          var _this49 = this;
+
+          titlesApiService.get($stateParams.id).then(function (res) {
+            if (res) {
+              _this49.title = res.data;
+              titleBarService.setData({
+                title: "Titles",
+                description: "a description",
+                path: [{
+                  state: 'users.home',
+                  text: "Home",
+                  icon: true,
+                  icon_class: 'fa-home'
+                }, {
+                  state: 'users.titles',
+                  text: "Titles"
+                }, {
+                  state: 'users.titlesDetails',
+                  text: _this49.title.name
+                }]
+              });
+              _this49.loading = false;
+            }
+          });
+        }
+      }]);
+
+      return _class66;
+    }())();
+  }
+});
+angular.module('logged').component('titlesFormPage', {
+  templateUrl: 'src/pages/logged/titles/form/titles-form.page.html',
+  controller: function controller($state, $stateParams, loginStatusService, titleBarService, titlesApiService, notyService) {
+    return new (function () {
+      function _class67() {
+        _classCallCheck(this, _class67);
+
+        this.title = {};
+        this.errors = {};
+        this.action = "";
+        this.loading = false;
+        this.submitting = false;
+        this.ok = false;
+      }
+
+      _createClass(_class67, [{
+        key: '$onInit',
+        value: function $onInit() {
+          var _this50 = this;
+
+          var basePath = {
+            title: "Titles",
+            description: "a description",
+            path: [{
+              state: 'users.home',
+              text: "Home",
+              icon: true,
+              icon_class: 'fa-home'
+            }, {
+              state: 'users.titles',
+              text: "Titles"
+            }]
+          };
+
+          if ($stateParams.id != undefined) {
+            this.action = "Edit";
+            this.loading = true;
+            titlesApiService.get($stateParams.id).then(function (res) {
+              if (res) {
+                _this50.title = res.data;
+                basePath.path.push({
+                  state: 'users.titlesEdit',
+                  text: "Edit " + toTitleBar(_this50.title.name)
+                });
+                titleBarService.setData(basePath);
+                _this50.loading = false;
+              }
+            });
+          } else {
+            this.action = "Add";
+            basePath.path.push({
+              state: 'users.titlesAdd',
+              text: "Add"
+            });
+            titleBarService.setData(basePath);
+          }
+        }
+      }, {
+        key: 'submit',
+        value: function submit() {
+          var _this51 = this;
+
+          this.submitting = true;
+
+          if (this.action == "Edit") {
+            titlesApiService.edit($stateParams.id, this.title).then(function (res) {
+              if (res) {
+                if (res.status == 200) {
+                  _this51.ok = true;
+                  notyService.success('Message', 'The title was successfully edited');
+                  $state.go('users.titles');
+                } else {
+                  notyService.error('Message', 'Exist some errors in data');
+                }
+                _this51.errors = res.errors;
+                _this51.submitting = false;
+              }
+            });
+          } else {
+            titlesApiService.add(this.title).then(function (res) {
+              if (res) {
+                if (res.status == 200) {
+                  _this51.ok = true;
+                  notyService.success('Message', 'The title was successfully added');
+                  $state.go('users.titles');
+                } else {
+                  notyService.error('Message', 'Exist some errors in data');
+                }
+                _this51.errors = res.errors;
+                _this51.submitting = false;
+              }
+            });
+          }
+        }
+      }]);
+
+      return _class67;
+    }())();
+  }
+});
+angular.module('logged').component('titlesListPage', {
+  templateUrl: 'src/pages/logged/titles/list/titles-list.page.html',
+  controller: function controller($state, loginStatusService, titleBarService, titlesApiService, notyService) {
+    return new (function () {
+      function _class68() {
+        _classCallCheck(this, _class68);
+
+        this.titles = [];
+        this.loading = true;
+      }
+
+      _createClass(_class68, [{
+        key: '$onInit',
+        value: function $onInit() {
+          var _this52 = this;
+
+          titleBarService.setData({
+            title: "Titles",
+            description: "a description",
+            path: [{
+              state: 'users.home',
+              text: "Home",
+              icon: true,
+              icon_class: 'fa-home'
+            }, {
+              state: 'users.titles',
+              text: "Titles"
+            }]
+          });
+
+          titlesApiService.list().then(function (res) {
+            if (res) {
+              _this52.titles = res.data;
+              _this52.loading = false;
+            }
+          });
+        }
+      }, {
+        key: 'delete',
+        value: function _delete(index) {
+          var _this53 = this;
+
+          titlesApiService.remove(this.titles[index].id).then(function (data) {
+            if (data) {
+              _this53.titles.splice(index, 1);
+              notyService.success('Message', 'The title was successfully removed');
+            } else {
+              notyService.erorr('Message', 'Other data depends from this title');
+            }
+          });
+        }
+      }]);
+
+      return _class68;
+    }())();
+  }
+});
+angular.module('logged').component('worksDetailsPage', {
+  templateUrl: 'src/pages/logged/works/details/works-details.page.html',
+  controller: function controller($state, $stateParams, loginStatusService, titleBarService, worksApiService, notyService, $filter) {
+    return new (function () {
+      function _class69() {
+        _classCallCheck(this, _class69);
+
+        this.work = {};
+        this.loading = true;
+      }
+
+      _createClass(_class69, [{
+        key: '$onInit',
+        value: function $onInit() {
+          var _this54 = this;
+
+          var basePath = {
+            title: "Works",
+            description: "a description",
+            path: [{
+              state: 'users.home',
+              text: "Home",
+              icon: true,
+              icon_class: 'fa-home'
+            }, {
+              state: 'users.works',
+              text: "Works"
+            }]
+          };
+
+          worksApiService.get($stateParams.id).then(function (res) {
+            if (res) {
+              if (res.status == 200) {
+                _this54.work = res.data;
+                basePath.path.push({
+                  state: 'users.worksDetails',
+                  text: "Details " + toTitleBar(_this54.work.name)
+                });
+                titleBarService.setData(basePath);
+                _this54.loading = false;
+              } else {
+                $state.go('not_found');
+              }
+            }
+          });
+        }
+      }]);
+
+      return _class69;
+    }())();
+  }
+});
+angular.module('logged').component('worksFormPage', {
+  templateUrl: 'src/pages/logged/works/form/works-form.page.html',
+  controller: function controller($state, $stateParams, loginStatusService, titleBarService, worksApiService, dancestylesApiService, companiesApiService, venuesApiService, personsApiService, notyService, $filter) {
+    return new (function () {
+      function _class70() {
+        _classCallCheck(this, _class70);
+
+        this.work = {};
+        this.errors = {};
+        this.action = "";
+        this.loading = false;
+        this.submitting = false;
+        this.ok = false;
+      }
+
+      _createClass(_class70, [{
+        key: '$onInit',
+        value: function $onInit() {
+          var _this55 = this;
+
+          var promises = [];
+          promises[promises.push(venuesApiService.list()) - 1].then(function (res) {
+            if (res && res.status == 200) {
+              _this55.venues = res.data.map(function (v) {
+                return { id: v.id, text: v.name };
+              });
+            }
+          });
+          promises[promises.push(companiesApiService.list()) - 1].then(function (res) {
+            if (res && res.status == 200) {
+              _this55.companies = res.data.map(function (v) {
+                return { id: v.id, text: v.name };
+              });
+            }
+          });
+          promises[promises.push(personsApiService.list()) - 1].then(function (res) {
+            if (res && res.status == 200) {
+              _this55.persons = res.data.map(function (v) {
+                return { id: v.id, text: v.first_name + v.last_name };
+              });
+            }
+          });
+          promises[promises.push(dancestylesApiService.list()) - 1].then(function (res) {
+            if (res && res.status == 200) {
+              _this55.dance_styles = res.data.map(function (v) {
+                return { id: v.id, text: v.name };
+              });
+            }
+          });
+
+          var basePath = {
+            title: "Works",
+            description: "a description",
+            path: [{
+              state: 'users.home',
+              text: "Home",
+              icon: true,
+              icon_class: 'fa-home'
+            }, {
+              state: 'users.works',
+              text: "Works"
+            }]
+          };
+
+          if ($stateParams.id != undefined) {
+            this.action = "Edit";
+            promises[promises.push(worksApiService.get($stateParams.id)) - 1].then(function (res) {
+              if (res) {
+                if (res.status == 200) {
+                  res.data._dance_styles = res.data._dance_styles.map(function (v) {
+                    return v.id;
+                  });
+                  res.data._persons = res.data._persons.map(function (v) {
+                    return v.id;
+                  });
+                  res.data._premiere_company = res.data._premiere_company.id;
+                  res.data._premiere_venue = res.data._premiere_venue.id;
+                  _this55.work = res.data;
+                  basePath.path.push({
+                    state: 'users.worksEdit',
+                    text: "Edit " + toTitleBar(_this55.work.name)
+                  });
+                  titleBarService.setData(basePath);
+                } else {
+                  $state.go('not_found');
+                }
+              }
+            });
+          } else {
+            this.action = "Add";
+            basePath.path.push({
+              state: 'users.worksAdd',
+              text: "Add"
+            });
+            titleBarService.setData(basePath);
+          }
+
+          $q.all(promises).then(function () {
+            _this55.loading = false;
+          });
+        }
+      }, {
+        key: 'submit',
+        value: function submit() {
+          var _this56 = this;
+
+          this.submitting = true;
+
+          if (this.action == "Edit") {
+            worksApiService.edit($stateParams.id, this.work).then(function (res) {
+              if (res) {
+                if (res.status == 200) {
+                  notyService.success('Message', 'The work was successfully edited');
+                  _this56.ok = true;
+                  $state.go('users.works');
+                } else {
+                  notyService.error('Message', 'Exist some errors in data');
+                }
+                _this56.errors = res.errors;
+                _this56.submitting = false;
+              }
+            });
+          } else {
+            worksApiService.add(this.work).then(function (res) {
+              if (res) {
+                if (res.status == 200) {
+                  _this56.ok = true;
+                  notyService.success('Message', 'The work was successfully added');
+                  $state.go('users.works');
+                } else {
+                  notyService.error('Message', 'Exist some errors in data');
+                }
+                _this56.errors = res.errors;
+                _this56.submitting = false;
+              }
+            });
+          }
+        }
+      }]);
+
+      return _class70;
+    }())();
+  }
+});
+angular.module('logged').component('worksListPage', {
+  templateUrl: 'src/pages/logged/works/list/works-list.page.html',
+  controller: function controller($state, loginStatusService, titleBarService, worksApiService, notyService) {
+    return new (function () {
+      function _class71() {
+        _classCallCheck(this, _class71);
+
+        this.works = [];
+        this.loading = true;
+      }
+
+      _createClass(_class71, [{
+        key: '$onInit',
+        value: function $onInit() {
+          var _this57 = this;
+
+          titleBarService.setData({
+            title: "Works",
+            description: "a description",
+            path: [{
+              state: 'users.home',
+              text: "Home",
+              icon: true,
+              icon_class: 'fa-home'
+            }, {
+              state: 'users.works',
+              text: "Works"
+            }]
+          });
+
+          worksApiService.list().then(function (res) {
+            if (res) {
+              _this57.works = res.data;
+              _this57.loading = false;
+            }
+          });
+        }
+      }, {
+        key: 'delete',
+        value: function _delete(index) {
+          var _this58 = this;
+
+          worksApiService.remove(this.works[index].id).then(function (data) {
+            if (data) {
+              _this58.works.splice(index, 1);
+              notyService.success('Message', 'The work was successfully removed');
+            } else {
+              notyService.erorr('Message', 'Other data depends from this work');
+            }
+          });
+        }
+      }]);
+
+      return _class71;
+    }())();
+  }
+});
+angular.module('logged').component('citiesDetailsPage', {
+  templateUrl: 'src/pages/logged/countries/cities/details/cities-details.page.html',
+  controller: function controller($stateParams, $state, loginStatusService, titleBarService, citiesApiService, countriesApiService) {
+    return new (function () {
+      function _class72() {
+        _classCallCheck(this, _class72);
+
+        this.loading = true;
+        this.city = {};
+      }
+
+      _createClass(_class72, [{
+        key: '$onInit',
+        value: function $onInit() {
+          var _this59 = this;
+
+          countriesApiService.get($stateParams.country_id).then(function (res) {
+            if (res) {
+              _this59.country = res.data;
+
+              citiesApiService.get($stateParams.id).then(function (res) {
+                if (res) {
+                  _this59.city = res.data;
+                  _this59.loading = false;
+
+                  titleBarService.setData({
+                    title: "Cities",
+                    description: "a description",
+                    path: [{
+                      state: 'users.home',
+                      text: "Home",
+                      icon: true,
+                      icon_class: 'fa-home'
+                    }, {
+                      state: 'users.countries',
+                      text: "Countries"
+                    }, {
+                      state: '',
+                      text: toTitleBar(_this59.country.name)
+                    }, {
+                      state: 'users.cities({country_id: ' + _this59.country.id + '})',
+                      text: "Cities"
+                    }, {
+                      state: 'users.citiesDetails',
+                      text: toTitleBar(_this59.city.name)
+                    }]
+                  });
+                }
+              });
+            }
+          });
+        }
+      }]);
+
+      return _class72;
+    }())();
+  }
+});
+angular.module('logged').component('citiesFormPage', {
+  templateUrl: 'src/pages/logged/countries/cities/form/cities-form.page.html',
+  controller: function controller($state, $stateParams, loginStatusService, titleBarService, countriesApiService, citiesApiService, notyService) {
+    return new (function () {
+      function _class73() {
+        _classCallCheck(this, _class73);
+
+        this.city = {};
+        this.errors = {};
+        this.action = "";
+        this.loading = false;
+        this.submitting = false;
+        this.ok = false;
+      }
+
+      _createClass(_class73, [{
+        key: '$onInit',
+        value: function $onInit() {
+          var _this60 = this;
+
+          countriesApiService.get($stateParams.country_id).then(function (res) {
+            if (res) {
+              _this60.country = res.data;
+              _this60.city._country = _this60.country.id;
+              titleBarService.setData({
+                title: "Cities",
+                description: "a description",
+                path: [{
+                  state: 'users.home',
+                  text: "Home",
+                  icon: true,
+                  icon_class: 'fa-home'
+                }, {
+                  state: 'users.countries',
+                  text: "Countries"
+                }, {
+                  state: '',
+                  text: toTitleBar(_this60.country.name)
+                }, {
+                  state: 'users.cities' + "({country_id: " + _this60.country.id + "})",
+                  text: "Cities"
+                }]
+              });
+
+              if ($stateParams.id != undefined) {
+                _this60.action = "Edit";
+                _this60.loading = true;
+                citiesApiService.get($stateParams.id, "?country_id=" + _this60.country.id).then(function (res) {
+                  if (res) {
+                    if (res.status == 200) {
+                      _this60.city = res.data;
+                      _this60.city._country = _this60.country.id;
+                      _this60.loading = false;
+                      titleBarService.addPath({
+                        state: 'users.citiesEdit',
+                        text: "Edit " + toTitleBar(_this60.city.name)
+                      });
+                    }
+                  }
+                });
+              } else {
+                _this60.action = "Add";
+                titleBarService.addPath({
+                  state: 'users.citiesAdd',
+                  text: "Add "
+                });
+              }
+            }
+          });
+        }
+      }, {
+        key: 'submit',
+        value: function submit() {
+          var _this61 = this;
+
+          this.submitting = true;
+          if (this.action == "Edit") {
+            citiesApiService.edit($stateParams.id, this.city).then(function (res) {
+              if (res) {
+                if (res.status == 200) {
+                  _this61.ok = true;
+                  notyService.success('Message', 'The city was successfully edited');
+                  $state.go("users.cities", { country_id: _this61.country.id });
+                } else {
+                  notyService.error('Message', 'Exist some errors in data');
+                }
+                _this61.errors = res.errors;
+                _this61.submitting = false;
+              }
+            });
+          } else {
+            citiesApiService.add(this.city).then(function (res) {
+              if (res) {
+                if (res.status == 200) {
+                  _this61.ok = true;
+                  notyService.success('Message', 'The city was addes successfully');
+                  $state.go("users.cities", { country_id: _this61.country.id });
+                } else {
+                  notyService.error('Message', 'Exist some errors in data');
+                }
+                _this61.errors = res.errors;
+                _this61.submitting = false;
+              }
+            });
+          }
+        }
+      }]);
+
+      return _class73;
+    }())();
+  }
+});
+angular.module('logged').component('citiesListPage', {
+  templateUrl: 'src/pages/logged/countries/cities/list/cities-list.page.html',
+  controller: function controller($state, $stateParams, loginStatusService, titleBarService, citiesApiService, countriesApiService, notyService) {
+    return new (function () {
+      function _class74() {
+        _classCallCheck(this, _class74);
+
+        this.cities = [];
+        this.loading = true;
+        this.country = {};
+      }
+
+      _createClass(_class74, [{
+        key: '$onInit',
+        value: function $onInit() {
+          var _this62 = this;
+
+          console.log($state);
+          countriesApiService.get($stateParams.country_id).then(function (res) {
+
+            if (res) {
+              _this62.country = res.data;
+              titleBarService.setData({
+                title: "Cities",
+                description: "a description",
+                path: [{
+                  state: 'users.home',
+                  text: "Home",
+                  icon: true,
+                  icon_class: 'fa-home'
+                }, {
+                  state: 'users.countries',
+                  text: "Countries"
+                }, {
+                  state: '',
+                  text: toTitleBar(_this62.country.name)
+                }, {
+                  state: 'users.cities',
+                  text: "Cities"
+                }]
+              });
+
+              citiesApiService.list("?country_id=" + _this62.country.id).then(function (res) {
+                if (res) {
+                  _this62.cities = res.data;
+                  _this62.loading = false;
+                }
+              });
+            }
+          });
+        }
+      }, {
+        key: 'delete',
+        value: function _delete(index) {
+          var _this63 = this;
+
+          citiesApiService.remove(this.cities[index].id).then(function (data) {
+            if (data) {
+              _this63.cities.splice(index, 1);
+              notyService.success('Message', 'The city was removed successfully');
+            } else {
+              notyService.erorr('Message', 'Other data depends from this city');
+            }
+          });
+        }
+      }]);
+
+      return _class74;
     }())();
   }
 });
