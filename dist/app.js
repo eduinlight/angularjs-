@@ -48,8 +48,8 @@ var toTitleBar = function toTitleBar(str) {
   if (str.length <= 10) return str;
   return str.substr(0, 7) + "...";
 };
-angular.module('my-directives', []);
 angular.module('my-components', []);
+angular.module('my-directives', []);
 angular.module('my-filters', []);
 angular.module('pages', ['not_logged', 'logged']);
 angular.module('my-pipes', []);
@@ -181,25 +181,6 @@ angular.module('schools', []).config(function ($stateProvider, $urlServiceProvid
     component: 'schoolsDetailsPage'
   });
 });
-angular.module('venues', []).config(function ($stateProvider, $urlServiceProvider) {
-  $urlServiceProvider.config.strictMode(false);
-  $stateProvider.state('users.venues', {
-    url: '/venues',
-    component: 'venuesListPage'
-  });
-  $stateProvider.state('users.venuesAdd', {
-    url: '/venues/add',
-    component: 'venuesFormPage'
-  });
-  $stateProvider.state('users.venuesEdit', {
-    url: '/venues/edit/:id',
-    component: 'venuesFormPage'
-  });
-  $stateProvider.state('users.venuesDetails', {
-    url: '/venues/details/:id',
-    component: 'venuesDetailsPage'
-  });
-});
 angular.module('titles', []).config(function ($stateProvider, $urlServiceProvider) {
   $urlServiceProvider.config.strictMode(false);
   $stateProvider.state('users.titles', {
@@ -217,6 +198,25 @@ angular.module('titles', []).config(function ($stateProvider, $urlServiceProvide
   $stateProvider.state('users.titlesDetails', {
     url: '/titles/details/:id',
     component: 'titlesDetailsPage'
+  });
+});
+angular.module('venues', []).config(function ($stateProvider, $urlServiceProvider) {
+  $urlServiceProvider.config.strictMode(false);
+  $stateProvider.state('users.venues', {
+    url: '/venues',
+    component: 'venuesListPage'
+  });
+  $stateProvider.state('users.venuesAdd', {
+    url: '/venues/add',
+    component: 'venuesFormPage'
+  });
+  $stateProvider.state('users.venuesEdit', {
+    url: '/venues/edit/:id',
+    component: 'venuesFormPage'
+  });
+  $stateProvider.state('users.venuesDetails', {
+    url: '/venues/details/:id',
+    component: 'venuesDetailsPage'
   });
 });
 angular.module('works', []).config(function ($stateProvider, $urlServiceProvider) {
@@ -1805,12 +1805,69 @@ angular.module('logged').component('countriesDetailsPage', {
     }())();
   }
 });
+angular.module('logged').component('countriesListPage', {
+  templateUrl: 'src/pages/logged/countries/list/countries-list.page.html',
+  controller: function controller($state, loginStatusService, titleBarService, countriesApiService, notyService) {
+    return new (function () {
+      function _class52() {
+        _classCallCheck(this, _class52);
+
+        this.countries = [];
+        this.loading = true;
+      }
+
+      _createClass(_class52, [{
+        key: '$onInit',
+        value: function $onInit() {
+          var _this25 = this;
+
+          titleBarService.setData({
+            title: "Countries",
+            description: "a description",
+            path: [{
+              state: 'users.home',
+              text: "Home",
+              icon: true,
+              icon_class: 'fa-home'
+            }, {
+              state: 'users.countries',
+              text: "Countries"
+            }]
+          });
+
+          countriesApiService.list().then(function (res) {
+            if (res) {
+              _this25.countries = res.data;
+              _this25.loading = false;
+            }
+          });
+        }
+      }, {
+        key: 'delete',
+        value: function _delete(index) {
+          var _this26 = this;
+
+          countriesApiService.remove(this.countries[index].id).then(function (data) {
+            if (data) {
+              _this26.countries.splice(index, 1);
+              notyService.success('Message', 'The country was successfully removed');
+            } else {
+              notyService.erorr('Message', 'Other data depends from this country');
+            }
+          });
+        }
+      }]);
+
+      return _class52;
+    }())();
+  }
+});
 angular.module('logged').component('countriesFormPage', {
   templateUrl: 'src/pages/logged/countries/form/countries-form.page.html',
   controller: function controller($state, $stateParams, loginStatusService, titleBarService, countriesApiService, notyService) {
     return new (function () {
-      function _class52() {
-        _classCallCheck(this, _class52);
+      function _class53() {
+        _classCallCheck(this, _class53);
 
         this.country = {};
         this.errors = {};
@@ -1820,10 +1877,10 @@ angular.module('logged').component('countriesFormPage', {
         this.ok = false;
       }
 
-      _createClass(_class52, [{
+      _createClass(_class53, [{
         key: '$onInit',
         value: function $onInit() {
-          var _this25 = this;
+          var _this27 = this;
 
           var basePath = {
             title: "Countries",
@@ -1844,13 +1901,13 @@ angular.module('logged').component('countriesFormPage', {
             this.loading = true;
             countriesApiService.get($stateParams.id).then(function (res) {
               if (res) {
-                _this25.country = res.data;
+                _this27.country = res.data;
                 basePath.path.push({
                   state: 'users.countriesEdit',
-                  text: "Edit " + toTitleBar(_this25.country.name)
+                  text: "Edit " + toTitleBar(_this27.country.name)
                 });
                 titleBarService.setData(basePath);
-                _this25.loading = false;
+                _this27.loading = false;
               }
             });
           } else {
@@ -1865,7 +1922,7 @@ angular.module('logged').component('countriesFormPage', {
       }, {
         key: 'submit',
         value: function submit() {
-          var _this26 = this;
+          var _this28 = this;
 
           this.submitting = true;
 
@@ -1873,88 +1930,31 @@ angular.module('logged').component('countriesFormPage', {
             countriesApiService.edit($stateParams.id, this.country).then(function (res) {
               if (res) {
                 if (res.status == 200) {
-                  _this26.ok = true;
+                  _this28.ok = true;
                   notyService.success('Message', 'The country was successfully edited');
                   $state.go('users.countries');
                 } else {
                   notyService.error('Message', 'Exist some errors in data');
                 }
-                _this26.errors = res.errors;
-                _this26.submitting = false;
+                _this28.errors = res.errors;
+                _this28.submitting = false;
               }
             });
           } else {
             countriesApiService.add(this.country).then(function (res) {
               if (res) {
                 if (res.status == 200) {
-                  _this26.ok = true;
+                  _this28.ok = true;
                   notyService.success('Message', 'The country was successfully added');
                   $state.go('users.countries');
                 } else {
                   notyService.error('Message', 'Exist some errors in data');
                 }
-                _this26.errors = res.errors;
-                _this26.submitting = false;
+                _this28.errors = res.errors;
+                _this28.submitting = false;
               }
             });
           }
-        }
-      }]);
-
-      return _class52;
-    }())();
-  }
-});
-angular.module('logged').component('countriesListPage', {
-  templateUrl: 'src/pages/logged/countries/list/countries-list.page.html',
-  controller: function controller($state, loginStatusService, titleBarService, countriesApiService, notyService) {
-    return new (function () {
-      function _class53() {
-        _classCallCheck(this, _class53);
-
-        this.countries = [];
-        this.loading = true;
-      }
-
-      _createClass(_class53, [{
-        key: '$onInit',
-        value: function $onInit() {
-          var _this27 = this;
-
-          titleBarService.setData({
-            title: "Countries",
-            description: "a description",
-            path: [{
-              state: 'users.home',
-              text: "Home",
-              icon: true,
-              icon_class: 'fa-home'
-            }, {
-              state: 'users.countries',
-              text: "Countries"
-            }]
-          });
-
-          countriesApiService.list().then(function (res) {
-            if (res) {
-              _this27.countries = res.data;
-              _this27.loading = false;
-            }
-          });
-        }
-      }, {
-        key: 'delete',
-        value: function _delete(index) {
-          var _this28 = this;
-
-          countriesApiService.remove(this.countries[index].id).then(function (data) {
-            if (data) {
-              _this28.countries.splice(index, 1);
-              notyService.success('Message', 'The country was successfully removed');
-            } else {
-              notyService.erorr('Message', 'Other data depends from this country');
-            }
-          });
         }
       }]);
 
@@ -2421,14 +2421,14 @@ angular.module('logged').component('personsListPage', {
     }())();
   }
 });
-angular.module('logged').component('schoolsDetailsPage', {
-  templateUrl: 'src/pages/logged/schools/details/schools-details.page.html',
-  controller: function controller($state, $stateParams, loginStatusService, titleBarService, schoolsApiService, notyService, $filter) {
+angular.module('logged').component('schoolsListPage', {
+  templateUrl: 'src/pages/logged/schools/list/schools-list.page.html',
+  controller: function controller($state, loginStatusService, titleBarService, schoolsApiService, notyService) {
     return new (function () {
       function _class60() {
         _classCallCheck(this, _class60);
 
-        this.school = {};
+        this.schools = [];
         this.loading = true;
       }
 
@@ -2436,6 +2436,63 @@ angular.module('logged').component('schoolsDetailsPage', {
         key: '$onInit',
         value: function $onInit() {
           var _this39 = this;
+
+          titleBarService.setData({
+            title: "Schools",
+            description: "a description",
+            path: [{
+              state: 'users.home',
+              text: "Home",
+              icon: true,
+              icon_class: 'fa-home'
+            }, {
+              state: 'users.schools',
+              text: "Schools"
+            }]
+          });
+
+          schoolsApiService.list().then(function (res) {
+            if (res) {
+              _this39.schools = res.data;
+              _this39.loading = false;
+            }
+          });
+        }
+      }, {
+        key: 'delete',
+        value: function _delete(index) {
+          var _this40 = this;
+
+          schoolsApiService.remove(this.schools[index].id).then(function (data) {
+            if (data) {
+              _this40.schools.splice(index, 1);
+              notyService.success('Message', 'The school was successfully removed');
+            } else {
+              notyService.erorr('Message', 'Other data depends from this school');
+            }
+          });
+        }
+      }]);
+
+      return _class60;
+    }())();
+  }
+});
+angular.module('logged').component('schoolsDetailsPage', {
+  templateUrl: 'src/pages/logged/schools/details/schools-details.page.html',
+  controller: function controller($state, $stateParams, loginStatusService, titleBarService, schoolsApiService, notyService, $filter) {
+    return new (function () {
+      function _class61() {
+        _classCallCheck(this, _class61);
+
+        this.school = {};
+        this.loading = true;
+      }
+
+      _createClass(_class61, [{
+        key: '$onInit',
+        value: function $onInit() {
+          var _this41 = this;
 
           var basePath = {
             title: "Schools",
@@ -2454,13 +2511,13 @@ angular.module('logged').component('schoolsDetailsPage', {
           schoolsApiService.get($stateParams.id).then(function (res) {
             if (res) {
               if (res.status == 200) {
-                _this39.school = res.data;
+                _this41.school = res.data;
                 basePath.path.push({
                   state: 'users.schoolsDetails',
-                  text: "Details " + toTitleBar(_this39.school.name)
+                  text: "Details " + toTitleBar(_this41.school.name)
                 });
                 titleBarService.setData(basePath);
-                _this39.loading = false;
+                _this41.loading = false;
               } else {
                 $state.go('not_found');
               }
@@ -2469,7 +2526,7 @@ angular.module('logged').component('schoolsDetailsPage', {
         }
       }]);
 
-      return _class60;
+      return _class61;
     }())();
   }
 });
@@ -2477,8 +2534,8 @@ angular.module('logged').component('schoolsFormPage', {
   templateUrl: 'src/pages/logged/schools/form/schools-form.page.html',
   controller: function controller($state, $stateParams, loginStatusService, titleBarService, schoolsApiService, citiesApiService, dancestylesApiService, personsApiService, notyService, $filter, $q) {
     return new (function () {
-      function _class61() {
-        _classCallCheck(this, _class61);
+      function _class62() {
+        _classCallCheck(this, _class62);
 
         this.school = {};
         this.errors = {};
@@ -2488,29 +2545,29 @@ angular.module('logged').component('schoolsFormPage', {
         this.ok = false;
       }
 
-      _createClass(_class61, [{
+      _createClass(_class62, [{
         key: '$onInit',
         value: function $onInit() {
-          var _this40 = this;
+          var _this42 = this;
 
           var promises = [];
           promises[promises.push(citiesApiService.list()) - 1].then(function (res) {
             if (res && res.status == 200) {
-              _this40.cities = res.data.map(function (v) {
+              _this42.cities = res.data.map(function (v) {
                 return { id: v.id, text: v.name + ", " + v.country };
               });
             }
           });
           promises[promises.push(personsApiService.list()) - 1].then(function (res) {
             if (res && res.status == 200) {
-              _this40.persons = res.data.map(function (v) {
+              _this42.persons = res.data.map(function (v) {
                 return { id: v.id, text: v.first_name + " " + v.last_name };
               });
             }
           });
           promises[promises.push(dancestylesApiService.list()) - 1].then(function (res) {
             if (res && res.status == 200) {
-              _this40.dance_styles = res.data.map(function (v) {
+              _this42.dance_styles = res.data.map(function (v) {
                 return { id: v.id, text: v.name };
               });
             }
@@ -2545,10 +2602,10 @@ angular.module('logged').component('schoolsFormPage', {
                   res.data._websites = res.data._websites.map(function (v) {
                     return v.url;
                   });
-                  _this40.school = res.data;
+                  _this42.school = res.data;
                   basePath.path.push({
                     state: 'users.schoolsEdit',
-                    text: "Edit " + toTitleBar(_this40.school.name)
+                    text: "Edit " + toTitleBar(_this42.school.name)
                   });
                   titleBarService.setData(basePath);
                 } else {
@@ -2567,13 +2624,13 @@ angular.module('logged').component('schoolsFormPage', {
           }
 
           $q.all(promises).then(function () {
-            _this40.loading = false;
+            _this42.loading = false;
           });
         }
       }, {
         key: 'submit',
         value: function submit() {
-          var _this41 = this;
+          var _this43 = this;
 
           this.submitting = true;
 
@@ -2582,87 +2639,30 @@ angular.module('logged').component('schoolsFormPage', {
               if (res) {
                 if (res.status == 200) {
                   notyService.success('Message', 'The school was successfully edited');
-                  _this41.ok = true;
+                  _this43.ok = true;
                   $state.go('users.schools');
                 } else {
                   notyService.error('Message', 'Exist some errors in data');
                 }
-                _this41.errors = res.errors;
-                _this41.submitting = false;
+                _this43.errors = res.errors;
+                _this43.submitting = false;
               }
             });
           } else {
             schoolsApiService.add(this.school).then(function (res) {
               if (res) {
                 if (res.status == 200) {
-                  _this41.ok = true;
+                  _this43.ok = true;
                   notyService.success('Message', 'The school was successfully added');
                   $state.go('users.schools');
                 } else {
                   notyService.error('Message', 'Exist some errors in data');
                 }
-                _this41.errors = res.errors;
-                _this41.submitting = false;
+                _this43.errors = res.errors;
+                _this43.submitting = false;
               }
             });
           }
-        }
-      }]);
-
-      return _class61;
-    }())();
-  }
-});
-angular.module('logged').component('schoolsListPage', {
-  templateUrl: 'src/pages/logged/schools/list/schools-list.page.html',
-  controller: function controller($state, loginStatusService, titleBarService, schoolsApiService, notyService) {
-    return new (function () {
-      function _class62() {
-        _classCallCheck(this, _class62);
-
-        this.schools = [];
-        this.loading = true;
-      }
-
-      _createClass(_class62, [{
-        key: '$onInit',
-        value: function $onInit() {
-          var _this42 = this;
-
-          titleBarService.setData({
-            title: "Schools",
-            description: "a description",
-            path: [{
-              state: 'users.home',
-              text: "Home",
-              icon: true,
-              icon_class: 'fa-home'
-            }, {
-              state: 'users.schools',
-              text: "Schools"
-            }]
-          });
-
-          schoolsApiService.list().then(function (res) {
-            if (res) {
-              _this42.schools = res.data;
-              _this42.loading = false;
-            }
-          });
-        }
-      }, {
-        key: 'delete',
-        value: function _delete(index) {
-          var _this43 = this;
-
-          schoolsApiService.remove(this.schools[index].id).then(function (data) {
-            if (data) {
-              _this43.schools.splice(index, 1);
-              notyService.success('Message', 'The school was successfully removed');
-            } else {
-              notyService.erorr('Message', 'Other data depends from this school');
-            }
-          });
         }
       }]);
 
@@ -2670,14 +2670,15 @@ angular.module('logged').component('schoolsListPage', {
     }())();
   }
 });
-angular.module('logged').component('venuesDetailsPage', {
-  templateUrl: 'src/pages/logged/venues/details/venues-details.page.html',
-  controller: function controller($state, $stateParams, loginStatusService, titleBarService, venuesApiService, notyService, $filter) {
+angular.module('logged').component('titlesDetailsPage', {
+  templateUrl: 'src/pages/logged/titles/details/titles-details.page.html',
+  controller: function controller($stateParams, $state, loginStatusService, titleBarService, titlesApiService) {
     return new (function () {
       function _class63() {
         _classCallCheck(this, _class63);
 
-        this.venue = {};
+        this.title = {};
+        this.action = "";
         this.loading = true;
       }
 
@@ -2685,6 +2686,208 @@ angular.module('logged').component('venuesDetailsPage', {
         key: '$onInit',
         value: function $onInit() {
           var _this44 = this;
+
+          titlesApiService.get($stateParams.id).then(function (res) {
+            if (res) {
+              _this44.title = res.data;
+              titleBarService.setData({
+                title: "Titles",
+                description: "a description",
+                path: [{
+                  state: 'users.home',
+                  text: "Home",
+                  icon: true,
+                  icon_class: 'fa-home'
+                }, {
+                  state: 'users.titles',
+                  text: "Titles"
+                }, {
+                  state: 'users.titlesDetails',
+                  text: _this44.title.name
+                }]
+              });
+              _this44.loading = false;
+            }
+          });
+        }
+      }]);
+
+      return _class63;
+    }())();
+  }
+});
+angular.module('logged').component('titlesFormPage', {
+  templateUrl: 'src/pages/logged/titles/form/titles-form.page.html',
+  controller: function controller($state, $stateParams, loginStatusService, titleBarService, titlesApiService, notyService) {
+    return new (function () {
+      function _class64() {
+        _classCallCheck(this, _class64);
+
+        this.title = {};
+        this.errors = {};
+        this.action = "";
+        this.loading = false;
+        this.submitting = false;
+        this.ok = false;
+      }
+
+      _createClass(_class64, [{
+        key: '$onInit',
+        value: function $onInit() {
+          var _this45 = this;
+
+          var basePath = {
+            title: "Titles",
+            description: "a description",
+            path: [{
+              state: 'users.home',
+              text: "Home",
+              icon: true,
+              icon_class: 'fa-home'
+            }, {
+              state: 'users.titles',
+              text: "Titles"
+            }]
+          };
+
+          if ($stateParams.id != undefined) {
+            this.action = "Edit";
+            this.loading = true;
+            titlesApiService.get($stateParams.id).then(function (res) {
+              if (res) {
+                _this45.title = res.data;
+                basePath.path.push({
+                  state: 'users.titlesEdit',
+                  text: "Edit " + toTitleBar(_this45.title.name)
+                });
+                titleBarService.setData(basePath);
+                _this45.loading = false;
+              }
+            });
+          } else {
+            this.action = "Add";
+            basePath.path.push({
+              state: 'users.titlesAdd',
+              text: "Add"
+            });
+            titleBarService.setData(basePath);
+          }
+        }
+      }, {
+        key: 'submit',
+        value: function submit() {
+          var _this46 = this;
+
+          this.submitting = true;
+
+          if (this.action == "Edit") {
+            titlesApiService.edit($stateParams.id, this.title).then(function (res) {
+              if (res) {
+                if (res.status == 200) {
+                  _this46.ok = true;
+                  notyService.success('Message', 'The title was successfully edited');
+                  $state.go('users.titles');
+                } else {
+                  notyService.error('Message', 'Exist some errors in data');
+                }
+                _this46.errors = res.errors;
+                _this46.submitting = false;
+              }
+            });
+          } else {
+            titlesApiService.add(this.title).then(function (res) {
+              if (res) {
+                if (res.status == 200) {
+                  _this46.ok = true;
+                  notyService.success('Message', 'The title was successfully added');
+                  $state.go('users.titles');
+                } else {
+                  notyService.error('Message', 'Exist some errors in data');
+                }
+                _this46.errors = res.errors;
+                _this46.submitting = false;
+              }
+            });
+          }
+        }
+      }]);
+
+      return _class64;
+    }())();
+  }
+});
+angular.module('logged').component('titlesListPage', {
+  templateUrl: 'src/pages/logged/titles/list/titles-list.page.html',
+  controller: function controller($state, loginStatusService, titleBarService, titlesApiService, notyService) {
+    return new (function () {
+      function _class65() {
+        _classCallCheck(this, _class65);
+
+        this.titles = [];
+        this.loading = true;
+      }
+
+      _createClass(_class65, [{
+        key: '$onInit',
+        value: function $onInit() {
+          var _this47 = this;
+
+          titleBarService.setData({
+            title: "Titles",
+            description: "a description",
+            path: [{
+              state: 'users.home',
+              text: "Home",
+              icon: true,
+              icon_class: 'fa-home'
+            }, {
+              state: 'users.titles',
+              text: "Titles"
+            }]
+          });
+
+          titlesApiService.list().then(function (res) {
+            if (res) {
+              _this47.titles = res.data;
+              _this47.loading = false;
+            }
+          });
+        }
+      }, {
+        key: 'delete',
+        value: function _delete(index) {
+          var _this48 = this;
+
+          titlesApiService.remove(this.titles[index].id).then(function (data) {
+            if (data) {
+              _this48.titles.splice(index, 1);
+              notyService.success('Message', 'The title was successfully removed');
+            } else {
+              notyService.erorr('Message', 'Other data depends from this title');
+            }
+          });
+        }
+      }]);
+
+      return _class65;
+    }())();
+  }
+});
+angular.module('logged').component('venuesDetailsPage', {
+  templateUrl: 'src/pages/logged/venues/details/venues-details.page.html',
+  controller: function controller($state, $stateParams, loginStatusService, titleBarService, venuesApiService, notyService, $filter) {
+    return new (function () {
+      function _class66() {
+        _classCallCheck(this, _class66);
+
+        this.venue = {};
+        this.loading = true;
+      }
+
+      _createClass(_class66, [{
+        key: '$onInit',
+        value: function $onInit() {
+          var _this49 = this;
 
           var basePath = {
             title: "Venues",
@@ -2703,13 +2906,13 @@ angular.module('logged').component('venuesDetailsPage', {
           venuesApiService.get($stateParams.id).then(function (res) {
             if (res) {
               if (res.status == 200) {
-                _this44.venue = res.data;
+                _this49.venue = res.data;
                 basePath.path.push({
                   state: 'users.venuesDetails',
-                  text: "Details " + toTitleBar(_this44.venue.name)
+                  text: "Details " + toTitleBar(_this49.venue.name)
                 });
                 titleBarService.setData(basePath);
-                _this44.loading = false;
+                _this49.loading = false;
               } else {
                 $state.go('not_found');
               }
@@ -2718,7 +2921,7 @@ angular.module('logged').component('venuesDetailsPage', {
         }
       }]);
 
-      return _class63;
+      return _class66;
     }())();
   }
 });
@@ -2726,8 +2929,8 @@ angular.module('logged').component('venuesFormPage', {
   templateUrl: 'src/pages/logged/venues/form/venues-form.page.html',
   controller: function controller($state, $stateParams, loginStatusService, titleBarService, venuesApiService, citiesApiService, titlesApiService, dancestylesApiService, notyService, $filter, $q) {
     return new (function () {
-      function _class64() {
-        _classCallCheck(this, _class64);
+      function _class67() {
+        _classCallCheck(this, _class67);
 
         this.venue = {};
         this.errors = {};
@@ -2737,15 +2940,15 @@ angular.module('logged').component('venuesFormPage', {
         this.ok = false;
       }
 
-      _createClass(_class64, [{
+      _createClass(_class67, [{
         key: '$onInit',
         value: function $onInit() {
-          var _this45 = this;
+          var _this50 = this;
 
           var promises = [];
           promises[promises.push(citiesApiService.list()) - 1].then(function (res) {
             if (res && res.status == 200) {
-              _this45.cities = res.data.map(function (v) {
+              _this50.cities = res.data.map(function (v) {
                 return { id: v.id, text: v.name + ", " + v.country };
               });
             }
@@ -2771,13 +2974,13 @@ angular.module('logged').component('venuesFormPage', {
               if (res) {
                 if (res.status == 200) {
                   res.data._city = res.data._city.id;
-                  _this45.venue = res.data;
-                  _this45.venue._websites = _this45.venue._websites.map(function (v) {
+                  _this50.venue = res.data;
+                  _this50.venue._websites = _this50.venue._websites.map(function (v) {
                     return v.url;
                   });
                   basePath.path.push({
                     state: 'users.venuesEdit',
-                    text: "Edit " + toTitleBar(_this45.venue.name)
+                    text: "Edit " + toTitleBar(_this50.venue.name)
                   });
                   titleBarService.setData(basePath);
                 } else {
@@ -2795,13 +2998,13 @@ angular.module('logged').component('venuesFormPage', {
           }
 
           $q.all(promises).then(function () {
-            _this45.loading = false;
+            _this50.loading = false;
           });
         }
       }, {
         key: 'submit',
         value: function submit() {
-          var _this46 = this;
+          var _this51 = this;
 
           this.submitting = true;
 
@@ -2810,34 +3013,34 @@ angular.module('logged').component('venuesFormPage', {
               if (res) {
                 if (res.status == 200) {
                   notyService.success('Message', 'The venue was successfully edited');
-                  _this46.ok = true;
+                  _this51.ok = true;
                   $state.go('users.venues');
                 } else {
                   notyService.error('Message', 'Exist some errors in data');
                 }
-                _this46.errors = res.errors;
-                _this46.submitting = false;
+                _this51.errors = res.errors;
+                _this51.submitting = false;
               }
             });
           } else {
             venuesApiService.add(this.venue).then(function (res) {
               if (res) {
                 if (res.status == 200) {
-                  _this46.ok = true;
+                  _this51.ok = true;
                   notyService.success('Message', 'The venue was successfully added');
                   $state.go('users.venues');
                 } else {
                   notyService.error('Message', 'Exist some errors in data');
                 }
-                _this46.errors = res.errors;
-                _this46.submitting = false;
+                _this51.errors = res.errors;
+                _this51.submitting = false;
               }
             });
           }
         }
       }]);
 
-      return _class64;
+      return _class67;
     }())();
   }
 });
@@ -2845,17 +3048,17 @@ angular.module('logged').component('venuesListPage', {
   templateUrl: 'src/pages/logged/venues/list/venues-list.page.html',
   controller: function controller($state, loginStatusService, titleBarService, venuesApiService, notyService) {
     return new (function () {
-      function _class65() {
-        _classCallCheck(this, _class65);
+      function _class68() {
+        _classCallCheck(this, _class68);
 
         this.venues = [];
         this.loading = true;
       }
 
-      _createClass(_class65, [{
+      _createClass(_class68, [{
         key: '$onInit',
         value: function $onInit() {
-          var _this47 = this;
+          var _this52 = this;
 
           titleBarService.setData({
             title: "Venues",
@@ -2873,210 +3076,7 @@ angular.module('logged').component('venuesListPage', {
 
           venuesApiService.list().then(function (res) {
             if (res) {
-              _this47.venues = res.data;
-              _this47.loading = false;
-            }
-          });
-        }
-      }, {
-        key: 'delete',
-        value: function _delete(index) {
-          var _this48 = this;
-
-          venuesApiService.remove(this.venues[index].id).then(function (data) {
-            if (data) {
-              _this48.venues.splice(index, 1);
-              notyService.success('Message', 'The venue was successfully removed');
-            } else {
-              notyService.erorr('Message', 'Other data depends from this venue');
-            }
-          });
-        }
-      }]);
-
-      return _class65;
-    }())();
-  }
-});
-angular.module('logged').component('titlesDetailsPage', {
-  templateUrl: 'src/pages/logged/titles/details/titles-details.page.html',
-  controller: function controller($stateParams, $state, loginStatusService, titleBarService, titlesApiService) {
-    return new (function () {
-      function _class66() {
-        _classCallCheck(this, _class66);
-
-        this.title = {};
-        this.action = "";
-        this.loading = true;
-      }
-
-      _createClass(_class66, [{
-        key: '$onInit',
-        value: function $onInit() {
-          var _this49 = this;
-
-          titlesApiService.get($stateParams.id).then(function (res) {
-            if (res) {
-              _this49.title = res.data;
-              titleBarService.setData({
-                title: "Titles",
-                description: "a description",
-                path: [{
-                  state: 'users.home',
-                  text: "Home",
-                  icon: true,
-                  icon_class: 'fa-home'
-                }, {
-                  state: 'users.titles',
-                  text: "Titles"
-                }, {
-                  state: 'users.titlesDetails',
-                  text: _this49.title.name
-                }]
-              });
-              _this49.loading = false;
-            }
-          });
-        }
-      }]);
-
-      return _class66;
-    }())();
-  }
-});
-angular.module('logged').component('titlesFormPage', {
-  templateUrl: 'src/pages/logged/titles/form/titles-form.page.html',
-  controller: function controller($state, $stateParams, loginStatusService, titleBarService, titlesApiService, notyService) {
-    return new (function () {
-      function _class67() {
-        _classCallCheck(this, _class67);
-
-        this.title = {};
-        this.errors = {};
-        this.action = "";
-        this.loading = false;
-        this.submitting = false;
-        this.ok = false;
-      }
-
-      _createClass(_class67, [{
-        key: '$onInit',
-        value: function $onInit() {
-          var _this50 = this;
-
-          var basePath = {
-            title: "Titles",
-            description: "a description",
-            path: [{
-              state: 'users.home',
-              text: "Home",
-              icon: true,
-              icon_class: 'fa-home'
-            }, {
-              state: 'users.titles',
-              text: "Titles"
-            }]
-          };
-
-          if ($stateParams.id != undefined) {
-            this.action = "Edit";
-            this.loading = true;
-            titlesApiService.get($stateParams.id).then(function (res) {
-              if (res) {
-                _this50.title = res.data;
-                basePath.path.push({
-                  state: 'users.titlesEdit',
-                  text: "Edit " + toTitleBar(_this50.title.name)
-                });
-                titleBarService.setData(basePath);
-                _this50.loading = false;
-              }
-            });
-          } else {
-            this.action = "Add";
-            basePath.path.push({
-              state: 'users.titlesAdd',
-              text: "Add"
-            });
-            titleBarService.setData(basePath);
-          }
-        }
-      }, {
-        key: 'submit',
-        value: function submit() {
-          var _this51 = this;
-
-          this.submitting = true;
-
-          if (this.action == "Edit") {
-            titlesApiService.edit($stateParams.id, this.title).then(function (res) {
-              if (res) {
-                if (res.status == 200) {
-                  _this51.ok = true;
-                  notyService.success('Message', 'The title was successfully edited');
-                  $state.go('users.titles');
-                } else {
-                  notyService.error('Message', 'Exist some errors in data');
-                }
-                _this51.errors = res.errors;
-                _this51.submitting = false;
-              }
-            });
-          } else {
-            titlesApiService.add(this.title).then(function (res) {
-              if (res) {
-                if (res.status == 200) {
-                  _this51.ok = true;
-                  notyService.success('Message', 'The title was successfully added');
-                  $state.go('users.titles');
-                } else {
-                  notyService.error('Message', 'Exist some errors in data');
-                }
-                _this51.errors = res.errors;
-                _this51.submitting = false;
-              }
-            });
-          }
-        }
-      }]);
-
-      return _class67;
-    }())();
-  }
-});
-angular.module('logged').component('titlesListPage', {
-  templateUrl: 'src/pages/logged/titles/list/titles-list.page.html',
-  controller: function controller($state, loginStatusService, titleBarService, titlesApiService, notyService) {
-    return new (function () {
-      function _class68() {
-        _classCallCheck(this, _class68);
-
-        this.titles = [];
-        this.loading = true;
-      }
-
-      _createClass(_class68, [{
-        key: '$onInit',
-        value: function $onInit() {
-          var _this52 = this;
-
-          titleBarService.setData({
-            title: "Titles",
-            description: "a description",
-            path: [{
-              state: 'users.home',
-              text: "Home",
-              icon: true,
-              icon_class: 'fa-home'
-            }, {
-              state: 'users.titles',
-              text: "Titles"
-            }]
-          });
-
-          titlesApiService.list().then(function (res) {
-            if (res) {
-              _this52.titles = res.data;
+              _this52.venues = res.data;
               _this52.loading = false;
             }
           });
@@ -3086,12 +3086,12 @@ angular.module('logged').component('titlesListPage', {
         value: function _delete(index) {
           var _this53 = this;
 
-          titlesApiService.remove(this.titles[index].id).then(function (data) {
+          venuesApiService.remove(this.venues[index].id).then(function (data) {
             if (data) {
-              _this53.titles.splice(index, 1);
-              notyService.success('Message', 'The title was successfully removed');
+              _this53.venues.splice(index, 1);
+              notyService.success('Message', 'The venue was successfully removed');
             } else {
-              notyService.erorr('Message', 'Other data depends from this title');
+              notyService.erorr('Message', 'Other data depends from this venue');
             }
           });
         }

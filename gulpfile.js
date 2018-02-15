@@ -49,7 +49,10 @@ gulp.task("app", function() {
 gulp.task("app.min", ["app"], function() {
   gulp.src([app_output + "app.js"])
     .pipe(rename("app.min.js"))
-    .pipe(uglify())
+    .pipe(uglify({
+      preserveComments: 'license',
+      hoist_funs: false
+    }))
     .pipe(gulp.dest(app_output));
 });
 
