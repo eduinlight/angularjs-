@@ -1,2 +1,2 @@
 # angularjs-codeigniter
-Write code with angularjs in the same way that with angular2. This project is just what you need to became a ninja with angularjs.
+This project is going to help you to combine angularjs and codeigniter framework with the help of a RESTFul Service. I came from angular 4X but in a project they say that i must to use angularjs. So crate a structure similar to angular 2X for develop this project. I hope that you find it interesting.
