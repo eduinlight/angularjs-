@@ -27,7 +27,7 @@ This project is going to help you to combine angularjs and codeigniter framework
   npm run build
 ```
 
-After that you need to change /dist/app.js for /dist/app.min.js on your index.html dependencies
+After that you need to change #dist/app.js for #dist/app.min.js on your index.html dependencies
 
 ## THANKS
 
