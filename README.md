@@ -31,7 +31,7 @@ After that you need to change #dist/app.js for #dist/app.min.js on your index.ht
 
 ## THANKS
 
-Thank's to the angularjs team, codeigniter team, gulp team, for google to provide the easiest library to user JWT with php from the FIREBASE API form PHP.
+Thank's to the angularjs team, codeigniter team, gulp team, for google to provide the easiest library to user JWT with php from the FIREBASE API for PHP.
 
 ## License
 
