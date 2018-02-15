@@ -1,5 +1,5 @@
 # angularjs-codeigniter
-This project is going to help you to combine angularjs and codeigniter framework with the help of a RESTFul Service. I came from angular 4X but in a project they said that i must to use angularjs. So crate a structure similar to angular 4X for develop this project. I hope that you find it interesting.
+This project is going to help you to combine angularjs and codeigniter framework with the help of a RESTFul Service. I came from angular 4X but in a project they said that I must to use angularjs. So I create a structure similar to angular 4X for develop this project. I hope that you find it interesting.
 
 ## How to use
 
