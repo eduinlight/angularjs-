@@ -1,0 +1,13 @@
+<section class="content-header">
+  <h1>
+    {{$ctrl.title}}
+    <small>{{$ctrl.description}}</small>
+  </h1>
+  <ol class="breadcrumb">
+    <li ng-repeat="p in $ctrl.path" ng-class="{'active': p.active}">
+      <a ui-sref="{{p.state}}">
+        <i ng-if="p.icon" class="fa" ng-class="p.icon_class"></i> {{p.text}}
+      </a>
+    </li>
+  </ol>
+</section>

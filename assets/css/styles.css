@@ -1,0 +1,23 @@
+.gritter-item-wrapper {
+  filter: progid: DXImageTransform.Microsoft.gradient( startColorstr='#EA323232', endColorstr='#EA323232', GradientType=0)!important
+}
+
+.gritter-item-wrapper>div.gritter-item {
+  color: rgba(255, 255, 255, 0.75) !important;
+}
+
+.gritter-item-wrapper.gritter-info>div.gritter-item {
+  background-color: rgba(0, 192, 239, 0.74) !important
+}
+
+.gritter-item-wrapper.gritter-error>div.gritter-item {
+  background-color: rgba(221, 59, 57, 0.74) !important;
+}
+
+.gritter-item-wrapper.gritter-success>div.gritter-item {
+  background-color: rgba(0, 166, 90, 0.74) !important;
+}
+
+.gritter-item-wrapper.gritter-warning>div.gritter-item {
+  background-color: rgba(243, 156, 18, 0.74) !important;
+}
