@@ -1074,46 +1074,15 @@ angular.module('my-components').component('leftPanelLink', {
     }())();
   }
 });
-angular.module('logged').component('homePage', {
-  templateUrl: 'src/pages/logged/home/home.page.html',
-  controller: function controller($state, loginStatusService, titleBarService) {
-    return new (function () {
-      function _class37() {
-        _classCallCheck(this, _class37);
-
-        this.rios = "windows";
-        this.ls = loginStatusService;
-      }
-
-      _createClass(_class37, [{
-        key: '$onInit',
-        value: function $onInit() {
-          titleBarService.setData({
-            title: "Home",
-            description: "a description",
-            path: [{
-              state: 'users.home',
-              text: "Home",
-              icon: true,
-              icon_class: 'fa-home'
-            }]
-          });
-        }
-      }]);
-
-      return _class37;
-    }())();
-  }
-});
 angular.module('logged').component('changePasswordPage', {
   templateUrl: 'src/pages/logged/change-password/change-password.page.html',
   controller: function controller($window, notyService, config, authService, loginStatusService, $state) {
     return new (function () {
-      function _class38() {
-        _classCallCheck(this, _class38);
+      function _class37() {
+        _classCallCheck(this, _class37);
       }
 
-      _createClass(_class38, [{
+      _createClass(_class37, [{
         key: '$onInit',
         value: function $onInit() {
           if (!loginStatusService.isLogged()) {
@@ -1153,6 +1122,37 @@ angular.module('logged').component('changePasswordPage', {
         key: 'back',
         value: function back() {
           $window.history.back();
+        }
+      }]);
+
+      return _class37;
+    }())();
+  }
+});
+angular.module('logged').component('homePage', {
+  templateUrl: 'src/pages/logged/home/home.page.html',
+  controller: function controller($state, loginStatusService, titleBarService) {
+    return new (function () {
+      function _class38() {
+        _classCallCheck(this, _class38);
+
+        this.rios = "windows";
+        this.ls = loginStatusService;
+      }
+
+      _createClass(_class38, [{
+        key: '$onInit',
+        value: function $onInit() {
+          titleBarService.setData({
+            title: "Home",
+            description: "a description",
+            path: [{
+              state: 'users.home',
+              text: "Home",
+              icon: true,
+              icon_class: 'fa-home'
+            }]
+          });
         }
       }]);
 
