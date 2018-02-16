@@ -3,6 +3,8 @@ function StorageModel() {
   this.user_id = ''
   this.rol = ''
   this.user = ''
+  this.first_name = ''
+  this.last_name = ''
 }
 angular.module('my-services').service('loginStatusService',
   function($rootScope) {

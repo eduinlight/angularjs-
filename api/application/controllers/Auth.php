@@ -25,7 +25,7 @@ class Auth extends RestService {
 			if (count($user_data)==0) {
 				@$data->user = "The user not exist";
 				$this->data_errors($data);
-			} else if (strcmp(sha1($pass), $user_data[0]->password) != 0) {
+			} else if (strcmp(md5($pass), $user_data[0]->pass) != 0) {
 				@$data->pass = "Wrong password";
 				$this->data_errors($data);
 			} else {
@@ -37,6 +37,8 @@ class Auth extends RestService {
 				@$payload->user_id = $user_data[0]->id;
 				@$payload->rol = $user_data[0]->rol;
 				@$payload->user = $user_data[0]->user;
+				@$payload->first_name = $user_data[0]->first_name;
+				@$payload->last_name = $user_data[0]->last_name;
 				@$payload->login_date = $last_login;
 				@$payload->access_token = $this->to_jwt($payload);
 				

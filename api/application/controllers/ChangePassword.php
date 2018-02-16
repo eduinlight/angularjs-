@@ -26,7 +26,7 @@ class ChangePassword extends Users {
 			if (count($user_data)==0) {
 				@$data->user = "The user not exist";
 				$this->data_errors($data);
-			} else if (strcmp(sha1($pass), $user_data[0]->password) != 0) {
+			} else if (strcmp(md5($pass), $user_data[0]->pass) != 0) {
 				@$data->pass = "Wrong password";
 				$this->data_errors($data);
 			} else if (!isset($new_pass) || $new_pass=="") {

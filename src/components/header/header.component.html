@@ -3,60 +3,29 @@
   <!-- Logo -->
   <a ui-sref="users.home" class="logo">
     <!-- mini logo for sidebar mini 50x50 pixels -->
-    <span class="logo-mini"><h5><b>GM</b></h5></span>
+    <span class="logo-mini"><h5><b>AC</b></h5></span>
     <!-- logo for regular state and mobile devices -->
-    <span class="logo-lg"><b>Google maps</b></span>
+    <span class="logo-lg"><b>Angularjs CI</b></span>
   </a>
 
   <!-- Header Navbar: style can be found in header.less -->
   <nav class="navbar navbar-static-top" role="navigation">
-    <!-- Sidebar toggle button-->
-    <a class="sidebar-toggle" data-toggle="offcanvas" role="button">
-      <span class="sr-only">Toggle navegation</span>
-    </a>
-
     <!-- Navbar Right Menu -->
     <div class="navbar-custom-menu">
       <ul class="nav navbar-nav">
-        <!-- <li id="home_news_messages" class="dropdown messages-menu"  title="New messages">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-            <i class="fa fa-envelope-o"></i>
-            <span id="home_news_messages_cant1" class="label label-success">0</span>
-          </a>
-          <ul class="dropdown-menu">
-            <li class="header">Usted tiene <span id="home_news_messages_cant2">0</span> mensages</li>
-            <li>
-              <ul class="menu">
-
-              </ul>
-            </li>
-          </ul>
-        </li> -->
-        <!-- Notifications: style can be found in dropdown.less -->
-        <li id="home_news_notifications" class="dropdown notifications-menu" title="New notifications">
-          <a ng-href="" class="dropdown-toggle" data-toggle="dropdown">
-            <i class="fa fa-bell-o"></i>
-            <span id="home_news_notifications_cant1" class="label label-warning">0</span>
-          </a>
-          <ul class="dropdown-menu">
-            <li class="header">You have <span id="home_news_notifications_cant2">0</span> notifications</li>
-            <li>
-              <!-- inner menu: contains the actual data -->
-              <ul class="menu">
-
-              </ul>
-            </li>
-          </ul>
-        </li>
-        <!-- User Account: style can be found in dropdown.less -->
         <li id="content_user_info">
           <a ng-href="" class="dropdown-toggle" data-toggle="dropdown">
-            <i class="fa fa-user"></i>
+            {{$ctrl.name}}
           </a>
           <ul id="menu1" class="dropdown-menu" role="menu" aria-labelledby="drop4">
             <li role="presentation"><a role="menuitem" tabindex="-1" ui-sref="changePassword">Change password</a></li>
             <li role="presentation"><a role="menuitem" tabindex="-1" ng-click="$ctrl.logout()">Logout</a></li>
           </ul>
+        </li>
+        <li id="content_user_info">
+          <a ng-href="" class="dropdown-toggle" data-toggle="dropdown">
+            <i class="fa fa-gears"></i>
+          </a>
         </li>
       </ul>
     </div>

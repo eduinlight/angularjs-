@@ -1,10 +1,10 @@
 <div class="login-box">
   <div class="login-logo">
-    <b>LOGO</b>
+    <b>Angularjs - Codeigniter</b>
   </div>
   <!-- /.login-logo -->
   <div class="login-box-body">
-    <p class="login-box-msg">Inserte los datos para iniciar sesión</p>
+    <p class="login-box-msg">Start session</p>
 
     <form name="loginForm" ng-submit="$ctrl.login()" novalidate>
       <div class="form-group" ng-class="{'has-error':$ctrl.errors.user}">
@@ -17,14 +17,14 @@
       <div class="form-group" ng-class="{'has-error' : $ctrl.errors.pass} ">
         <label ng-if="$ctrl.errors.pass" class="control-label" for="pass">{{$ctrl.errors.pass}}</label>
         <div class="form-group has-feedback">
-          <input type="password" class="form-control" id="pass" ng-model="$ctrl.model.pass" placeholder="Cotraseña">
+          <input type="password" class="form-control" id="pass" ng-model="$ctrl.model.pass" placeholder="Password">
           <span class="glyphicon glyphicon-lock form-control-feedback"></span>
         </div>
       </div>
 
       <div class="row">
         <div class="col-xs-12">
-          <button type="submit" class="btn btn-primary btn-block btn-flat">Iniciar</button>
+          <button type="submit" class="btn btn-primary btn-block btn-flat">Start</button>
         </div>
         <!-- /.col -->
       </div>

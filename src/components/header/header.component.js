@@ -5,7 +5,7 @@ angular.module('my-components').component('myHeader', {
       constructor() {}
 
       $onInit = () => {
-
+        this.name = loginStatusService.storage.first_name + " " + loginStatusService.storage.last_name
       }
 
       logout = () => {

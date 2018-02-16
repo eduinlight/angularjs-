@@ -28,6 +28,8 @@ angular.module('not_logged').component('loginPage', {
               access_token: res.data.access_token,
               user_id: res.data.user_id,
               rol: res.data.rol,
+              first_name: res.data.first_name,
+              last_name: res.data.last_name,
               user: res.data.user,
             })
 
