@@ -1,9 +1,9 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-require_once('./application/libraries/rest/Users.php');
+require_once('./application/libraries/rest/RestServiceUsers.php');
 
-class Upload extends Users {
+class Upload extends RestServiceUsers {
 
 	function __construct() {
 		parent::__construct();

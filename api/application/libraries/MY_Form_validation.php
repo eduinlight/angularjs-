@@ -14,9 +14,9 @@ class MY_Form_validation extends CI_Form_validation{
 		$ci->load->Model('M_User', 'Users');
 		$query = array('user' => $user);
 		if($this->user_id!=null){
-			@$query['id!='] = $id;
+			@$query['id!='] = $this->user_id;
 		}
-		if(count($ci->Users->filter($query))==0){
+		if(count($ci->Users->filter($query))>0){
 			$this->set_message('valid_user', "The user already exist");
 			return false;
 		}

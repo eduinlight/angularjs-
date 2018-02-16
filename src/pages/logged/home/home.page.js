@@ -3,8 +3,8 @@ angular.module('logged').component('homePage', {
   controller: function($state, loginStatusService, titleBarService) {
     return new class {
       constructor() {
-
         this.rios = "windows"
+        this.ls = loginStatusService
       }
 
       $onInit() {

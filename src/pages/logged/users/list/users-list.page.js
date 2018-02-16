@@ -1,21 +1,21 @@
-angular.module('logged').component('titlesListPage', {
-  templateUrl: 'src/pages/logged/titles/list/titles-list.page.html',
+angular.module('logged').component('usersListPage', {
+  templateUrl: 'src/pages/logged/users/list/users-list.page.html',
   controller: function(
     $state,
     loginStatusService,
     titleBarService,
-    titlesApiService,
+    usersApiService,
     notyService
   ) {
     return new class {
       constructor() {
-        this.titles = []
+        this.users = []
         this.loading = true
       }
 
       $onInit() {
         titleBarService.setData({
-          title: "Titles",
+          title: "Users",
           description: "a description",
           path: [{
             state: 'users.home',
@@ -23,23 +23,23 @@ angular.module('logged').component('titlesListPage', {
             icon: true,
             icon_class: 'fa-home'
           }, {
-            state: 'users.titles',
-            text: "Titles",
+            state: 'users.users',
+            text: "Users",
           }]
         })
 
-        titlesApiService.list().then((res) => {
+        usersApiService.list().then((res) => {
           if (res) {
-            this.titles = res.data
+            this.users = res.data
             this.loading = false
           }
         })
       }
 
       delete(index) {
-        titlesApiService.remove(this.titles[index].id).then(data => {
+        usersApiService.remove(this.users[index].id).then(data => {
           if (data) {
-            this.titles.splice(index, 1)
+            this.users.splice(index, 1)
             notyService.success('Message', 'The title was successfully removed')
           } else {
             notyService.erorr('Message', 'Other data depends from this title')

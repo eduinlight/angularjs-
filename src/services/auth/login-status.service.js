@@ -29,6 +29,9 @@ angular.module('my-services').service('loginStatusService',
       isAdmin() {
         return this.isLogged() && this.storage.rol === 'admin'
       }
+      isUser() {
+        return this.isLogged() && this.storage.rol === 'user'
+      }
 
       setStorage(value) {
         this.storage = value

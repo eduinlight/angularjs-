@@ -6,6 +6,7 @@ angular.module('my-components').component('myHeader', {
 
       $onInit = () => {
         this.name = loginStatusService.storage.first_name + " " + loginStatusService.storage.last_name
+        this.is_admin = loginStatusService.isAdmin()
       }
 
       logout = () => {
@@ -15,6 +16,7 @@ angular.module('my-components').component('myHeader', {
 
         $state.go('login')
       }
+
     }
   }
 });

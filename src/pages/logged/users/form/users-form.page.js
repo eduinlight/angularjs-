@@ -1,16 +1,16 @@
-angular.module('logged').component('titlesFormPage', {
-  templateUrl: 'src/pages/logged/titles/form/titles-form.page.html',
+angular.module('logged').component('usersFormPage', {
+  templateUrl: 'src/pages/logged/users/form/users-form.page.html',
   controller: function(
     $state,
     $stateParams,
     loginStatusService,
     titleBarService,
-    titlesApiService,
+    usersApiService,
     notyService
   ) {
     return new class {
       constructor() {
-        this.title = {}
+        this.user = {}
         this.errors = {}
         this.action = ""
         this.loading = false
@@ -20,7 +20,7 @@ angular.module('logged').component('titlesFormPage', {
 
       $onInit() {
         let basePath = {
-          title: "Titles",
+          title: "Users",
           description: "a description",
           path: [{
             state: 'users.home',
@@ -28,20 +28,20 @@ angular.module('logged').component('titlesFormPage', {
             icon: true,
             icon_class: 'fa-home'
           }, {
-            state: 'users.titles',
-            text: "Titles",
+            state: 'users.users',
+            text: "Users",
           }]
         }
 
         if ($stateParams.id != undefined) {
           this.action = "Edit"
           this.loading = true
-          titlesApiService.get($stateParams.id).then((res) => {
+          usersApiService.get($stateParams.id).then((res) => {
             if (res) {
-              this.title = res.data
+              this.user = res.data
               basePath.path.push({
-                state: 'users.titlesEdit',
-                text: "Edit " + toTitleBar(this.title.name),
+                state: 'users.usersEdit',
+                text: "Edit " + toTitleBar(this.user.first_name + " " + this.user.last_name),
               })
               titleBarService.setData(basePath)
               this.loading = false
@@ -50,7 +50,7 @@ angular.module('logged').component('titlesFormPage', {
         } else {
           this.action = "Add"
           basePath.path.push({
-            state: 'users.titlesAdd',
+            state: 'users.usersAdd',
             text: "Add",
           })
           titleBarService.setData(basePath)
@@ -61,12 +61,12 @@ angular.module('logged').component('titlesFormPage', {
         this.submitting = true
 
         if (this.action == "Edit") {
-          titlesApiService.edit($stateParams.id, this.title).then((res) => {
+          usersApiService.edit($stateParams.id, this.user).then((res) => {
             if (res) {
               if (res.status == 200) {
                 this.ok = true
                 notyService.success('Message', 'The title was successfully edited')
-                $state.go('users.titles')
+                $state.go('users.users')
               } else {
                 notyService.error('Message', 'Exist some errors in data')
               }
@@ -75,12 +75,12 @@ angular.module('logged').component('titlesFormPage', {
             }
           })
         } else {
-          titlesApiService.add(this.title).then((res) => {
+          usersApiService.add(this.user).then((res) => {
             if (res) {
               if (res.status == 200) {
                 this.ok = true
                 notyService.success('Message', 'The title was successfully added')
-                $state.go('users.titles')
+                $state.go('users.users')
               } else {
                 notyService.error('Message', 'Exist some errors in data')
               }

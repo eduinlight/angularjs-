@@ -2,12 +2,12 @@
   <div class="col-xs-12">
     <div class="box">
       <div class="box-header with-border">
-        <h3 class="box-title">List of titles</h3>
+        <h3 class="box-user">List of users</h3>
         <div class="box-tools pull-right">
-          <span data-toggle="tooltip" title="" class="badge bg-light-blue">
-            {{$ctrl.titles.length}}
+          <span data-toggle="tooltip" user="" class="badge bg-light-blue">
+            {{$ctrl.users.length}}
           </span>
-          <a ui-sref="users.titlesAdd" class="btn">
+          <a ui-sref="users.usersAdd" class="btn">
             <i class="fa fa-plus"></i> Add
           </a>
         </div>
@@ -15,45 +15,41 @@
       <!-- /.box-header -->
       <div class="box-body">
         <loading-data active="$ctrl.loading"></loading-data>
-        <div ng-show="!$ctrl.loading && $ctrl.titles.length==0" class="callout callout-info">
-          <p>There are not titles</p>
+        <div ng-show="!$ctrl.loading && $ctrl.users.length==0" class="callout callout-info">
+          <p>There are not users</p>
         </div>
-        <table ng-show="!$ctrl.loading && $ctrl.titles.length>0" class="table table-bordered">
+        <table ng-show="!$ctrl.loading && $ctrl.users.length>0" class="table table-bordered">
           <thead>
             <tr>
               <th style="width: 10px">#</th>
-              <th>Name</th>
+              <th>First name</th>
+              <th>Last name</th>
+              <th>user</th>
+              <th>rol</th>
               <th style="width: 20%">Options</th>
             </tr>
           </thead>
           <tbody>
-            <tr ng-repeat="title in $ctrl.titles track by $index">
+            <tr ng-repeat="user in $ctrl.users track by $index">
               <td>{{$index+1}}</td>
-              <td>{{title.name}}</td>
+              <td>{{user.first_name}}</td>
+              <td>{{user.last_name}}</td>
+              <td>{{user.user}}</td>
+              <td><small class="label label-primary">{{user.rol}}</small></td>
               <td>
-                <a ui-sref="users.titlesDetails({id: title.id})" class="btn btn-success" title="Detelles">
+                <a ui-sref="users.usersDetails({id: user.id})" class="btn btn-success" user="Detelles">
                   <i class="fa fa-search"></i>
                 </a>
-                <a ui-sref="users.titlesEdit({id: title.id})" class="btn btn-primary" title="Edit">
+                <a ui-sref="users.usersEdit({id: user.id})" class="btn btn-primary" user="Edit">
                   <i class="fa fa-edit"></i>
                 </a>
-                <a ng-click="$ctrl.delete($index)" class="btn btn-danger" title="Eliminar">
+                <a ng-click="$ctrl.delete($index)" class="btn btn-danger" user="Eliminar">
                   <i class="fa fa-remove"></i>
                 </a>
               </td>
             </tr>
           </tbody>
         </table>
-      </div>
-      <!-- /.box-body -->
-      <div class="box-footer clearfix">
-        <ul class="pagination pagination-sm no-margin pull-right">
-          <li><a href="#">«</a></li>
-          <li><a href="#">1</a></li>
-          <li><a href="#">2</a></li>
-          <li><a href="#">3</a></li>
-          <li><a href="#">»</a></li>
-        </ul>
       </div>
     </div>
   </div>

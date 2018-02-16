@@ -4,7 +4,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 require_once(__DIR__.'/RestService.php');
 
-class Users extends RestService {
+class RestServiceUsers extends RestService {
 
   protected $access_token = "";
   protected $payload = null;
@@ -33,7 +33,7 @@ class Users extends RestService {
   protected function only_access($rols = array()){
     $ok = false;
     foreach($rols as $rol){
-      if($this->payload->rol!=$rol)
+      if($this->payload->rol==$rol)
        $ok = true;
     }
     if(!$ok)

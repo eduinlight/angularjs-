@@ -1,25 +1,25 @@
-angular.module('logged').component('titlesDetailsPage', {
-  templateUrl: 'src/pages/logged/titles/details/titles-details.page.html',
+angular.module('logged').component('usersDetailsPage', {
+  templateUrl: 'src/pages/logged/users/details/users-details.page.html',
   controller: function(
     $stateParams,
     $state,
     loginStatusService,
     titleBarService,
-    titlesApiService,
+    usersApiService,
   ) {
     return new class {
       constructor() {
-        this.title = {}
+        this.user = {}
         this.action = ""
         this.loading = true
       }
 
       $onInit() {
-        titlesApiService.get($stateParams.id).then((res) => {
+        usersApiService.get($stateParams.id).then((res) => {
           if (res) {
-            this.title = res.data
+            this.user = res.data
             titleBarService.setData({
-              title: "Titles",
+              title: "Users",
               description: "a description",
               path: [{
                 state: 'users.home',
@@ -27,11 +27,11 @@ angular.module('logged').component('titlesDetailsPage', {
                 icon: true,
                 icon_class: 'fa-home'
               }, {
-                state: 'users.titles',
-                text: "Titles",
+                state: 'users.users',
+                text: "Users",
               }, {
-                state: 'users.titlesDetails',
-                text: this.title.name,
+                state: 'users.usersDetails',
+                text: this.user.name,
               }]
             })
             this.loading = false

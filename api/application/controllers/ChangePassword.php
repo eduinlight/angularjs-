@@ -1,9 +1,9 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-require_once('./application/libraries/rest/Users.php');
+require_once('./application/libraries/rest/RestServiceUsers.php');
 
-class ChangePassword extends Users {
+class ChangePassword extends RestServiceUsers {
 
 	function __construct() {
 		parent::__construct();
@@ -33,7 +33,7 @@ class ChangePassword extends Users {
 				@$data->new_pass = "Wrong new password";
 				$this->data_errors($data);
 			} else {
-				$this->User->update($user_data[0]->id, array('password' => sha1($new_pass)));
+				$this->User->update($user_data[0]->id, array('pass' => md5($new_pass)));
 				
 				// RESPUESTA
 				@$res->user_id = $user_data[0]->id;

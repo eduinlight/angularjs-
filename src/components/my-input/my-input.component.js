@@ -8,6 +8,7 @@ angular.module('my-components').component('myInput', {
     model: '=',
     placeholder: '@',
     required: '<',
+    readonly: '<',
     type: '@',
   },
   controller: function() {

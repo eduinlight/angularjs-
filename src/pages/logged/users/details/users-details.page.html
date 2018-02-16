@@ -2,7 +2,7 @@
   <div class="col-xs-12">
     <div class="box">
       <div class="box-header with-border">
-        <h3 class="box-title">Details of title</h3>
+        <h3 class="box-title">Details of user</h3>
         <div class="box-tools pull-right">
         </div>
       </div>
@@ -10,8 +10,14 @@
       <div class="box-body">
         <loading-data active="$ctrl.loading"></loading-data>
         <dl ng-hide="$ctrl.loading" class="dl-horizontal">
-          <dt>Name</dt>
-          <dd>{{$ctrl.title.name}}</dd>
+          <dt>User</dt>
+          <dd>{{$ctrl.user.user}}</dd>
+          <dt>First name</dt>
+          <dd>{{$ctrl.user.first_name}}</dd>
+          <dt>Last name</dt>
+          <dd>{{$ctrl.user.last_name}}</dd>
+          <dt>Rol</dt>
+          <dd><small class="label label-primary">{{$ctrl.user.rol}}</small></dd>
         </dl>
       </div>
     </div>
