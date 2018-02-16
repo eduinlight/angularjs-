@@ -1122,17 +1122,72 @@ angular.module('logged').component('changePasswordPage', {
     }())();
   }
 });
+angular.module('logged').component('changePasswordPage', {
+  templateUrl: 'src/pages/logged/change-password/change-password.page.html',
+  controller: function controller($window, notyService, config, authService, loginStatusService, $state) {
+    return new (function () {
+      function _class38() {
+        _classCallCheck(this, _class38);
+      }
+
+      _createClass(_class38, [{
+        key: '$onInit',
+        value: function $onInit() {
+          if (!loginStatusService.isLogged()) {
+            $state.go('users.home');
+          }
+
+          this.model = {
+            user: loginStatusService.storage.user,
+            pass: "",
+            new_pass: ""
+          };
+          this.errors = {};
+        }
+      }, {
+        key: 'change_password',
+        value: function change_password() {
+          var _this11 = this;
+
+          authService.change_password(this.model).then(function (res) {
+            if (res) {
+              if (res.status == 400) {
+                _this11.errors = res.errors;
+              } else {
+                //quitar errores
+                _this11.errors = {};
+
+                //notificación de bienvenida
+                notyService.info("Message", "The password was changed successfully");
+
+                //cambio de estado
+                $window.history.back();
+              }
+            }
+          });
+        }
+      }, {
+        key: 'back',
+        value: function back() {
+          $window.history.back();
+        }
+      }]);
+
+      return _class38;
+    }())();
+  }
+});
 angular.module('logged').component('homePage', {
   templateUrl: 'src/pages/logged/home/home.page.html',
   controller: function controller($state, loginStatusService, titleBarService) {
     return new (function () {
-      function _class38() {
-        _classCallCheck(this, _class38);
+      function _class39() {
+        _classCallCheck(this, _class39);
 
         this.rios = "windows";
       }
 
-      _createClass(_class38, [{
+      _createClass(_class39, [{
         key: '$onInit',
         value: function $onInit() {
           titleBarService.setData({
@@ -1148,35 +1203,35 @@ angular.module('logged').component('homePage', {
         }
       }]);
 
-      return _class38;
+      return _class39;
     }())();
   }
 });
 angular.module('not_logged').component('loginPage', {
   templateUrl: 'src/pages/not_logged/login/login.page.html',
   controller: function controller(notyService, config, authService, loginStatusService, $state) {
-    var _this11 = this;
+    var _this12 = this;
 
     this.$onInit = function () {
       if (loginStatusService.isLogged()) {
         $state.go('users.home');
       }
 
-      _this11.model = {
+      _this12.model = {
         user: "",
         pass: ""
       };
-      _this11.errors = {};
+      _this12.errors = {};
     };
 
     this.login = function () {
-      authService.login(_this11.model.user, _this11.model.pass).then(function (res) {
+      authService.login(_this12.model.user, _this12.model.pass).then(function (res) {
         if (res) {
           if (res.status == 400) {
-            _this11.errors = res.errors;
+            _this12.errors = res.errors;
           } else {
             //quitar errores
-            _this11.errors = {};
+            _this12.errors = {};
 
             //guardar el estado de la app
             loginStatusService.setStorage({
@@ -1202,52 +1257,6 @@ angular.module('not_logged').component('loginPage', {
 angular.module('not_logged').component('notFoundPage', {
   templateUrl: 'src/pages/not_logged/not_found/not_found.page.html',
   controller: function controller(notyService) {}
-});
-angular.module('logged').component('titlesDetailsPage', {
-  templateUrl: 'src/pages/logged/titles/details/titles-details.page.html',
-  controller: function controller($stateParams, $state, loginStatusService, titleBarService, titlesApiService) {
-    return new (function () {
-      function _class39() {
-        _classCallCheck(this, _class39);
-
-        this.title = {};
-        this.action = "";
-        this.loading = true;
-      }
-
-      _createClass(_class39, [{
-        key: '$onInit',
-        value: function $onInit() {
-          var _this12 = this;
-
-          titlesApiService.get($stateParams.id).then(function (res) {
-            if (res) {
-              _this12.title = res.data;
-              titleBarService.setData({
-                title: "Titles",
-                description: "a description",
-                path: [{
-                  state: 'users.home',
-                  text: "Home",
-                  icon: true,
-                  icon_class: 'fa-home'
-                }, {
-                  state: 'users.titles',
-                  text: "Titles"
-                }, {
-                  state: 'users.titlesDetails',
-                  text: _this12.title.name
-                }]
-              });
-              _this12.loading = false;
-            }
-          });
-        }
-      }]);
-
-      return _class39;
-    }())();
-  }
 });
 angular.module('logged').component('titlesFormPage', {
   templateUrl: 'src/pages/logged/titles/form/titles-form.page.html',
@@ -1349,14 +1358,15 @@ angular.module('logged').component('titlesFormPage', {
     }())();
   }
 });
-angular.module('logged').component('titlesListPage', {
-  templateUrl: 'src/pages/logged/titles/list/titles-list.page.html',
-  controller: function controller($state, loginStatusService, titleBarService, titlesApiService, notyService) {
+angular.module('logged').component('titlesDetailsPage', {
+  templateUrl: 'src/pages/logged/titles/details/titles-details.page.html',
+  controller: function controller($stateParams, $state, loginStatusService, titleBarService, titlesApiService) {
     return new (function () {
       function _class41() {
         _classCallCheck(this, _class41);
 
-        this.titles = [];
+        this.title = {};
+        this.action = "";
         this.loading = true;
       }
 
@@ -1364,6 +1374,51 @@ angular.module('logged').component('titlesListPage', {
         key: '$onInit',
         value: function $onInit() {
           var _this15 = this;
+
+          titlesApiService.get($stateParams.id).then(function (res) {
+            if (res) {
+              _this15.title = res.data;
+              titleBarService.setData({
+                title: "Titles",
+                description: "a description",
+                path: [{
+                  state: 'users.home',
+                  text: "Home",
+                  icon: true,
+                  icon_class: 'fa-home'
+                }, {
+                  state: 'users.titles',
+                  text: "Titles"
+                }, {
+                  state: 'users.titlesDetails',
+                  text: _this15.title.name
+                }]
+              });
+              _this15.loading = false;
+            }
+          });
+        }
+      }]);
+
+      return _class41;
+    }())();
+  }
+});
+angular.module('logged').component('titlesListPage', {
+  templateUrl: 'src/pages/logged/titles/list/titles-list.page.html',
+  controller: function controller($state, loginStatusService, titleBarService, titlesApiService, notyService) {
+    return new (function () {
+      function _class42() {
+        _classCallCheck(this, _class42);
+
+        this.titles = [];
+        this.loading = true;
+      }
+
+      _createClass(_class42, [{
+        key: '$onInit',
+        value: function $onInit() {
+          var _this16 = this;
 
           titleBarService.setData({
             title: "Titles",
@@ -1381,19 +1436,19 @@ angular.module('logged').component('titlesListPage', {
 
           titlesApiService.list().then(function (res) {
             if (res) {
-              _this15.titles = res.data;
-              _this15.loading = false;
+              _this16.titles = res.data;
+              _this16.loading = false;
             }
           });
         }
       }, {
         key: 'delete',
         value: function _delete(index) {
-          var _this16 = this;
+          var _this17 = this;
 
           titlesApiService.remove(this.titles[index].id).then(function (data) {
             if (data) {
-              _this16.titles.splice(index, 1);
+              _this17.titles.splice(index, 1);
               notyService.success('Message', 'The title was successfully removed');
             } else {
               notyService.erorr('Message', 'Other data depends from this title');
@@ -1402,7 +1457,7 @@ angular.module('logged').component('titlesListPage', {
         }
       }]);
 
-      return _class41;
+      return _class42;
     }())();
   }
 });
