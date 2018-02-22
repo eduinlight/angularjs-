@@ -91,4 +91,6 @@ gulp.task("serve", function() {
 gulp.task("watch", ["build-dev", "serve"], () => {
   gulp.watch(["index.html", "src/**/*.js", "src/**/*.html"], ["app"])
     .on('error', (e) => { console.log(e) })
+  gulp.watch(["dependencies.js"], ["angular", "others"])
+    .on('error', (e) => { console.log(e) })
 })
